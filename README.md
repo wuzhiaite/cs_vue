@@ -1,6 +1,6 @@
 # csvue
 
-## Project setup
+### 基础指令
 ```
 下载依赖
 npm install
@@ -10,7 +10,10 @@ npm run serve
 npm run build
 
 ```
-### 基础配置制作
+### 基础配置文件
+```
+
+```
 
 
 
