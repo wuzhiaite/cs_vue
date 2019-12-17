@@ -1,8 +1,6 @@
 
 module.exports = {
-    publicPath : process.env.NODE_ENV === 'development'//部署应用包时的基本 URL
-                    ? '/development/'
-                    : '/production/',
+    publicPath : '/cs/',//部署应用包时的基本 URL
     outputDir : 'dist',
     assetsDir : '',//放置生成的静态资源 (js、css、img、fonts) 的 (相对于 outputDir 的) 目录。
     indexPath : 'index.html',
@@ -29,7 +27,7 @@ module.exports = {
             config.plugins = [...config.plugins, ...plugins];
         }
         
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV === 'product') {
           // 为生产环境修改配置...
         } else {
           // 为开发环境修改配置...
