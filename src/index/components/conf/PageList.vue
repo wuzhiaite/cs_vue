@@ -8,35 +8,43 @@
                 style="width:100%;"></el-input>
             </el-row> 
             <Buttons :btns="btns"></Buttons> 
-            <div style="display:block;background-color:#909399;width:100%;margin-buttom:20px;text-align:left;">
-                <span style="width:33.33%;display:inline-block;">
-                  <label>下拉框选项:</label>
-                  <el-select v-model="value" 
-                    size="mini"
-                    clearable="false" 
-                    multiple="false"
-                    filterable
-                    placeholder="请选择">
-                      <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                        :disabled="item.disabled">
-                      </el-option>
-                  </el-select>
-                </span>
-                <span style="width:33.33%;display:inline-block;">
-                  <label>测试时间:</label>
-                    <el-date-picker
+             <!-- <el-collapse-transition> -->
+               <transition name="el-zoom-in-top">
+                <div   v-show="show"
+                  style="display:block;background-color:#D1E7FE;width:100%;margin:10px;text-align:left;">
+                  <span style="width:33.33%;display:inline-block;">
+                    <label style="font-size:12px;">
+                      <strong>下拉框选项:</strong>
+                    </label>
+                    <el-select v-model="value" 
                       size="mini"
-                      type="dates"
-                      v-model="value4"
-                      placeholder="时间">
-                    </el-date-picker>
-                </span>
-
-            </div>      
+                      clearable="true" 
+                      multiple="false"
+                      filterable
+                      placeholder="请选择">
+                        <el-option
+                          v-for="item in options"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                          :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                  </span>
+                  <span style="width:33.33%;display:inline-block;">
+                    <label style="font-size:12px;">
+                      <strong>测试时间框:</strong>
+                    </label>
+                      <el-date-picker
+                        size="mini"
+                        type="dates"
+                        v-model="value4"
+                        placeholder="时间">
+                      </el-date-picker>
+                  </span>               
+                </div> 
+            </transition>      
+            <!-- </el-collapse-transition>       -->
             <TableList :tableParam="tableParam"></TableList>
              <el-pagination 
                 @size-change="handleSizeChange"
@@ -49,9 +57,9 @@
               </el-pagination>
         </div>
         <div style="width:1px;"></div>
-        <div>
-          
-          
+        <div>   
+           《这是虚假的存在》
+           <TableList :tableParam="tableParam"></TableList>
           
         </div> 
 
@@ -60,9 +68,8 @@
 </template>
 <script>
  import TableList from '../common/TableList';
- 
  import Buttons from '../common/Buttons';
-
+ import {Dialog} from 'element-ui';
 
 
  export default {
@@ -71,6 +78,7 @@
         search:'',
         tableParam:{},
         btns:[],
+        show:false,
       }
     },
     components:{
@@ -83,7 +91,17 @@
     },
     methods:{
       initBtns:function(){
-          this.btns = [{
+          var that = this;
+          this.btns = [
+            {
+              name : '高级查询',
+              type : 'primary',
+              icon : 'el-icon-s-promotion',
+              disabled : false,
+              click : function(){
+                that.show = ! that.show;
+              }
+            },{
               name : '查询',
               type : 'primary',
               icon : 'el-icon-search',
@@ -99,11 +117,14 @@
               click : function(){
                 alert('嘻嘻嘻！！！');
               }
-            }]
+            },]
       },
       handleClick:function(row){
          console.log('handleClick');
          console.log(row);
+
+
+        
       },
       handleEdit : function(row){
           console.log('handleEdit');

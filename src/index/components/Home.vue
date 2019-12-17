@@ -95,7 +95,8 @@
    .el-header {
     color: #333;
     line-height: 60px;
-    background-color: #409EFF
+    background-color: #409EFF;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
   }
   .el-header .el-title{
     font-size:30px;

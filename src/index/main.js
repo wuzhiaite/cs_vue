@@ -4,6 +4,8 @@ import * as lodash from 'lodash';
 import ElementUI from 'element-ui';
 import './element-variables.scss';
 import '../style/theme/index.css';
+import '../util/el-components';
+
 
 
 Vue.use(ElementUI);
