@@ -60,13 +60,6 @@
         initTableData:function(){//初始化展示列表的数据
             if(this.tableParam.tableData){
                 this.tableData = this.tableParam.tableData;
-            }else{
-                var param = this.tableParam.initData    
-                if(param){
-                    //如果有请求参数，则发送请求后台数据
-                }else{
-                    this.tableParam = [];
-                }
             }
             this.loading = false;
         },
