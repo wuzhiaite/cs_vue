@@ -118,7 +118,8 @@
              this.getTableData();
         },
         changeCondition:function(index,item){
-
+            this.reqParam[item.prop] = item.value;
+            this.getTableData();
 
         }
     },
