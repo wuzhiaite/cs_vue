@@ -93,6 +93,7 @@
             this.getTableData();
         },
         getTableData:function(){//获取表单数据
+            if(true){this.virtueData();}
             this.post(this.url,this.reqParam)
                     .then(res =>{
                         if(res.code == 200){
@@ -120,6 +121,38 @@
         changeCondition:function(index,item){
             this.reqParam[item.prop] = item.value;
             this.getTableData();
+
+        },
+        virtueData : function(){
+            var data = {
+                    "total": 8, //总记录
+                    "list": [// 结果列表
+                        {
+                            "field": obj, //查询字段
+                            "field": obj //查询字段
+                        }
+                    ],
+                    "pageNum": 1,//当前页码
+                    "pageSize": 3,//每页数量
+                    "size": 3,//当页数量
+                    "startRow": 1,//开始行数
+                    "endRow": 3,//结束行数
+                    "pages": 3,//总页数
+                    "prePage": 0,//前一页页码
+                    "nextPage": 2,//下一页页码
+                    "isFirstPage": true,//是否首页
+                    "isLastPage": false,//是否是最后一夜
+                    "hasPreviousPage": false,//是否有上一页
+                    "hasNextPage": true,//是否有下一页
+                    "navigatePages": 8,
+                    "navigatepageNums": [//页码列表
+                        1,
+                        2,
+                        3
+                    ],
+                    "navigateFirstPage": 1,//第一页
+                    "navigateLastPage": 3 //最后一页
+                };
 
         }
     },
