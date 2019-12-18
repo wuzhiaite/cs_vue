@@ -1,51 +1,55 @@
 <template>        
     <transition name="el-zoom-in-top">
-        <div v-show="show"  class="el-condition-div"
-            style="">
-            <span  class="el-condition-span">
-                <label style="font-size:12px;">
-                    <strong>下拉框选项:</strong>
+        <div class="el-condition-div" v-if="show" >
+            <span  class="el-condition-span" v-for="(item,index) in conditions">
+                <label>
+                    <strong>{{item.label}}</strong>
                 </label>
-                <el-select v-model="value" 
-                    size="mini"
-                    clearable="true" 
-                    multiple="false"
+                <el-select v-if="item.type == 'select' "
+                    v-model="item.value" 
+                    :size=" item.size ? item.size : 'mini' "
+                    :clearable="item.ismulti ? false : true" 
+                    :multiple="item.ismulti ? true : false"
+                    @change="synData(index,item)"
                     filterable
-                    placeholder="请选择">
+                    placeholder="item.placeholder ? item.placeholder : '请选择' ">
                     <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                        :disabled="item.disabled">
+                        v-for="opt in item.options"
+                        :key="opt.value"
+                        :label="opt.label"
+                        :value="opt.value"
+                        :disabled="opt.disabled">
                     </el-option>
                 </el-select>
-            </span>
-            <span class="el-condition-span" >
-                <label style="font-size:12px;">
-                    <strong>测试时间框:</strong>
-                </label>
-                <el-date-picker
-                    size="mini"
+                <el-date-picker v-if=" item.type == 'date' "
+                    @change="synData(index,item)"
+                    :size=" item.size ? item.size : 'mini' "
                     type="dates"
-                    v-model="value4"
-                    placeholder="时间">
-                    </el-date-picker>
+                    v-model="item.value"
+                    :placeholder="item.placeholder">
+                </el-date-picker>
             </span>               
         </div> 
     </transition>      
 </template>
 <script>
-
-
  export default {
-    data(){
-      return {
-      }
-    },
-    created(){
+    props:{
+        conditions:{
+            type : Array,
+            default : []
+        },
+        show:{
+            type : Boolean,
+            default : false,
+        }
     },
     methods:{
+        synData:function(index,item){
+            console.log(item);
+            this.$alert(JSON.stringify(item)+'&index='+index);
+            this.$emit("conditions:update",this.conditions);
+        }
     }
  }
 

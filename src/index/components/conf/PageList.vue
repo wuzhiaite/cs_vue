@@ -58,9 +58,10 @@
         </div>
         <div style="width:1px;"></div>
         <div>   
-           《这是虚假的存在》
-           <TableList :tableParam="tableParam"></TableList>
-          
+
+            
+
+
         </div> 
 
 
@@ -79,6 +80,8 @@
         tableParam:{},
         btns:[],
         show:false,
+        conditions:[],
+        pageParam:{},
       }
     },
     components:{
@@ -88,8 +91,49 @@
     created(){
       this.initTable();
       this.initBtns();
+      this.initConditions();
+      this.initPageParam();
     },
     methods:{
+      initPageParam : function(){
+           this.pageParam = {     
+                isPagination:true,//是否分页
+                isQualitySearch:true,//是否高级查询
+                conditions:this.conditions,//高级查询项
+                btns:this.btns,//按钮
+                tableParam : this.tableParam//表单参数
+           }
+      },
+      initConditions :function(){
+          this.conditions = [
+            {
+              type:'select',
+              label:'喜欢的水果',
+              prop:'fruit',
+              ismulti:true,
+              options:[
+                {
+                  label:'苹果',
+                  value:'apple',
+                  disabled:true,  
+                },{
+                  label:'香蕉',
+                  value:'banana',
+                },{
+                   label:'橘子',
+                   value:'orange' 
+                }
+              ],
+            },{
+              type:'date',
+              label:'开始时间',
+              prop:'fruit',
+            }
+          ];
+
+
+
+      },
       initBtns:function(){
           var that = this;
           this.btns = [
@@ -124,7 +168,7 @@
          console.log(row);
 
 
-        
+
       },
       handleEdit : function(row){
           console.log('handleEdit');
