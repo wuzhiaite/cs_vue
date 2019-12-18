@@ -1,33 +1,35 @@
 <template>        
     <transition name="el-zoom-in-top">
         <div class="el-condition-div" v-if="show" >
-            <span  class="el-condition-span" v-for="(item,index) in conditions">
-                <label>
-                    <strong>{{item.label}}</strong>
-                </label>
-                <el-select v-if="item.type == 'select' "
-                    v-model="item.value" 
-                    :size=" item.size ? item.size : 'mini' "
-                    :clearable="item.ismulti ? false : true" 
-                    :multiple="item.ismulti ? true : false"
-                    @change="synData(index,item)"
-                    filterable
-                    placeholder="item.placeholder ? item.placeholder : '请选择' ">
-                    <el-option
-                        v-for="opt in item.options"
-                        :key="opt.value"
-                        :label="opt.label"
-                        :value="opt.value"
-                        :disabled="opt.disabled">
-                    </el-option>
-                </el-select>
-                <el-date-picker v-if=" item.type == 'date' "
-                    @change="synData(index,item)"
-                    :size=" item.size ? item.size : 'mini' "
-                    type="dates"
-                    v-model="item.value"
-                    :placeholder="item.placeholder">
-                </el-date-picker>
+            <span   v-for="(item,index) in conditions">
+                <span>
+                    <strong>{{item.label}}:</strong>
+                </span>
+                <span class="el-condition-span">
+                    <el-select v-if="item.type == 'select' "
+                        v-model="item.value" 
+                        :size=" item.size ? item.size : 'mini' "
+                        :clearable="item.ismulti ? false : true" 
+                        :multiple="item.ismulti ? true : false"
+                        @change="synData(index,item)"
+                        filterable
+                        :placeholder="item.placeholder ? item.placeholder : '请选择' ">
+                        <el-option
+                            v-for="opt in item.options"
+                            :key="opt.value"
+                            :label="opt.label"
+                            :value="opt.value"
+                            :disabled="opt.disabled?opt.disabled:false">
+                        </el-option>
+                    </el-select>
+                    <el-date-picker v-if=" item.type == 'date' "
+                        @change="synData(index,item)"
+                        :size=" item.size ? item.size : 'mini' "
+                        type="dates"
+                        v-model="item.value"
+                        :placeholder="item.placeholder">
+                    </el-date-picker>
+                </span>
             </span>               
         </div> 
     </transition>      
@@ -63,10 +65,18 @@
     margin:10px;
     text-align:left;
     font-size:12px;
+    padding:15px;
 }
 .el-condition-span {
     width:33.33%;
-    display:inline-block;
+    display:inline;
+    margin-right:15px;
+}
+span {
+    width:15px;
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: pre-wrap !important;
 }
 
 </style>

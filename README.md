@@ -133,7 +133,7 @@ vue.config.js 配置转发路径和端口，基础路径配置等；
 
 - 表单配置
 
-  ```
+  ```vue
    var that = this;
    this.tableParam = {
               border:true,//是否有边框

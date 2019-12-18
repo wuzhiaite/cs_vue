@@ -1,26 +1,28 @@
 <template>
- <div>          
-    <el-row>
+ <div style="width:100%;">    
+     <el-row>      
         <el-input v-model="search" placeholder="请输入内容"
             size="small"
             prefix-icon="el-icon-search"
-            style="width:100%;"></el-input>
-    </el-row> 
-    <Buttons :btns="pageParam.btns"></Buttons>  
+            style="width:40%;margin-right:15px;"></el-input>  
+      <Buttons :btns="pageParam.btns"></Buttons> 
+     </el-row> 
     <Conditions :conditions.sync="pageParam.conditions" 
             @changeCondition="changeCondition" 
             :show="show"></Conditions>  
     <TableList :tableParam="pageParam.tableParam"></TableList>
-    <el-pagination v-if="pageParam.isPagination "
+    <el-pagination v-if=" pageParam.isPagination != null
+                             ? pageParam.isPagination 
+                             : true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage"
+        :current-page="tableData.pageNum"
         :page-sizes="[10, 20, 30, 40]"
-        :page-size="10"
+        :page-size="tableData.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="40">
+        :total="tableData.total">
     </el-pagination>
-   <div>     
+   </div>     
 </template>
 <script>
  import TableList from '../common/TableList';
@@ -47,7 +49,8 @@
                 conditions:[],
                 url:'',
                 result:{},
-                tableParam:{}
+                tableParam:{},
+                tableData:{},
             }
         }
     },
@@ -65,16 +68,7 @@
     },
     methods:{
         addQualitySearch:function(){//增加高级查询,和普通查询
-         var that = this;
-         var quailtyBtn = {
-                name : '高级查询',
-                type : 'primary',
-                icon : 'el-icon-s-promotion',
-                disabled : false,
-                click : function(){
-                    that.show = ! that.show;
-                }
-            };
+          var that = this;
           var selectBtn = {
               name : '查询',
               type : 'primary',
@@ -86,9 +80,24 @@
                  that.getTableData();
               }
             };
-            if(this.pageParam.quailtySearch){               
-                var btns = this.pageParam.btns;
-                this.pageParam.btns = lodash.concat( quailtyBtn,selectBtn,btns );
+            if(lodash.findIndex(this.pageParam.btns,{ name : '查询'}) == -1){
+                 this.pageParam.btns = lodash.concat(selectBtn,this.pageParam.btns );
+            }  
+            if(this.pageParam.isQualitySearch){  
+                 var quailtyBtn = {
+                        name : '高级查询',
+                        type : 'primary',
+                        icon : 'el-icon-s-promotion',
+                        disabled : false,
+                        click : function(){
+                            that.show = ! that.show;
+                        }
+
+                    };  
+                    
+                if(lodash.findIndex(this.pageParam.btns,{ name : '高级查询'}) == -1){
+                    this.pageParam.btns = lodash.concat(quailtyBtn,this.pageParam.btns );
+                }     
             }
         },
         initData:function(){//初始化渲染数据
@@ -101,25 +110,18 @@
             this.post(this.url,this.reqParam)
                 .then(res =>{
                     if(res.code == 200){
-                            var data = res.data ;
-                        if(this.pageParam.isPagination){ 
-                            this.tableData = data; 
-                        }else{
-                            this.tableData = data;
-                        }     
-                        this.tableParam.tableData =          
+                        this.tableData = res.data;      
+                        this.tableParam.tableData =  res.data.list;         
                     }   
                 }).catch(error => {
-                    this.$notify(error.message);
+                    // this.$notify(error.message);
                 })
         },
         handleSizeChange : function(val) {//pageSize调整
-            console.log(`每页 ${val} 条`);
             this.reqParam.pageSize = val;
             this.getTableData();
         },
         handleCurrentChange : function(val) {//currentPage调整
-            console.log(`当前页: ${val}`);
              this.reqParam.pageNum = val;
              this.getTableData();
         },
@@ -132,6 +134,7 @@
             var data = {
                     "total": 8, //总记录
                     "list": [{ //列表数据
+                            id:'1111',
                             date: '2016-05-02',
                             name: '王小虎',
                             province: '上海',
@@ -139,6 +142,7 @@
                             address: '上海市普陀区金沙江路 1518 弄',
                             zip: 200333
                         }, {
+                            id:'2',
                             date: '2016-05-04',
                             name: '王小虎',
                             province: '上海',
@@ -146,6 +150,7 @@
                             address: '上海市普陀区金沙江路 1517 弄',
                             zip: 200333
                         }, {
+                            id:'3',
                             date: '2016-05-01',
                             name: '王小虎',
                             province: '上海',
@@ -153,6 +158,7 @@
                             address: '上海市普陀区金沙江路 1519 弄',
                             zip: 200333
                         }, {
+                            id:'4333',
                             date: '2016-05-03',
                             name: '王小虎',
                             province: '上海',
@@ -161,7 +167,7 @@
                             zip: 200333
                         }],
                     "pageNum": 1,//当前页码
-                    "pageSize": 3,//每页数量
+                    "pageSize": 10,//每页数量
                     "size": 3,//当页数量
                     "startRow": 1,//开始行数
                     "endRow": 3,//结束行数
@@ -181,6 +187,8 @@
                     "navigateFirstPage": 1,//第一页
                     "navigateLastPage": 3 //最后一页
                 };
+                this.tableData = data;      
+                this.tableParam.tableData =  data.list; 
 
         }
     },
@@ -191,9 +199,9 @@
 
 </script>
 <style scoped>
-
-
-
+.el-row{
+    margin:15px;
+}
 </style>
 
 

@@ -5,10 +5,8 @@
          <span class="el-title">
            测试用的
          </span>
-         <span class="el-user">
-           <el-dropdown>
+         <span class="el-user">       
             <i class="el-icon-setting" style="margin-right: 15px"></i>
-           </el-dropdown>
              江小白
           </span>
       </el-header>
