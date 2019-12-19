@@ -19,7 +19,10 @@ vue.config.js 配置转发路径和端口，基础路径配置等；
 
 
 ####  1.通用台账配置页面
+```
+作用：1.通用的列表展示页面，可以通过参数配置实现页面生成；
 
+```
 ![avatar](./img/pagelist.jpg)
 
 **参数配置说明：**
@@ -98,34 +101,6 @@ vue.config.js 配置转发路径和端口，基础路径配置等；
               }
             ];
         },
-        initBtns:function(){
-            var that = this;
-            this.btns = [
-              {
-                name : '高级查询',
-                type : 'primary',
-                icon : 'el-icon-s-promotion',
-                disabled : false,
-                click : function(){
-                  that.show = ! that.show;
-                }
-              },{
-                name : '查询',
-                type : 'primary',
-                icon : 'el-icon-search',
-                disabled : false,
-                click : function(){
-                  alert('嘿嘿嘿！！！');
-                }
-              },{
-                name : '删除',
-                type : 'primary',
-                icon : 'el-icon-delete',
-                disabled : false,
-                click : function(){
-                  alert('嘻嘻嘻！！！');
-                }
-              },]
   
   ```
 
