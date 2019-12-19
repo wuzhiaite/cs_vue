@@ -4,13 +4,15 @@
           <CommonPage :pageParam="pageParam"></CommonPage>
         </div>
         <div style="width:1px;"></div>
-        <div>   
+        <div>    
           
 
 
 
+
+
+
           
-        
         </div> 
     </div>
 </template>

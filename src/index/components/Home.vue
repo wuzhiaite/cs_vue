@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
          <span class="el-title">
-           测试用的
+           DEMO
          </span>
          <span class="el-user">       
             <i class="el-icon-setting" style="margin-right: 15px"></i>
