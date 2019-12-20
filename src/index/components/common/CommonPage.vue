@@ -1,16 +1,20 @@
 <template>
  <div style="width:100%;">    
      <el-row>      
-        <el-input v-model="search" placeholder="请输入内容"
+        <el-input v-model="search" 
+            placeholder="请输入内容"
+            @change="doSearch"
+            clearable=true
             size="small"
+            maxlength="1000"
             prefix-icon="el-icon-search"
             style="width:40%;margin-right:15px;"></el-input>  
-      <Buttons :btns="pageParam.btns"></Buttons> 
+      <Buttons :btns="pageParam.btns" :callbackParam.sync="callbackParam"></Buttons> 
      </el-row> 
     <Conditions :conditions.sync="pageParam.conditions" 
             @changeCondition="changeCondition" 
             :show="show"></Conditions>  
-    <TableList :tableParam="pageParam.tableParam"></TableList>
+    <TableList :tableParam="pageParam.tableParam" style=""></TableList>
     <el-pagination v-if=" pageParam.isPagination != null
                              ? pageParam.isPagination 
                              : true"
@@ -32,12 +36,16 @@
  export default {
     data(){
       return {
-          show : false,
+          show : true,
           search:'',
           tableParam:{
               tableData:[]
           },
-          reqParam:{},      
+          reqParam:{},
+          callbackParam:{
+              multipleSelection:[],
+              
+          }      
       }
     },
     props:{
@@ -67,6 +75,12 @@
         this.initData();//初始化数据
     },
     methods:{
+        doSearch:function(){
+            if(this.search){
+                this.reqParam.search = this.search;
+                this.getTableData(); 
+            }    
+        },
         addQualitySearch:function(){//增加高级查询,和普通查询
           var that = this;
           var selectBtn = {
@@ -75,9 +89,7 @@
               icon : 'el-icon-search',
               disabled : false,
               click : function(){
-                 alert('嘿嘿嘿！！！'+this.search);
-                 that.reqParam.search = this.search;
-                 that.getTableData();
+                 that.doSearch();   
               }
             };
             if(lodash.findIndex(this.pageParam.btns,{ name : '查询'}) == -1){
@@ -92,9 +104,7 @@
                         click : function(){
                             that.show = ! that.show;
                         }
-
-                    };  
-                    
+                    };     
                 if(lodash.findIndex(this.pageParam.btns,{ name : '高级查询'}) == -1){
                     this.pageParam.btns = lodash.concat(quailtyBtn,this.pageParam.btns );
                 }     
@@ -106,6 +116,7 @@
             this.getTableData();
         },
         getTableData:function(){//获取表单数据
+            console.log("getTableData");
             if(true){this.virtueData();}
             this.post(this.url,this.reqParam)
                 .then(res =>{
@@ -115,7 +126,7 @@
                     }   
                 }).catch(error => {
                     // this.$notify(error.message);
-                })
+                })     
         },
         handleSizeChange : function(val) {//pageSize调整
             this.reqParam.pageSize = val;
@@ -128,7 +139,6 @@
         changeCondition:function(index,item){
             this.reqParam[item.prop] = item.value;
             this.getTableData();
-
         },
         virtueData : function(){
             var data = {

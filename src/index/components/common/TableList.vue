@@ -9,6 +9,7 @@
         :highlight-current-row="tableParam.highlightCurrentRow?true:false"
         :default-sort="tableParam.defaultSort ?tableParam.defaultSort :{} "
         @sort-change="sortChange"
+        @selection-change="handleSelectionChange"
         :height="tableParam.height ? tableParam.height : 600+'px'"
         :max-height="tableParam.maxHeight"
         style="width: 100%;height:100px;">
@@ -45,6 +46,9 @@
          tableParam:{
              type:Object,
              default:{}
+         },
+         callbackParam:{
+             multipleSelection:[],
          }   
     },
     data(){
@@ -66,7 +70,11 @@
         sortChange:function(row){//监听排序事件
             console.log(row);
             
-        }
+        },
+        handleSelectionChange(val) {
+            this.callbackParam.multipleSelection = val ;
+            this.$emti('callbackParam:update',this.callbackParam)
+       }
     }
  }
 

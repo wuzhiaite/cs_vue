@@ -1,20 +1,16 @@
 <template>
-    <div class="box-block">
+<CommonPage :pageParam="pageParam"></CommonPage>
+  <!-- <div class="box-block">
         <div>
           <CommonPage :pageParam="pageParam"></CommonPage>
         </div>
         <div style="width:1px;"></div>
-        <div>    
-          
+        <div style="">    
+            <table>
 
-
-
-
-
-
-          
+            </table>
         </div> 
-    </div>
+    </div> -->
 </template>
 <script>
  import CommonPage from '../common/CommonPage';
@@ -22,11 +18,11 @@
  export default {
     data(){
       return {
-        search:'',
         tableParam:{},
         btns:[],
         conditions:[],
         pageParam:{},
+       
       }
     },
     components:{
@@ -39,6 +35,9 @@
       this.initPageParam();
     },
     methods:{
+      onSubmit() {
+          console.log('submit!');
+      },
       initPageParam : function(){
            this.pageParam = {     
                 isPagination:true,//是否分页
@@ -74,6 +73,16 @@
               type:'date',
               label:'开始时间',
               prop:'fruit',
+            },{
+              type:'bol',
+              label:'是否为女',
+              prop:'gender',
+              activeText:'是',
+              inactiveText:'否'
+            },{
+              type:'interval',
+              label:'时间段',
+              prop:'interval',
             }
           ];
       },

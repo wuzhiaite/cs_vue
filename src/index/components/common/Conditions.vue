@@ -1,13 +1,15 @@
-<template>        
+<template>      
     <transition name="el-zoom-in-top">
         <div class="el-condition-div" v-if="show" >
-            <span   v-for="(item,index) in conditions">
-                <span>
-                    <strong>{{item.label}}:</strong>
+            <span   v-for="(item,index) in conditions" 
+                    class="el-span" >
+                <span class="label-span" >
+                     <strong>{{item.label}}:</strong>
                 </span>
                 <span class="el-condition-span">
                     <el-select v-if="item.type == 'select' "
                         v-model="item.value" 
+                        style="width:150px;"
                         :size=" item.size ? item.size : 'mini' "
                         :clearable="item.ismulti ? false : true" 
                         :multiple="item.ismulti ? true : false"
@@ -23,16 +25,58 @@
                         </el-option>
                     </el-select>
                     <el-date-picker v-if=" item.type == 'date' "
+                        style="width:150px;"
                         @change="synData(index,item)"
                         :size=" item.size ? item.size : 'mini' "
                         type="dates"
                         v-model="item.value"
                         :placeholder="item.placeholder">
-                    </el-date-picker>
+                    </el-date-picker >
+                     <el-switch v-if=" item.type == 'bol' " 
+                            style="width:150px;"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949"
+                            :active-text="item.activeText"
+                            :inactive-text="item.inactiveText"
+                            v-model="item.value">
+                     </el-switch>
+                     <span v-if=" item.type == 'interval' " >
+                          <el-date-picker 
+                            style="width:130px;"
+                            @change="synData(index,item)"
+                            :size=" item.size ? item.size : 'mini' "
+                            type="dates"
+                            v-model="item.startTime"
+                            :placeholder="item.placeholder">
+                          </el-date-picker >
+                            -
+                          <el-date-picker 
+                            style="width:130px;"
+                            @change="synData(index,item)"
+                            :size=" item.size ? item.size : 'mini' "
+                            type="dates"
+                            v-model="item.endTime"
+                            :placeholder="item.placeholder">
+                         </el-date-picker >
+                     <!-- <el-date-picker
+                        v-if=" item.type == 'interval' " 
+                        :size="item.size ? item.type : 'mini'"
+                        style="width:250px;display:inline-block;"
+                        v-model="item.value"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions">
+                    </el-date-picker> -->
+                    </span>
                 </span>
             </span>               
         </div> 
-    </transition>      
+    </transition>  
+
 </template>
 <script>
  export default {
@@ -43,8 +87,39 @@
         },
         show:{
             type : Boolean,
-            default : false,
+            default : true,
         }
+    },
+    data:function(){
+        return {
+               pickerOptions: {
+                shortcuts: [{
+                    text: '最近一周',
+                    onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', [start, end]);
+                    }
+                }, {
+                    text: '最近一个月',
+                    onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                    picker.$emit('pick', [start, end]);
+                    }
+                }, {
+                    text: '最近三个月',
+                    onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                    picker.$emit('pick', [start, end]);
+                    }
+                }]
+            },
+      }
     },
     methods:{
         synData:function(index,item){
@@ -62,18 +137,25 @@
     display:block;
     background-color:#D1E7FE;
     width:100%;
-    margin:10px;
+    margin:auto;
     text-align:left;
     font-size:12px;
     padding:15px;
 }
+.el-span{
+    width:380px;
+    display:inline-block;
+    margin-top:15px;
+}
 .el-condition-span {
-    width:33.33%;
     display:inline;
     margin-right:15px;
 }
-span {
-    width:15px;
+.label-span {
+    display:inline-block;
+    width:70px;
+    margin-right:15px;
+    margin-bottom: 15px;
     word-wrap: break-word;
     word-break: break-all;
     white-space: pre-wrap !important;
