@@ -18,7 +18,7 @@
           <el-radio-button v-show="isCollapse" :label="false">展开</el-radio-button>
           <el-radio-button v-show="!isCollapse" :label="true">收起</el-radio-button>
         </el-radio-group>   -->
-        <el-menu  router unique-opened  
+        <el-menu  router unique-opened  default-active="/config/pagelist"
               class="el-menu-vertical-demo" @open="handleOpen"
               @close="handleClose" :collapse="isCollapse">
           <el-submenu index="1">

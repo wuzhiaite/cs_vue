@@ -1,7 +1,7 @@
 <template>      
     <transition name="el-zoom-in-top">
         <div class="el-condition-div" v-if="show" >
-            <span   v-for="(item,index) in conditions" 
+            <span   v-for="(item,index) in conditions"                 
                     class="el-span" >
                 <span class="label-span" >
                      <strong>{{item.label}}:</strong>
@@ -58,20 +58,17 @@
                             v-model="item.endTime"
                             :placeholder="item.placeholder">
                          </el-date-picker >
-                     <!-- <el-date-picker
-                        v-if=" item.type == 'interval' " 
-                        :size="item.size ? item.type : 'mini'"
-                        style="width:250px;display:inline-block;"
-                        v-model="item.value"
-                        type="daterange"
-                        align="right"
-                        unlink-panels
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :picker-options="pickerOptions">
-                    </el-date-picker> -->
                     </span>
+                     <el-radio-group 
+                         v-model="item.value" 
+                         @change="synData(index,item)"
+                         :size=" item.size ? item.size : 'mini' "
+                         v-if="item.type == 'buttons'">
+                        <el-radio-button v-for="opt in item.options" 
+                           :disabled="item.disabled ? item.disabled : false"
+                           :label="opt.name" ></el-radio-button>    
+                     </el-radio-group>
+
                 </span>
             </span>               
         </div> 
@@ -148,7 +145,7 @@
     margin-top:15px;
 }
 .el-condition-span {
-    display:inline;
+    display:inline-block;
     margin-right:15px;
 }
 .label-span {
