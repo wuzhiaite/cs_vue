@@ -75,7 +75,7 @@
                     </td> 
                     <td class="td_form">
                         <el-radio-group  size="mini" v-model="form.edu" 
-                                  style="display:inline;padding:5px;">
+                                  style="display:inline;padding:0px;">
                             <el-radio 
                                 size="mini"
                                 v-for="item in edus" 
@@ -91,7 +91,7 @@
                     <td  class="td_form">
                          <el-checkbox-group v-model="form.checkbox"
                                       size="mini"
-                                      style="display:inline;padding:5px;">
+                                      style="display:inline;padding:0px;">
                               <el-checkbox 
                                   size="mini"
                                   style="padding:0px;font-size:12px;margin-right:10px;"
@@ -130,8 +130,6 @@
                         </el-date-picker>          
                     </td>         
                 </tr> 
-
-
                 <tr>
                     <td class="td-label">
                       <span>
@@ -143,6 +141,36 @@
                              style="width:100%;padding:0px;"
                              v-model="form.shelfDes"></el-input>           
                     </td> 
+                </tr> 
+                <tr>
+                    <td class="td-label">
+                      <span>
+                        <strong>个性图片:</strong>
+                      </span>
+                    </td> 
+                    <td  class="td_form" colspan="3">
+                      <div>
+                          <el-upload
+                            style="width:100px;margin-right:10px;"
+                            class="avatar-uploader"
+                            action="https://jsonplaceholder.typicode.com/posts/"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                            <span  style="display:inline-block;margin:0px;margin-right:50px;" >
+                                <img v-if="imageUrl" :src="imageUrl" 
+                                    class="avatar">
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            </span>
+                            <span   style="display:inline-block;margin:0px;" >
+                                <img v-if="imageUrl" :src="imageUrl" 
+                                    class="avatar">
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            </span>
+                          </el-upload>    
+                      </div>
+                    </td> 
+
                 </tr>  
             </table>
           
@@ -173,7 +201,7 @@
               {name:'游泳',value:'swmming'}],
         cities: ['上海', '北京', '广州', '深圳'],   
         checkedCities:[],   
-        
+        imageUrl:'',
       }
     },
     watch:{
@@ -197,6 +225,21 @@
       this.initDemon();
     },
     methods:{
+       handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      },
       initDemon:function(){
          this.demon = 
          {
@@ -570,12 +613,6 @@ span{
   font-size:12px;
   padding:0px;
 }
-td{
-  border : 1px solid black;
-  padding:0px;
-  width:auto;
-  height:5px;
-}
  table{
   border-collapse: collapse;
   margin: 0 auto;
@@ -610,6 +647,32 @@ table tr:nth-child(even){
   padding:0px;
   border:0px;
 }
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+
+
+
 </style>
 
 
