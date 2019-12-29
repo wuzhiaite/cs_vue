@@ -178,8 +178,8 @@
     </div>
 </template>
 <script>
- import CommonPage from '../common/CommonPage';
- import TableList from '../common/TableList'
+ 
+
  export default {
     data(){
       return {
@@ -214,8 +214,6 @@
 
     },
     components:{
-      CommonPage,
-      TableList,
     },
     created(){
       this.initTable();

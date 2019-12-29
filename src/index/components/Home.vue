@@ -14,27 +14,27 @@
     <el-container style="height: 100%; border: 1px solid #eee;width:100%;"> 
       <el-aside width="180px" style="background-color: #eee" 
           router="true" mode="horizontal" >
-        <!-- <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
-          <el-radio-button v-show="isCollapse" :label="false">展开</el-radio-button>
-          <el-radio-button v-show="!isCollapse" :label="true">收起</el-radio-button>
-        </el-radio-group>   -->
-        <el-menu  router unique-opened  default-active="/config/pagelist"
-              class="el-menu-vertical-demo" @open="handleOpen"
-              @close="handleClose" :collapse="isCollapse">
-          <el-submenu index="1">
-            <template slot="title">              
-              <i class="el-icon-setting"></i>
-                <span slot="title"> 页面配置 </span>
-            </template>
-               <el-menu-item-group>
-                   <el-menu-item index="/config/pagelist" key="pageList">台账页面配置</el-menu-item>
-                </el-menu-item-group>
-          </el-submenu>
-        </el-menu>
+       
+       <el-menu style="background: #ececec;width: 180px;" unique-opened router>
+              <template v-for="(item,index) in this.routes" v-if="!item.hidden">
+                <el-submenu :key="index" :index="index+''">
+                  <template slot="title">
+                    <i :class="item.iconCls" style="color: #20a0ff;width: 14px;"></i>
+                    <span slot="title">{{item.name}}</span>
+                  </template>
+                  <el-menu-item width="180px"
+                                style="padding-left: 30px;padding-right:0px;margin-left: 0px;width: 170px;text-align: left"
+                                v-for="child in item.children"
+                                :index="child.path"
+                                :key="child.path">{{child.name}}
+                  </el-menu-item>
+                </el-submenu>
+              </template>
+            </el-menu>
       </el-aside>
       <el-main >
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
           </el-breadcrumb>
         <router-view  />
@@ -44,15 +44,18 @@
 </template>
 
 <script>
-  import router from '../routers/ConfigRouter';
+  import {mapGetters} from  'vuex';
+
   export default {
     name:'home',
-    router,
     data() {
       return {
         screenHeight: window.screen.availHeight - 100,
         isCollapse: false,
       }
+    },
+    computed:{
+       ...mapGetters({routes:'cs/getMenus'}),
     },
     mounted(){
       const that = this
@@ -62,6 +65,9 @@
               that.screenWidth = window.screenWidth
           })()
       }
+    },
+    created(){
+        console.log(this.$router);
     },
     watch:{
         screenHeight(val){

@@ -4,7 +4,7 @@
         <el-input v-model="search" 
             placeholder="请输入内容"
             @change="doSearch"
-            clearable=true
+            clearable
             size="small"
             maxlength="1000"
             prefix-icon="el-icon-search"
