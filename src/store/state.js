@@ -8,13 +8,13 @@ export default {
     //用户信息
     user : localStorage.getItem("user") 
                 ? JSON.parse(localStorage.getItem("user") )
-                :  {   
-                        userId : '',
-                        username : '',
-                        token : '',
-                        englishName:'',
-                    }
-
+                : {   
+                    userId : '',
+                    username : '',
+                    token : '',
+                    englishName:'',
+                  },
+    screenHeight:window.screen.availHeight - 100             
 
 
 }

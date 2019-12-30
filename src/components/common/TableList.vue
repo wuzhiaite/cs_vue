@@ -10,7 +10,7 @@
         :default-sort="tableParam.defaultSort ?tableParam.defaultSort :{} "
         @sort-change="sortChange"
         @selection-change="handleSelectionChange"
-        :height="tableParam.height ? tableParam.height : 600+'px'"
+        :height="height*0.66"
         :max-height="tableParam.maxHeight"
         style="width: 100%;height:100px;">
         <!-- 是否多选 -->
@@ -39,7 +39,7 @@
     
 </template>
 <script>
-
+import {mapGetters} from 'vuex';
 
  export default {
     props:{
@@ -57,6 +57,9 @@
             tableData:[],
         }
     },
+    computed:{
+        ...mapGetters({height:'getScreenHeight'}),
+    },
     created:function(){
         this.initTableData();
     },
@@ -68,8 +71,7 @@
             this.loading = false;
         },
         sortChange:function(row){//监听排序事件
-            console.log(row);
-            
+            console.log(row);       
         },
         handleSelectionChange(val) {
             this.callbackParam.multipleSelection = val ;

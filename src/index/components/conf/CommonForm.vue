@@ -1,5 +1,5 @@
 <template>
-<div>    
+<div >    
     <span style="text-align:left;font-size:20px;">
         <strong>通用表单</strong>
     </span>
@@ -170,6 +170,26 @@
         <tr>
             <td class="td-label">
                 <span>
+                 <strong>签名:</strong>
+                </span>
+            </td> 
+            <td  class="td_form" colspan="3">
+                <Signature :sign="form.sign"></Signature>      
+            </td> 
+        </tr> 
+         <tr>
+            <td class="td-label">
+                <span>
+                <strong>毛笔字:</strong>
+                </span>
+            </td> 
+            <td  class="td_form" colspan="3">
+                <BrushSignature :sign="form.brushSign"></BrushSignature>      
+            </td> 
+        </tr> 
+        <tr>
+            <td class="td-label">
+                <span>
                 <strong>个性图片:</strong>
                 </span>
             </td> 
@@ -264,6 +284,9 @@
       },
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${ file.name }？`);
+      },
+      handleAvatarSuccess(){
+
       }
     }
  }

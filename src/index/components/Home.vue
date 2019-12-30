@@ -3,15 +3,15 @@
     <el-container>
       <el-header>
          <span class="el-title">
-           DEMO
+           {{systemName}}
          </span>
          <span class="el-user">       
             <i class="el-icon-setting" style="margin-right: 15px"></i>
-             江小白
+             {{username}}
           </span>
       </el-header>
     </el-container>  
-    <el-container style="height: 100%; border: 1px solid #eee;width:100%;"> 
+    <el-container style="height: 95%; border: 1px solid #eee;width:100%;"> 
       <el-aside width="180px" style="background-color: #eee" 
           router="true" mode="horizontal" >
        
@@ -35,7 +35,7 @@
       </el-aside>
       <el-main >
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
           </el-breadcrumb>
         <router-view  />
@@ -51,21 +51,32 @@
     name:'home',
     data() {
       return {
-        screenHeight: window.screen.availHeight - 100,
         isCollapse: false,
       }
     },
     computed:{
-       ...mapGetters({routes:'cs/getMenus'}),
+       ...mapGetters({
+              routes:'cs/getMenus',
+              systemName : 'getSystemName',
+              username : 'getUsername'}),
+       screenHeight:{
+          get(){
+             return this.$store.state.screenHeight ;
+          },
+          set(value){
+             this.$state.dispatch('setScreenHeight', value )
+          }
+       }       
     },
     mounted(){
       const that = this
       window.onresize = () => {
           return (() => {
-              window.screenWidth = document.body.clientWidth
-              that.screenWidth = window.screenWidth
+              window.screenHeight = document.body.clientHeight
+              that.screenHeight = window.screenHeight
           })()
       }
+      console.log(this.$store);
     },
     created(){
         console.log(this.$router);
@@ -75,9 +86,10 @@
           // 为了避免频繁触发resize函数导致页面卡顿，使用定时器
           if(!this.timer){
               // 一旦监听到的screenWidth值改变，就将其重新赋给data里的screenWidth
-              this.screenWidth = val
+              this.screenHeight = val
               this.timer = true
               let that = this
+              this.$store.dispatch("setScreenHeight",this.screenHeight);
               setTimeout(function(){
                   // 打印screenWidth变化的值
                   console.log(that.screenWidth)
@@ -87,6 +99,7 @@
       }
     },
     methods:{
+      
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
       },

@@ -8,6 +8,7 @@ export default {
 
     setSystemName : ( state , systemName )=> state.systemName = systemName,
 
+    setScreenHeight : (state,height) => state.screenHeight = height,
 
 
 }

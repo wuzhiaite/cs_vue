@@ -4,20 +4,19 @@ export default  {
         namespaced:true,
         state:{
             menus:[],    
-            basePath:'./components/',
+        
         },
         mutations:{
             setMenus(state,menus){
                 state.menus = menus;
-            }
+            },
+           
         },
         getters:{
             getMenus( context ){
                 return context.menus;
             },
-            getBasePath( context ){
-                return context.basePath ;    
-            }
+            
         
         },
         actions:{
@@ -28,7 +27,6 @@ export default  {
                 }
             },
             
-
         },
    
 

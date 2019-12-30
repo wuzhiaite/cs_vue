@@ -4,12 +4,88 @@
           <CommonPage :pageParam="pageParam"></CommonPage>
         </div>
         <div style="width:1px;"></div>
-        <div style="float:right;">    
+        <div style="float:right;margin-top:20px;">    
             <span style="text-align:left;font-size:20px;">
               <strong>台账配置明细</strong>
             </span>
-            
-          
+            <table>
+                <tr>
+                    <td class="td-label">
+                        <span>
+                        <strong>条件搜索字段:</strong>
+                        </span>
+                    </td> 
+                    <td class="td_form">
+                       <el-select v-model="conditionSelect"
+                          style="width:100%;padding:0px;"
+                          :disabled="disabled"
+                          multiple placeholder="请选择">
+                            <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.name"
+                              :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </td>                            
+                </tr> 
+                <tr>
+                    <td style="" class="td-label">
+                    <span>
+                        <strong>列展示字段:</strong>
+                    </span>
+                    </td>
+                    <td class="td_form">
+                        <el-select v-model="conditionSelect"
+                          :disabled="disabled"
+                          style="width:100%;padding:0px;"
+                          multiple placeholder="请选择">
+                            <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.name"
+                              :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </td>           
+                </tr>             
+                <tr>
+                    <td class="td-label">
+                        <span>
+                        <strong>条件项:</strong>
+                        </span>
+                    </td> 
+                    <td class="td_form">
+                        <el-select v-model="conditionSelect"
+                         :disabled="disabled"
+                          style="width:100%;padding:0px;"
+                          multiple placeholder="请选择">
+                            <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.name"
+                              :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </td>         
+                </tr> 
+                <tr>
+                    <td class="td-label">
+                        <span>
+                        <strong>查询SQL:</strong>
+                        </span>
+                    </td> 
+                    <td  class="td_form">
+                        <el-input type="textarea" 
+                            show-word-limit
+                            maxlength="5000"
+                            style="width:100%;padding:0px;height:100%;"
+                            :disabled="disabled"
+                            rows="13"
+                            v-model="form.shelfDes"></el-input>           
+                    </td> 
+                </tr> 
+            </table>        
         </div> 
     </div>
 </template>
@@ -23,11 +99,22 @@
         btns:[],
         conditions:[],
         pageParam:{},
+        form:{},
+        disabled:false,
+        conditionSelect:['name','area','age'],
+        options:[
+          {
+            name:'名称',
+            value:'name'
+          },{
+            name:'区域',
+            value:'area',
+          },{
+            name:'年龄',
+            value:'age',
+          }
+        ],
       }
-    },
-    watch:{
-    },
-    components:{
     },
     created(){
       this.initTable();
@@ -53,10 +140,24 @@
       handleEdit : function(row){
            alert(JSON.stringify(row));
       },
+       initBtns:function(){
+          var that = this;
+          this.btns = [
+            {
+                name : '新增',
+                type : 'primary',
+                icon : 'el-icon-delete',
+                disabled : false,
+                click : function(){
+                   this.$alert('<CommonForm></CommonForm>', {
+                        dangerouslyUseHTMLString: true
+                      });
+                }
+              }]
+      },
       initTable : function(){
           var that = this;
           this.tableParam = {
-            border:true,//是否有边框
             script:true,
             highlightCurrentRow:true,//单行选择
             maxHeight:"1500",//最大高度
@@ -66,47 +167,32 @@
               // prop: 'date', order: 'descending'
             },
             columns:[{
-                prop : 'date',
-                label : '日期',
-                width :'120',
-                icon : 'el-icon-time',
-             },{
                 prop : "name",
                 label : "姓名",
                 width : "80"
              },{
-                prop:"province",
-                label:"省份",
-                width:"80",
-             },{
-                prop : "city",
-                label : "市区",
-                width : "80",
-             },{
-                prop : "address",
-                label : "地址",
-                width : "250",
-             },{
-                 prop : "zip",
-                 label : "邮编",
-                 width : "120",
-             },{
                 prop : "cz",
                 label : "操作",
-                width : "200",
-                sortable:'',
-                fixed:'right',
+                width : "300",
                 opers:[
                   {
-                    name:"查看",
-                    type:'',
+                    name:"台账预览",
+                    type:'text',
+                    icon : 'el-icon-view',
+                    click:function(row){
+                      that.handleClick(row);
+                    }
+                  },{
+                    name:"删除",
+                    type:'danger',
+                    icon : 'el-icon-delete',
                     click:function(row){
                       that.handleClick(row);
                     }
                   },
                   {
                     name:"编辑",
-                    type:'danger',
+                    type:'',
                     icon:'el-icon-edit',
                     click:function(row){
                         that.handleEdit(row);
@@ -146,8 +232,10 @@ span{
  table{
   border-collapse: collapse;
   margin: 0 auto;
+  margin-top:10px;
   text-align: center;
-    }
+  width:100%;
+}
 table td, table th{
   border: 1px solid #cad9ea;
   color: #666;
@@ -166,11 +254,11 @@ table tr:nth-child(even){
 }
 
 .td-label{
-  width:20%;
+  width:30%;
   background-color:#D1E7FE;
 }
 .td-form{
-  width:30%;
+  width:70%;
 }
 .el-tb-common{
   width:100%;

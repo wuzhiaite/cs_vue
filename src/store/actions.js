@@ -11,7 +11,10 @@ export default {
     },
     setSystemName(context,systemName){
         context.commit('setSystemName',systemName);
-    }
+    },
+    setScreenHeight({commit},height){
+        return commit('setScreenHeight',height);   
+   }
 
 
 }

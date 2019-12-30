@@ -4,7 +4,7 @@ export default {
 
     getSystemName : state => state.systemName,
 
-    
+    getScreenHeight : state => state.screenHeight ,
 }
 
 

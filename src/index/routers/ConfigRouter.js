@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 export default new VueRouter({
     routes :[
         {
-            path : '/index',
+            path : '/',
             name : '首页',
             component : () => import('../components/Index'), 
         },{
@@ -15,7 +15,7 @@ export default new VueRouter({
             component : () => import('../components/Home'), 
         },{
             path :'/pagelist',
-            name:'通用台账',
+            name:'配置页面',
             component : () => import('../components/conf/PageList'),
         },{
             path : '/commonform',
@@ -24,7 +24,7 @@ export default new VueRouter({
         },{
               path:'/commonComponent',
               name : '通用组件',
-              component : () => import('../components/conf/commonComponent'),
+              component : () => import('../components/conf/ComComponent'),
               iconCls:'el-icon-collection',
         },{
             path : '/comPageList',

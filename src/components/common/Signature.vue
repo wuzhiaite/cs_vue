@@ -5,13 +5,17 @@
                   <canvas ref="canvasF"
                         @touchstart='touchStart' 
                         @touchmove='touchMove' 
-                        @touchend='touchEnd' ></canvas>
+                        @touchend='touchEnd' 
+                        @mousedown="touchStart" 
+                        @mousemove="touchMove" 
+                        @mouseup="touchEnd"
+                        ></canvas>
               </div>
-          </div>
-           <div  style="float:right;margin-top:10px;color:gray;margin-right:10px;" @click="overwrite"> 
-                <van-icon name="replay" />
+              <div  style="text-align:right;color:gray;margin:0px;" @click="overwrite"> 
+                <i class="el-icon-refresh" />
                 重新签署 
               </div>
+          </div>       
       </section>    
 </template>
 <script>
@@ -60,7 +64,7 @@
         ev = ev || event
         ev.preventDefault()
         var obj = {};
-        if (ev.touches && ev.touches.length == 1) {
+        if (ev.touches && ev.touches.length == 1 && this.isDown) {
            obj = {
             x: ev.targetTouches[0].clienX,
             y: ev.targetTouches[0].clientY,
@@ -84,12 +88,12 @@
         ev = ev || event
         ev.preventDefault()
         var obj = {};
-        if (ev.touches.length == 1) {
+        if (ev.touches && ev.touches.length == 1) {
            obj = {
             x: ev.targetTouches[0].clientX - this.stageInfo.left,
             y: ev.targetTouches[0].clientY - this.stageInfo.top
           }
-        }else{
+        }else if(this.isDown) {
            obj = {
             x: ev.offsetX,
             y: ev.offsetY
@@ -110,13 +114,13 @@
         ev = ev || event
         ev.preventDefault()
         var obj = {};
-        if (ev.touches && ev.touches.length == 1) {
+        if (ev.touches && ev.touches.length == 1 ) {
            obj = {
             x: ev.targetTouches[0].clientX - this.stageInfo.left,
             y: ev.targetTouches[0].clientY - this.stageInfo.top
           }
          
-        }else{
+        }else {
            obj = {
             x: ev.offsetX,
             y: ev.offsetY

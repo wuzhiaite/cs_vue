@@ -10,12 +10,13 @@
                       @mousemove="touchMove" 
                       @mouseup="touchEnd"
                        ></canvas>
-              </div>        
-          </div>
-           <div  style="float:right;margin-top:10px;color:gray;margin-right:10px;" @click="overwrite"> 
-                <van-icon name="replay" />
+              </div>  
+              <div  style="text-align:right;margin:0px;color:gray;margin-right:10px;position: relative;" @click="overwrite"> 
+                <i class="el-icon-refresh" />
                 重新签署 
-              </div>
+              </div>      
+          </div>
+           
       </section>    
 
 </template>
@@ -162,6 +163,9 @@
     flex-direction: column;
   }
   .canvasBox {
+    margin:0px;
+    padding:0px;
+    width:100%;
     box-sizing: border-box;
     flex: 1;
   }

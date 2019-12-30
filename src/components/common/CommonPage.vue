@@ -11,10 +11,12 @@
             style="width:40%;margin-right:15px;"></el-input>  
       <Buttons :btns="pageParam.btns" :callbackParam.sync="callbackParam"></Buttons> 
      </el-row> 
-    <Conditions :conditions.sync="pageParam.conditions" 
+    <Conditions v-if="pageParam.conditions" :conditions.sync="pageParam.conditions" 
             @changeCondition="changeCondition" 
-            :show="show"></Conditions>  
+            :show="show"></Conditions>   
+                 
     <TableList :tableParam="pageParam.tableParam" style=""></TableList>
+
     <el-pagination v-if=" pageParam.isPagination != null
                              ? pageParam.isPagination 
                              : true"
@@ -142,6 +144,70 @@
             var data = {
                     "total": 8, //总记录
                     "list": [{ //列表数据
+                            id:'1111',
+                            date: '2016-05-02',
+                            name: '王小虎',
+                            province: '上海',
+                            city: '普陀区',
+                            address: '上海市普陀区金沙江路 1518 弄',
+                            zip: 200333
+                        }, {
+                            id:'2',
+                            date: '2016-05-04',
+                            name: '王小虎',
+                            province: '上海',
+                            city: '普陀区',
+                            address: '上海市普陀区金沙江路 1517 弄',
+                            zip: 200333
+                        }, {
+                            id:'3',
+                            date: '2016-05-01',
+                            name: '王小虎',
+                            province: '上海',
+                            city: '普陀区',
+                            address: '上海市普陀区金沙江路 1519 弄',
+                            zip: 200333
+                        }, {
+                            id:'4333',
+                            date: '2016-05-03',
+                            name: '王小虎',
+                            province: '上海',
+                            city: '普陀区',
+                            address: '上海市普陀区金沙江路 1516 弄',
+                            zip: 200333
+                        },{ //列表数据
+                            id:'1111',
+                            date: '2016-05-02',
+                            name: '王小虎',
+                            province: '上海',
+                            city: '普陀区',
+                            address: '上海市普陀区金沙江路 1518 弄',
+                            zip: 200333
+                        }, {
+                            id:'2',
+                            date: '2016-05-04',
+                            name: '王小虎',
+                            province: '上海',
+                            city: '普陀区',
+                            address: '上海市普陀区金沙江路 1517 弄',
+                            zip: 200333
+                        }, {
+                            id:'3',
+                            date: '2016-05-01',
+                            name: '王小虎',
+                            province: '上海',
+                            city: '普陀区',
+                            address: '上海市普陀区金沙江路 1519 弄',
+                            zip: 200333
+                        }, {
+                            id:'4333',
+                            date: '2016-05-03',
+                            name: '王小虎',
+                            province: '上海',
+                            city: '普陀区',
+                            address: '上海市普陀区金沙江路 1516 弄',
+                            zip: 200333
+                        },{ //列表数据
                             id:'1111',
                             date: '2016-05-02',
                             name: '王小虎',
