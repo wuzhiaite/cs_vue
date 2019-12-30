@@ -23,6 +23,7 @@
                     <span slot="title">{{item.name}}</span>
                   </template>
                   <el-menu-item width="180px"
+                                v-if="item.children"
                                 style="padding-left: 30px;padding-right:0px;margin-left: 0px;width: 170px;text-align: left"
                                 v-for="child in item.children"
                                 :index="child.path"

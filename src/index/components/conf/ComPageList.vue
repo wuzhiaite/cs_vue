@@ -1,17 +1,7 @@
 <template>
-  <div class="box-block">
-        <div>
-          <CommonPage :pageParam="pageParam"></CommonPage>
-        </div>
-        <div style="width:1px;"></div>
-        <div style="float:right;">    
-            <span style="text-align:left;font-size:20px;">
-              <strong>台账配置明细</strong>
-            </span>
-            
-          
-        </div> 
-    </div>
+  <div>
+    <CommonPage :pageParam="pageParam"></CommonPage>
+  </div>
 </template>
 <script>
  
@@ -25,32 +15,96 @@
         pageParam:{},
       }
     },
-    watch:{
-    },
     components:{
     },
     created(){
       this.initTable();
       this.initBtns();
+      this.initConditions();
       this.initPageParam();
     },
     methods:{
-      
       onSubmit() {
           console.log('submit!');
       },
       initPageParam : function(){
            this.pageParam = {     
                 isPagination:true,//是否分页
-                isQualitySearch:false,//是否高级查询
+                isQualitySearch:true,//是否高级查询
+                conditions:this.conditions,//高级查询项
                 btns:this.btns,//按钮
                 tableParam : this.tableParam//表单参数
            }
       },
+      initConditions :function(){
+          this.conditions = [
+            {
+              type:'select',
+              label:'喜欢的水果',
+              prop:'fruit',
+              ismulti:false,
+              options:[
+                {
+                  label:'苹果',
+                  value:'apple',
+                  disabled:true,  
+                },{
+                  label:'香蕉',
+                  value:'banana',
+                  disabled:false,
+                },{
+                   label:'橘子',
+                   value:'orange',
+                   disabled:false, 
+                }
+              ],
+            },{
+              type:'date',
+              label:'开始时间',
+              prop:'fruit',
+            },{
+              type:'bol',
+              label:'是否为女',
+              prop:'gender',
+              activeText:'是',
+              inactiveText:'否'
+            },{
+              type:'interval',
+              label:'时间段',
+              prop:'interval',
+            },{
+              type:'buttons',
+              label:'所在区域',
+              prop:'button',
+              value:'西安',
+              options:[
+                {name:'上海',value:'shanghai'},
+                {name:'北京',value:'beijing'},
+                {name:'深圳',value:'shenzhen'},
+                {name:'西安',value:'xian'}],
+            }
+          ];
+      },
+      initBtns:function(){
+          var that = this;
+          this.btns = [{
+                name : '删除',
+                type : 'primary',
+                icon : 'el-icon-delete',
+                disabled : false,
+                click : function(){
+                  alert('嘻嘻嘻！！！!');
+                }
+              },]
+      },
       handleClick:function(row){
+         console.log('handleClick');
+         console.log(row);
          alert(JSON.stringify(row));
       },
       handleEdit : function(row){
+          console.log('handleEdit');
+          console.log(row);
            alert(JSON.stringify(row));
       },
       initTable : function(){

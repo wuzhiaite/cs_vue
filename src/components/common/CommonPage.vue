@@ -68,10 +68,8 @@
       Conditions,
     },
     created(){
-        this.tableParam = this.pageParam.tableParam ;
-        if(this.pageParam.isQualitySearch){
-             this.addQualitySearch();//判断是否有高级查询需求
-        }    
+        this.tableParam = this.pageParam.tableParam ;  
+        this.addQualitySearch();//判断是否有高级查询需求 
         this.initData();//初始化数据
     },
     methods:{

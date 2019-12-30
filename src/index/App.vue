@@ -43,20 +43,24 @@ export default {
             children : [
                 {
                     path :'/pagelist',
-                    name:'通用台账',
+                    name:'配置页面',
                     realPath:'conf/PageList',
+                },{
+                    path : '/comPageList',
+                    name : '通用台账',
+                    realPath:'conf/ComPageList',
                 },{
                     path : '/commonform',
                     name : '通用表单',
                     realPath:'conf/CommongForm',
-                }]
+                },{
+                    path:'/commonComponent',
+                    name : '通用组件',
+                    realPath:'BrushSignature',
+                    iconCls:'el-icon-collection',
+                },]
 
-          },{
-              path:'/commonComponent',
-              name : '通用组件',
-              realPath:'BrushSignature',
-              iconCls:'el-icon-collection',
-           },    
+          }   
         ];
        var basePath = this.$store.state.cs.basePath;
        csMenus = formatRoutes( csMenus );

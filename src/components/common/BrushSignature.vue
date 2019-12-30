@@ -168,7 +168,7 @@
   canvas {
     display: block;
 		margin: 0 auto ;
-    border: 1px solid white;
+    border: 1px solid black;
   }
   .btnBox {
     padding: 10px;

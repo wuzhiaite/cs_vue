@@ -24,9 +24,14 @@ export default new VueRouter({
         },{
               path:'/commonComponent',
               name : '通用组件',
-              component : () => import('../components/BrushSignature'),
+              component : () => import('../components/conf/commonComponent'),
               iconCls:'el-icon-collection',
-           }, 
+        },{
+            path : '/comPageList',
+            name : '通用台账',
+            component : () => import('../components/conf/ComPageList'),
+            iconCls:'el-icon-collection',
+        }
     ]
 }); 
 
