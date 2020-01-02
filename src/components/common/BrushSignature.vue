@@ -172,7 +172,7 @@
   canvas {
     display: block;
 		margin: 0 auto ;
-    border: 1px solid black;
+    border: 1px solid white;
   }
   .btnBox {
     padding: 10px;
