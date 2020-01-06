@@ -1,6 +1,5 @@
 <template>
-  <div id="app">
-      <!-- <router-view  /> -->
+  <div id="app" >
     <Home />
   </div>
 </template>
@@ -60,7 +59,19 @@ export default {
                     iconCls:'el-icon-collection',
                 },]
 
-          }   
+          } ,
+          {
+            path:'/',
+            name:'图表样式',  
+            iconCls:'el-icon-s-shop',
+            children : [
+                {
+                    path :'/bargraph',
+                    name:'柱状统计图',
+                    realPath:'charts/BarGraph',
+                }
+            ]  
+          } 
         ];
        var basePath = this.$store.state.cs.basePath;
        csMenus = formatRoutes( csMenus );

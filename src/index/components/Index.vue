@@ -1,31 +1,49 @@
 <template>
-  <el-carousel :interval="2000" type="card" height="200px">
-    <el-carousel-item v-for="item in 6" :key="item">
-      <h3 class="medium">{{ item }}</h3>
-    </el-carousel-item>
-  </el-carousel>
+  <div class="main">
+      <div class="quarter-div" >
+        <BarGraph></BarGraph>
+      </div>
+      <div class="quarter-div">
+        <ScaleGraph></ScaleGraph>
+      </div>
+       <div class="quarter-div" >
+        
+      </div>
+      <div class="quarter-div" >
+      
+      </div>
+  </div> 
 </template>
 <script>
+import BarGraph from './charts/BarGraph';
+import ScaleGraph from './charts/ScaleGraph';
+
 export default {
-  
+  name:'index',
+  components:{
+    BarGraph,
+    ScaleGraph,
+  }
+
+
+
 }
 </script>
 <style>
-  .el-carousel__item h3 {
-    color: #475669;
-    font-size: 14px;
-    opacity: 0.75;
-    line-height: 200px;
-    margin: 0;
-  }
-  
-  .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
-  }
-  
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
-  }
+*{
+  margin: 0;
+  padding: 0;
+}
+.main{
+  width: 80%;
+  height: 80%;
+  position: absolute;
+}
+.quarter-div{
+  width: 50%;
+  height: 50%;
+  float: left;
+}
 </style>
 
 

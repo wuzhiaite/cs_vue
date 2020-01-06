@@ -31,6 +31,11 @@ export default new VueRouter({
             name : '通用台账',
             component : () => import('../components/conf/ComPageList'),
             iconCls:'el-icon-collection',
+        },{
+            path : '/bargraph',
+            name : '柱状统计图',
+            component : () => import('../components/charts/BarGraph'),
+            iconCls:'el-icon-collection',
         }
     ]
 }); 

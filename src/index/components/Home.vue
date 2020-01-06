@@ -17,7 +17,7 @@
        
        <el-menu style="background: #ececec;width: 180px;" unique-opened router>
               <template v-for="(item,index) in this.routes" v-if="!item.hidden">
-                <el-submenu :key="index" :index="index+''">
+                <el-submenu :key="index" :index="index+''" style="text-align:left;">
                   <template slot="title">
                     <i :class="item.iconCls" style="color: #20a0ff;width: 14px;"></i>
                     <span slot="title">{{item.name}}</span>
@@ -61,10 +61,11 @@
               username : 'getUsername'}),
        screenHeight:{
           get(){
+            console.log();
              return this.$store.state.screenHeight ;
           },
           set(value){
-             this.$state.dispatch('setScreenHeight', value )
+             this.$store.state.screenHeight = value ;
           }
        }       
     },
@@ -72,14 +73,10 @@
       const that = this
       window.onresize = () => {
           return (() => {
-              window.screenHeight = document.body.clientHeight
+              window.screenHeight = window.screen.availHeight - 100  
               that.screenHeight = window.screenHeight
           })()
       }
-      console.log(this.$store);
-    },
-    created(){
-        console.log(this.$router);
     },
     watch:{
         screenHeight(val){

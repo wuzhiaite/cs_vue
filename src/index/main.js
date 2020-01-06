@@ -1,23 +1,27 @@
 import Vue from 'vue'
 import App from './App.vue';
-import * as lodash from 'lodash';
 import ElementUI from 'element-ui';
 import './element-variables.scss';
 import '../style/theme/index.css';
 import '../util/el-components';
-import {get,post} from '../util/api'
-import '../plugin/index';
-import store from  '../store/index'
+import store from  '../store/index';
 import router from './routers/ConfigRouter';
-
+import '../plugin/ComBindPlugin';
+import '../plugin/index';
+import '../plugin/VueAxiosPlugin';
 
 Vue.use(ElementUI);
-window.lodash = lodash;//注册使用lodash
-Vue.prototype.$lodash = lodash;//注册使用lodash
-Vue.prototype.get = get;
-Vue.prototype.post = post;
+
 
 Vue.config.productionTip = false
+
+
+new Vue({
+  store,
+  router,
+  render: h => h(App),
+}).$mount('#app')
+
 
 // router.beforeEach((to, from, next) => {
 //   // 重新提交mutation，设置state.userInfo.uid
@@ -28,9 +32,5 @@ Vue.config.productionTip = false
 
 
 
-new Vue({
-  store,
-  router,
-  render: h => h(App),
-}).$mount('#app')
+
 
