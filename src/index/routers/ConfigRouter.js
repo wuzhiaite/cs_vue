@@ -32,9 +32,15 @@ export default new VueRouter({
             component : () => import('../components/conf/ComPageList'),
             iconCls:'el-icon-collection',
         },{
-            path : '/bargraph',
-            name : '柱状统计图',
-            component : () => import('../components/charts/BarGraph'),
+            path : '/graphExp01',
+            name : '统计图标样例01',
+            component : () => import('../components/charts/Exp01'),
+            iconCls:'el-icon-collection',
+        },
+        {
+            path : '/graphExp02',
+            name : '统计图标样例02',
+            component : () => import('../components/charts/Exp02'),
             iconCls:'el-icon-collection',
         }
     ]

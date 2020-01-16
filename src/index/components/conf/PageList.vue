@@ -169,11 +169,11 @@
             columns:[{
                 prop : "name",
                 label : "姓名",
-                width : "80"
+                width : "10"
              },{
-                prop : "cz",
-                label : "操作",
-                width : "300",
+                prop : "",
+                label : "台账预览",
+                width : "10",
                 opers:[
                   {
                     name:"台账预览",
@@ -182,7 +182,14 @@
                     click:function(row){
                       that.handleClick(row);
                     }
-                  },{
+                  }   
+                ]
+             },{
+                prop : "cz",
+                label : "操作",
+                width : "20",
+                opers:[
+                  {
                     name:"删除",
                     type:'danger',
                     icon : 'el-icon-delete',

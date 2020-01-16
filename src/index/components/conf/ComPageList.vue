@@ -122,32 +122,32 @@
             columns:[{
                 prop : 'date',
                 label : '日期',
-                width :'120',
+                width :'15',
                 icon : 'el-icon-time',
              },{
                 prop : "name",
                 label : "姓名",
-                width : "80"
+                width : "10"
              },{
                 prop:"province",
                 label:"省份",
-                width:"80",
+                width:"10",
              },{
                 prop : "city",
                 label : "市区",
-                width : "80",
+                width : "10",
              },{
                 prop : "address",
                 label : "地址",
-                width : "250",
+                width : "20",
              },{
                  prop : "zip",
                  label : "邮编",
-                 width : "120",
+                 width : "10",
              },{
                 prop : "cz",
                 label : "操作",
-                width : "200",
+                width : "15",
                 sortable:'',
                 fixed:'right',
                 opers:[

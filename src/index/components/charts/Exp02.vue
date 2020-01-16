@@ -1,12 +1,21 @@
 <template>
- 
+  <div class="main">
+      <div class="quarter-div">
+        
+      </div>
+      <div class="quarter-div">
+      </div>
+      <div class="quarter-div" >
+      </div>
+      <div class="quarter-div" >
+      </div>
+  </div> 
 </template>
 <script>
 
 export default {
   name:'index',
-  components:{
-  }
+  components:{}
 
 
 

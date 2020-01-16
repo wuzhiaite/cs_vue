@@ -66,17 +66,20 @@ export default {
             iconCls:'el-icon-s-shop',
             children : [
                 {
-                    path :'/bargraph',
-                    name:'柱状统计图',
-                    realPath:'charts/BarGraph',
+                    path :'/graphExp01',
+                    name:'统计图标样例01',
+                    realPath:'charts/Exp01',
+                },
+                {
+                    path :'/graphExp02',
+                    name:'统计图标样例02',
+                    realPath:'charts/Exp01',
                 }
             ]  
           } 
         ];
        var basePath = this.$store.state.cs.basePath;
        csMenus = formatRoutes( csMenus );
-      //  console.log(csMenus); 
-      //  this.$router.addRoutes(csMenus);
        this.$store.dispatch("cs/setMenusAction",csMenus);
     }
 

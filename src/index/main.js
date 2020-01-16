@@ -10,6 +10,8 @@ import '../plugin/ComBindPlugin';
 import '../plugin/index';
 import '../plugin/VueAxiosPlugin';
 
+
+
 Vue.use(ElementUI);
 
 

@@ -20,7 +20,7 @@
             :fixed="item.fixed?item.fixed:false"
             :prop="item.prop?item.prop:''"
             :label="item.label?item.label:''"
-            :width="item.width?item.width:80" 
+            :width="item.width?item.width/100*width:0.25*width" 
             :sortable="item.sortable ? item.sortable:'custom'"> 
             <template slot-scope="scope" >   
                 <!-- 普通数据渲染 -->
@@ -32,7 +32,7 @@
                        :icon="oper.icon ? oper.icon:''"
                        v-for="(oper,index)  in item.opers" @click="oper.click(scope.row)" >
                    {{ oper.name }}
-                   </el-button>                  
+                 </el-button>                  
             </template>
         </el-table-column>
     </el-table> 
@@ -58,7 +58,7 @@ import {mapGetters} from 'vuex';
         }
     },
     computed:{
-        ...mapGetters({height:'getScreenHeight'}),
+        ...mapGetters({height:'getScreenHeight',width:'getScreenWidth'}),
     },
     created:function(){
         this.initTableData();

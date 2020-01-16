@@ -105,7 +105,6 @@ export default {
                 .position('time*value')
                 .shape("dotLine")
                 .opacity('value',function(value){
-                    console.log(value);
                    if(value < 20){
                            return  0.5;
                        }else{

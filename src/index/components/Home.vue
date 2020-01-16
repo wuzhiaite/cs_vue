@@ -38,7 +38,9 @@
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
           </el-breadcrumb>
-        <router-view  />
+          <keep-alive>
+               <router-view  />
+          </keep-alive>
       </el-main>  
     </el-container>
   </div>
@@ -61,20 +63,28 @@
               username : 'getUsername'}),
        screenHeight:{
           get(){
-            console.log();
              return this.$store.state.screenHeight ;
           },
           set(value){
              this.$store.state.screenHeight = value ;
           }
-       }       
+       },
+      screenWidth:{
+          get(){
+             return this.$store.state.screenWidth ;
+          },
+          set(value){
+             this.$store.state.screenWidth = value ;
+          }
+       }          
     },
     mounted(){
       const that = this
       window.onresize = () => {
           return (() => {
-              window.screenHeight = window.screen.availHeight - 100  
-              that.screenHeight = window.screenHeight
+              window.screenHeight = window.screen.availHeight - 100  ;
+              that.screenHeight = window.screenHeight;
+              that.screenWidth = window.screen.availWidth;
           })()
       }
     },
