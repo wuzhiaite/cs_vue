@@ -188,6 +188,7 @@
                 prop : "cz",
                 label : "操作",
                 width : "20",
+                fixed:'right',
                 opers:[
                   {
                     name:"删除",

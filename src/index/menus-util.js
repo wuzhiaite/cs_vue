@@ -20,7 +20,7 @@ export const formatRoutes = (routes)=> {
         path: path,
         component :function(){
            if(realPath){
-            return import('./components/'+realPath) ;
+            return require('./components/'+realPath) ;
            }else{
                return '';
            }       

@@ -13,6 +13,7 @@
         btns:[],
         conditions:[],
         pageParam:{},
+        searchParam :{},
       }
     },
     components:{
@@ -20,6 +21,7 @@
     created(){
       this.initTable();
       this.initBtns();
+      this.initSearch();
       this.initConditions();
       this.initPageParam();
     },
@@ -27,10 +29,17 @@
       onSubmit() {
           console.log('submit!');
       },
+      initSearch : function(){
+         this.searchParam ={
+            placeholder:'请输入名称|地址|邮政编码',
+            maxlength:50,
+         }
+      },
       initPageParam : function(){
            this.pageParam = {     
                 isPagination:true,//是否分页
                 isQualitySearch:true,//是否高级查询
+                searchParam : this.searchParam,
                 conditions:this.conditions,//高级查询项
                 btns:this.btns,//按钮
                 tableParam : this.tableParam//表单参数
@@ -122,11 +131,13 @@
             columns:[{
                 prop : 'date',
                 label : '日期',
+                sortable : true,
                 width :'15',
                 icon : 'el-icon-time',
              },{
                 prop : "name",
                 label : "姓名",
+                fixed : 'left',
                 width : "10"
              },{
                 prop:"province",
@@ -145,9 +156,21 @@
                  label : "邮编",
                  width : "10",
              },{
+                 prop : "tag",
+                 label : "标签",
+                 width : "10",
+                 filters:[{ text: '家', value: '家' }, { text: '公司', value: '公司' }],
+                 types:{//设置按钮样式
+                    '家' : 'primary' ,
+                    '公司' : 'success',
+                 },
+                 filterTag : function(value, row){
+                     return row.tag === value; 
+                 }
+             },{
                 prop : "cz",
                 label : "操作",
-                width : "15",
+                width : "17",
                 sortable:'',
                 fixed:'right',
                 opers:[

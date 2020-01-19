@@ -14,8 +14,10 @@
     <el-container style="height: 95%; border: 1px solid #eee;width:100%;"> 
       <el-aside width="180px" style="background-color: #eee" 
           router="true" mode="horizontal" >
-       
-       <el-menu style="background: #ececec;width: 180px;" unique-opened router>
+
+       <el-menu style="background: #ececec;width: 180px;" 
+              :default-active="$router.currentRoute.path"
+              unique-opened router>
               <template v-for="(item,index) in this.routes" v-if="!item.hidden">
                 <el-submenu :key="index" :index="index+''" style="text-align:left;">
                   <template slot="title">
@@ -27,7 +29,10 @@
                                 style="padding-left: 30px;padding-right:0px;margin-left: 0px;width: 170px;text-align: left"
                                 v-for="child in item.children"
                                 :index="child.path"
-                                :key="child.path">{{child.name}}
+                                :key="child.path">
+                                <i :class="child.iconCls ? child.iconCls : 'el-icon-info'" 
+                                    style="color: #20a0ff;width: 14px;"></i>
+                                {{child.name}}
                   </el-menu-item>
                 </el-submenu>
               </template>
@@ -76,7 +81,10 @@
           set(value){
              this.$store.state.screenWidth = value ;
           }
-       }          
+       },       
+    },
+    created:function(){
+      console.log(this.$router);
     },
     mounted(){
       const that = this
@@ -138,4 +146,5 @@
   .el-aside {
     color: #333;
   };
+
 </style>

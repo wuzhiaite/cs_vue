@@ -16,7 +16,12 @@ Vue.use(ElementUI);
 
 
 Vue.config.productionTip = false
-
+// router.js文件
+// 全局路由守卫，动态改变tille
+router.beforeEach((to, from, next) => {
+  window.document.title = to.meta.title || '默认'
+  next()
+})
 
 new Vue({
   store,

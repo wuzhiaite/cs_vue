@@ -8,6 +8,8 @@ export default  {
         },
         mutations:{
             setMenus(state,menus){
+                console.log('setMenus');
+                console.log(menus);
                 state.menus = menus;
             },
            
@@ -22,6 +24,8 @@ export default  {
         actions:{
             //菜单动作
             setMenusAction(context,param){
+                console.log('menusAction');
+                console.log(param);
                 if(param){
                     context.commit('setMenus',param);
                 }

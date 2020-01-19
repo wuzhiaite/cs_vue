@@ -36,7 +36,7 @@ export default {
     menusInfo(){
       var csMenus = [     
           {
-            path:'/',
+            path:'',
             name:'通用配置管理',  
             iconCls:'el-icon-setting',
             children : [
@@ -51,7 +51,7 @@ export default {
                 },{
                     path : '/commonform',
                     name : '通用表单',
-                    realPath:'conf/CommongForm',
+                    realPath:'conf/CommoneForm',
                 },{
                     path:'/commonComponent',
                     name : '通用组件',
@@ -61,7 +61,7 @@ export default {
 
           } ,
           {
-            path:'/',
+            path:'',
             name:'图表样式',  
             iconCls:'el-icon-s-shop',
             children : [
@@ -80,7 +80,34 @@ export default {
         ];
        var basePath = this.$store.state.cs.basePath;
        csMenus = formatRoutes( csMenus );
+       console.log(csMenus);
        this.$store.dispatch("cs/setMenusAction",csMenus);
+       this.$router.addRoutes(csMenus);
+       var r = [{
+            path:'/conf',
+            name:'图表样式',  
+            iconCls:'el-icon-s-shop',
+            component : () => import('./components/conf/ComComponent'),
+            children : [{
+                path : 'ge',
+                name : '统计图标样例06',
+                component : () => import('./components/charts/Exp01'),
+                iconCls:'el-icon-collection',
+                meta:{
+                    title:'统计图标样例06'
+                }
+            },{
+                path : 'cp',
+                name : '统计数据',
+                component : () => import('./components/conf/ComPageList'),
+                iconCls:'el-icon-collection',
+                meta:{
+                    title:'统计数据'
+                }
+            }]
+       }];
+        this.$router.addRoutes(r);
+
     }
 
 

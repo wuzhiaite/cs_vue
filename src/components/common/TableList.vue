@@ -3,7 +3,7 @@
     <el-table 
         v-loading="loading"
         :data="tableData"
-        :size="tableParam.size? tableParam.size:'mini'"
+        :size="tableParam.size ? tableParam.size:'mini'"
         :border="tableParam.border?true:false"
         :script="tableParam.script?true:false"
         :highlight-current-row="tableParam.highlightCurrentRow?true:false"
@@ -21,18 +21,27 @@
             :prop="item.prop?item.prop:''"
             :label="item.label?item.label:''"
             :width="item.width?item.width/100*width:0.25*width" 
-            :sortable="item.sortable ? item.sortable:'custom'"> 
+            :sortable="item.sortable ? item.sortable : false"
+            :filters="item.filters ? item.filters : null"
+            :filter-method="item.filters ? item.filterTag : null "
+            :formatter="item.formatter ? item.formatter : null"> 
             <template slot-scope="scope" >   
                 <!-- 普通数据渲染 -->
                  <i v-if="item.icon" :class="item.icon"></i>
-                 <span v-if="item.prop" style="margin-left: 10px"> {{scope.row[item.prop]}}</span>   
+                 <span v-if="item.prop&&!item.types" style="margin-left: 10px"> {{scope.row[item.prop]}}</span>   
                  <!-- 按钮操作渲染 -->
                  <el-button  v-if="item.opers.length>0"
                        size="mini" :type="oper.type?oper.type:''"
                        :icon="oper.icon ? oper.icon:''"
                        v-for="(oper,index)  in item.opers" @click="oper.click(scope.row)" >
                    {{ oper.name }}
-                 </el-button>                  
+                 </el-button>  
+                 <el-tag  v-if="item.types"
+                    size="mini"
+                   :type="item.types[scope.row[item.prop]]"
+                    close-transition>
+                    {{scope.row[item.prop]}}
+                 </el-tag>   
             </template>
         </el-table-column>
     </el-table> 
@@ -76,7 +85,10 @@ import {mapGetters} from 'vuex';
         handleSelectionChange(val) {
             this.callbackParam.multipleSelection = val ;
             this.$emti('callbackParam:update',this.callbackParam)
-       }
+       },
+       filterTag(value, row) {
+            return row.tag === value;
+       },
     }
  }
 

@@ -1,13 +1,18 @@
 <template>
- <div style="width:100%;">    
+ <div style="width:100%;">
      <el-row>      
         <el-input v-model="search" 
-            placeholder="请输入内容"
+            :placeholder=" pageParam.searchParam && pageParam.searchParam.placeholder 
+                                ? pageParam.searchParam.placeholder 
+                                : '请输入内容' "
             @change="doSearch"
-            clearable
+            :clearable=" pageParam.searchParam && pageParam.searchParam.clearable 
+                                ? pageParam.searchParam.clearable : true"
             size="small"
-            maxlength="1000"
-            prefix-icon="el-icon-search"
+            :maxlength="pageParam.searchParam && pageParam.searchParam.maxlength
+                                    ? pageParam.searchParam.maxlength : 1000"
+            :prefix-icon="pageParam.searchParam && pageParam.searchParam.icon 
+                                    ? pageParam.searchParam.icon : 'el-icon-search'"
             style="width:40%;margin-right:15px;"></el-input>  
       <Buttons :btns="pageParam.btns" :callbackParam.sync="callbackParam"></Buttons> 
      </el-row> 
@@ -17,7 +22,9 @@
                  
     <TableList :tableParam="pageParam.tableParam" style=""></TableList>
 
-    <el-pagination v-if=" pageParam.isPagination != null
+    <el-pagination 
+    style="float:right;"
+        v-if=" pageParam.isPagination != null
                              ? pageParam.isPagination 
                              : true"
         @size-change="handleSizeChange"
@@ -70,6 +77,7 @@
       Conditions,
     },
     created(){
+        console.log();
         this.tableParam = this.pageParam.tableParam ;  
         this.addQualitySearch();//判断是否有高级查询需求 
         this.initData();//初始化数据
@@ -117,16 +125,14 @@
         },
         getTableData:function(){//获取表单数据
             console.log("getTableData");
-            if(true){this.virtueData();}
+            if(true){return this.virtueData();}
             this.post(this.url,this.reqParam)
                 .then(res =>{
                     if(res.code == 200){
                         this.tableData = res.data;      
                         this.tableParam.tableData =  res.data.list;         
                     }   
-                }).catch(error => {
-                    // this.$notify(error.message);
-                })     
+                });    
         },
         handleSizeChange : function(val) {//pageSize调整
             this.reqParam.pageSize = val;
@@ -150,7 +156,8 @@
                             province: '上海',
                             city: '普陀区',
                             address: '上海市普陀区金沙江路 1518 弄',
-                            zip: 200333
+                            zip: 200333,
+                            tag: '公司',
                         }, {
                             id:'2',
                             date: '2016-05-04',
@@ -158,7 +165,8 @@
                             province: '上海',
                             city: '普陀区',
                             address: '上海市普陀区金沙江路 1517 弄',
-                            zip: 200333
+                            zip: 200333,
+                            tag: '公司'
                         }, {
                             id:'3',
                             date: '2016-05-01',
@@ -166,7 +174,8 @@
                             province: '上海',
                             city: '普陀区',
                             address: '上海市普陀区金沙江路 1519 弄',
-                            zip: 200333
+                            zip: 200333,
+                            tag: '公司'
                         }, {
                             id:'4333',
                             date: '2016-05-03',
@@ -174,7 +183,8 @@
                             province: '上海',
                             city: '普陀区',
                             address: '上海市普陀区金沙江路 1516 弄',
-                            zip: 200333
+                            zip: 200333,
+                             tag: '家'
                         },{ //列表数据
                             id:'1111',
                             date: '2016-05-02',
@@ -182,7 +192,8 @@
                             province: '上海',
                             city: '普陀区',
                             address: '上海市普陀区金沙江路 1518 弄',
-                            zip: 200333
+                            zip: 200333,
+                             tag: '家'
                         }, {
                             id:'2',
                             date: '2016-05-04',
@@ -190,7 +201,8 @@
                             province: '上海',
                             city: '普陀区',
                             address: '上海市普陀区金沙江路 1517 弄',
-                            zip: 200333
+                            zip: 200333,
+                             tag: '家'
                         }, {
                             id:'3',
                             date: '2016-05-01',
@@ -198,7 +210,8 @@
                             province: '上海',
                             city: '普陀区',
                             address: '上海市普陀区金沙江路 1519 弄',
-                            zip: 200333
+                            zip: 200333,
+                            tag: '家'
                         }, {
                             id:'4333',
                             date: '2016-05-03',
@@ -206,7 +219,8 @@
                             province: '上海',
                             city: '普陀区',
                             address: '上海市普陀区金沙江路 1516 弄',
-                            zip: 200333
+                            zip: 200333,
+                             tag: '家'
                         },{ //列表数据
                             id:'1111',
                             date: '2016-05-02',
@@ -214,7 +228,8 @@
                             province: '上海',
                             city: '普陀区',
                             address: '上海市普陀区金沙江路 1518 弄',
-                            zip: 200333
+                            zip: 200333,
+                             tag: '家'
                         }, {
                             id:'2',
                             date: '2016-05-04',
@@ -222,7 +237,8 @@
                             province: '上海',
                             city: '普陀区',
                             address: '上海市普陀区金沙江路 1517 弄',
-                            zip: 200333
+                            zip: 200333,
+                             tag: '家'
                         }, {
                             id:'3',
                             date: '2016-05-01',
@@ -230,7 +246,8 @@
                             province: '上海',
                             city: '普陀区',
                             address: '上海市普陀区金沙江路 1519 弄',
-                            zip: 200333
+                            zip: 200333,
+                             tag: '家'
                         }, {
                             id:'4333',
                             date: '2016-05-03',
@@ -238,7 +255,8 @@
                             province: '上海',
                             city: '普陀区',
                             address: '上海市普陀区金沙江路 1516 弄',
-                            zip: 200333
+                            zip: 200333,
+                             tag: '家'
                         }],
                     "pageNum": 1,//当前页码
                     "pageSize": 10,//每页数量
