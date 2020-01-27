@@ -1,7 +1,8 @@
 <template>
       <el-carousel :interval="4000" type="card" height="200px">
-        <el-carousel-item v-for="item in 6" :key="item">
-          <h3>{{ item }}</h3>
+        <el-carousel-item v-for="url in urls" :key="url">
+          <img :src="url" :alt="url" />
+          <!-- <img src="../img/index/sn01.jpg" /> -->
         </el-carousel-item>
       </el-carousel>
 </template>
@@ -9,10 +10,23 @@
 
 export default {
   name:'index',
-  components:{
+  data:function(){
+    return {
+      urls:[],
+    }
+  },
+  created:function(){
+    this.initURLS();
+  },
+  methods:{
+    initURLS:function(){
+      this.urls = [
+        '../img/index/sn01.jpg',
+        '../img/index/sn02.jpg',
+        '../img/index/sn03.jpg',
+      ];
+    }
   }
-
-
 
 }
 </script>
@@ -36,6 +50,10 @@ export default {
   width: 50%;
   height: 50%;
   float: left;
+}
+img{
+  width:auto;
+	height:auto;
 }
 </style>
 

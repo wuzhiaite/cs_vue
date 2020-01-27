@@ -18,11 +18,9 @@ export const formatRoutes = (routes)=> {
 
       let fmRouter = {
         path: path,
-        component :function(){
+        component :function(resolve){
            if(realPath){
-            return require('./components/'+realPath) ;
-           }else{
-               return '';
+             require(['./components/'+realPath+'.vue'],resolve) ;
            }       
         },
         name: name,

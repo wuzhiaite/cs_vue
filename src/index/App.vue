@@ -1,6 +1,6 @@
 <template>
   <div id="app" >
-    <Home />
+    <router-view  />
   </div>
 </template>
 
@@ -21,7 +21,6 @@ export default {
   },
   methods:{  
     ...mapActions(['setUserAction','setSystemName']),
-   
     login(){
         var user= {
           userId : '20191227',
@@ -36,34 +35,36 @@ export default {
     menusInfo(){
       var csMenus = [     
           {
-            path:'',
+            path:'/home',
             name:'通用配置管理',  
             iconCls:'el-icon-setting',
+            realPath:'Home',
             children : [
                 {
                     path :'/pagelist',
-                    name:'配置页面',
+                    name:'通用台账配置',
                     realPath:'conf/PageList',
                 },{
                     path : '/comPageList',
-                    name : '通用台账',
+                    name : '通用台账样例',
                     realPath:'conf/ComPageList',
                 },{
                     path : '/commonform',
-                    name : '通用表单',
+                    name : '通用表单样例',
                     realPath:'conf/CommoneForm',
                 },{
                     path:'/commonComponent',
                     name : '通用组件',
                     realPath:'BrushSignature',
                     iconCls:'el-icon-collection',
-                },]
+                }]
 
           } ,
           {
-            path:'',
+            path:'/home',
             name:'图表样式',  
             iconCls:'el-icon-s-shop',
+            realPath:'Home',
             children : [
                 {
                     path :'/graphExp01',
@@ -78,36 +79,9 @@ export default {
             ]  
           } 
         ];
-       var basePath = this.$store.state.cs.basePath;
        csMenus = formatRoutes( csMenus );
-       console.log(csMenus);
        this.$store.dispatch("cs/setMenusAction",csMenus);
        this.$router.addRoutes(csMenus);
-       var r = [{
-            path:'/conf',
-            name:'图表样式',  
-            iconCls:'el-icon-s-shop',
-            component : () => import('./components/conf/ComComponent'),
-            children : [{
-                path : 'ge',
-                name : '统计图标样例06',
-                component : () => import('./components/charts/Exp01'),
-                iconCls:'el-icon-collection',
-                meta:{
-                    title:'统计图标样例06'
-                }
-            },{
-                path : 'cp',
-                name : '统计数据',
-                component : () => import('./components/conf/ComPageList'),
-                iconCls:'el-icon-collection',
-                meta:{
-                    title:'统计数据'
-                }
-            }]
-       }];
-        this.$router.addRoutes(r);
-
     }
 
 

@@ -11,7 +11,7 @@
                       @mouseup="touchEnd"
                        ></canvas>
               </div>  
-              <div  style="text-align:right;margin:0px;color:gray;margin-right:10px;position: relative;" @click="overwrite"> 
+              <div class="cursor-pointer" @click="overwrite"> 
                 <i class="el-icon-refresh" />
                 重新签署 
               </div>      
@@ -152,6 +152,14 @@
 </script>
 
 <style scoped>
+  .cursor-pointer{
+    text-align:right;
+    margin:0px;
+    color:gray;
+    margin-right:10px;
+    position: relative;
+    cursor:pointer;
+  }
   .signatureBox {
     width: 100%;
     height: calc(100% - 50px);
