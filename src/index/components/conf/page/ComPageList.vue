@@ -1,19 +1,25 @@
 <template>
   <div>
     <CommonPage :pageParam="pageParam"></CommonPage>
+    <ComDialog
+      :dialog="dialog"
+      :visable.sync="visable">
+    </ComDialog>
+
   </div>
 </template>
 <script>
- 
 
  export default {
     data(){
       return {
+        visable:false,
         tableParam:{},
         btns:[],
         conditions:[],
         pageParam:{},
         searchParam :{},
+        dialog:{} 
       }
     },
     components:{
@@ -24,8 +30,33 @@
       this.initSearch();
       this.initConditions();
       this.initPageParam();
+      this.initDialog();
     },
     methods:{
+      initDialog(){
+          this.dialog={
+              title:'测试列表数据',
+              modal:true,
+              fullscreen:false,
+              appendToBody:true,
+              localScroll:false,
+              closeOnModal:true,
+              closeOnEscape:true,
+              center:true,
+              close:function(){
+                // alert('close');
+              },
+              closed:function(){
+                // alert('closed');
+              },
+              opened:function(){
+                //  alert('opened'); 
+              },
+              open:function(){
+                // alert('open');
+              }
+            } 
+      },
       onSubmit() {
           console.log('submit!');
       },
@@ -107,13 +138,10 @@
               },]
       },
       handleClick:function(row){
-         console.log('handleClick');
-         console.log(row);
-         alert(JSON.stringify(row));
+        this.visable = true;
+        
       },
       handleEdit : function(row){
-          console.log('handleEdit');
-          console.log(row);
            alert(JSON.stringify(row));
       },
       initTable : function(){

@@ -1,5 +1,6 @@
 <template>
  <div style="width:100%;">
+     <!-- 搜索框 -->
      <el-row>      
         <el-input v-model="search" 
             :placeholder=" pageParam.searchParam && pageParam.searchParam.placeholder 
@@ -14,14 +15,16 @@
             :prefix-icon="pageParam.searchParam && pageParam.searchParam.icon 
                                     ? pageParam.searchParam.icon : 'el-icon-search'"
             style="width:40%;margin-right:15px;"></el-input>  
+            <!-- 搜索框点击事件 -->
       <Buttons :btns="pageParam.btns" :callbackParam.sync="callbackParam"></Buttons> 
      </el-row> 
+     <!-- 条件项 -->
     <Conditions v-if="pageParam.conditions" :conditions.sync="pageParam.conditions" 
             @changeCondition="changeCondition" 
             :show="show"></Conditions>   
-                 
+     <!-- 列表页面 -->
     <TableList :tableParam="pageParam.tableParam" style=""></TableList>
-
+    <!-- 分页组件 -->
     <el-pagination 
     style="float:right;"
         v-if=" pageParam.isPagination != null

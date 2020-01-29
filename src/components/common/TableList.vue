@@ -12,6 +12,7 @@
         @selection-change="handleSelectionChange"
         :height="height*0.66"
         :max-height="tableParam.maxHeight"
+        @row-click="tableParam.events.rowClick ? tableParam.events.rowClick : null"
         style="width: 100%;height:100px;">
         <!-- 是否多选 -->
         <el-table-column v-if="tableParam.multi" type="selection"  width="55"></el-table-column>  

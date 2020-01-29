@@ -37,12 +37,12 @@
       submit: function () {
         var path = this.$route.query.redirect;
         this.$router
-              .replace({path: path == '/' || path == undefined ? '/home' : path});
+              .replace({path: path == '/' || path == undefined ? '/index' : path});
       }
     }
   }
 </script>
-<style>
+<style scoped>
   .login-container {
     border-radius: 15px;
     background-clip: padding-box;

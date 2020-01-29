@@ -181,6 +181,7 @@
     display: block;
 		margin: 0 auto ;
     border: 1px solid white;
+    cursor:pointer;
   }
   .btnBox {
     padding: 10px;

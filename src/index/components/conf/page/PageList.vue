@@ -5,92 +5,12 @@
         </div>
         <div style="width:1px;"></div>
         <div style="float:right;margin-top:20px;">    
-            <span style="text-align:left;font-size:20px;">
-              <strong>台账配置明细</strong>
-            </span>
-            <table>
-                <tr>
-                    <td class="td-label">
-                        <span>
-                        <strong>条件搜索字段:</strong>
-                        </span>
-                    </td> 
-                    <td class="td_form">
-                       <el-select v-model="conditionSelect"
-                          style="width:100%;padding:0px;"
-                          :disabled="disabled"
-                          multiple placeholder="请选择">
-                            <el-option
-                              v-for="item in options"
-                              :key="item.value"
-                              :label="item.name"
-                              :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </td>                            
-                </tr> 
-                <tr>
-                    <td style="" class="td-label">
-                    <span>
-                        <strong>列展示字段:</strong>
-                    </span>
-                    </td>
-                    <td class="td_form">
-                        <el-select v-model="conditionSelect"
-                          :disabled="disabled"
-                          style="width:100%;padding:0px;"
-                          multiple placeholder="请选择">
-                            <el-option
-                              v-for="item in options"
-                              :key="item.value"
-                              :label="item.name"
-                              :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </td>           
-                </tr>             
-                <tr>
-                    <td class="td-label">
-                        <span>
-                        <strong>条件项:</strong>
-                        </span>
-                    </td> 
-                    <td class="td_form">
-                        <el-select v-model="conditionSelect"
-                         :disabled="disabled"
-                          style="width:100%;padding:0px;"
-                          multiple placeholder="请选择">
-                            <el-option
-                              v-for="item in options"
-                              :key="item.value"
-                              :label="item.name"
-                              :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </td>         
-                </tr> 
-                <tr>
-                    <td class="td-label">
-                        <span>
-                        <strong>查询SQL:</strong>
-                        </span>
-                    </td> 
-                    <td  class="td_form">
-                        <el-input type="textarea" 
-                            show-word-limit
-                            maxlength="5000"
-                            style="width:100%;padding:0px;height:100%;"
-                            :disabled="disabled"
-                            rows="13"
-                            v-model="form.shelfDes"></el-input>           
-                    </td> 
-                </tr> 
-            </table>        
+          <PageListDetail :form="form"></PageListDetail>
         </div> 
     </div>
 </template>
 <script>
- 
+ import PageListDetail from './PageListDetail'
 
  export default {
     data(){
@@ -116,13 +36,15 @@
         ],
       }
     },
+    components:{
+       PageListDetail,
+    },
     created(){
       this.initTable();
       this.initBtns();
       this.initPageParam();
     },
     methods:{
-      
       onSubmit() {
           console.log('submit!');
       },
@@ -149,9 +71,7 @@
                 icon : 'el-icon-delete',
                 disabled : false,
                 click : function(){
-                   this.$alert('<CommonForm></CommonForm>', {
-                        dangerouslyUseHTMLString: true
-                      });
+                   
                 }
               }]
       },
@@ -161,7 +81,7 @@
             script:true,
             highlightCurrentRow:true,//单行选择
             maxHeight:"1500",//最大高度
-            multi:true,//是否为多选
+            multi:false,//是否为多选
             height:'600px',
             defaultSort:{//默认排序参数
               // prop: 'date', order: 'descending'
@@ -202,12 +122,18 @@
                     name:"编辑",
                     type:'',
                     icon:'el-icon-edit',
-                    click:function(row){
+                    click:function(row, column, event){
                         that.handleEdit(row);
                     }
                   }   
                 ]
              }],
+             events:{
+                rowClick : function(row, column, event){
+                  // alert(JSON.stringify(row));
+                  that.form = row ;
+                }
+             },
              initData:{
                url:'',
                param:{},

@@ -1,8 +1,11 @@
 <template>
       <el-carousel :interval="4000" type="card" height="200px">
-        <el-carousel-item v-for="url in urls" :key="url">
-          <img :src="url" :alt="url" />
-          <!-- <img src="../img/index/sn01.jpg" /> -->
+        <el-carousel-item v-for="(url,index) in urls" :key="index">
+            <el-image :src="url">
+              <div slot="placeholder" class="image-slot">
+                加载中<span class="dot">...</span>
+              </div>
+            </el-image>
         </el-carousel-item>
       </el-carousel>
 </template>
@@ -21,16 +24,16 @@ export default {
   methods:{
     initURLS:function(){
       this.urls = [
-        '../img/index/sn01.jpg',
-        '../img/index/sn02.jpg',
-        '../img/index/sn03.jpg',
+        require('../img/index/sn01.jpg'),
+        require('../img/index/sn02.jpg'),
+        require('../img/index/sn03.jpg'),
       ];
     }
   }
 
 }
 </script>
-<style>
+<style scoped>
 .el-carousel__item h3 {
     color: #475669;
     font-size: 14px;
@@ -46,15 +49,15 @@ export default {
   .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
   }
-.quarter-div{
-  width: 50%;
-  height: 50%;
-  float: left;
-}
-img{
-  width:auto;
-	height:auto;
-}
+  .quarter-div{
+    width: 50%;
+    height: 60%;
+    float: left;
+  }
+  .el-image{
+    width:100%;
+    height:100%;
+  }
 </style>
 
 
