@@ -23,98 +23,39 @@
     },
     created:function(){
         this.initForm();
-        this.initBtns();
     },
     methods:{
-       initBtns : function(){
-          this.btns = [
-            {
-              name:'新增',
-              type:'primary',
-              click:function(){
-                alert('新增');
-              }
-            },{
-              name:'取消',
-              type:'',
-              click:function(){
-                alert('取消');
-              }
-            }
-          ];  
-       },
        initForm : function(){
           this.formItems = [
               {
-                prop:'name',
-                label:'姓名',
-                type:'input',
+                prop:'search',
+                label:'查询条件项',
+                type:'select',
+                multiple:true,
+                default:['姓名（name）','地区（region）','邮政（zip）'],
+                options:[
+                  {label:'姓名（name）'},
+                  {label:'地区（region）'},
+                  {label:'邮政（zip）'}
+                ]
               },{
-                prop:'gender',
-                label:'性别',
+                prop:'columns',
+                label:'展示项目',
                 type:'select',
                 options:[
                   {label:'男',value:'boy'},
                   {label:'女',value:'girl'}
                 ]
               },{
-                prop:'isGraduate',
-                label:'是否已毕业',
-                type:'switch',
-                active:'是',
-                inactive:'否',
-              },{
-                prop:'educateLevel',
-                label:'学历水平',
-                type:'radio',
-                options:[
-                  {label:'大学',value:'highschool'},
-                  {label:'高中',value:'middleschool'},
-                  {label:'初中',value:'juniormiddleschool'},
-                ],
-              },{
-                prop:'likes',
-                label:'兴趣爱好',
-                type:'checkbox',
-                default:[],
-                options:[
-                  {label:'篮球',value:'basketball'},
-                  {label:'乒乓球',value:'pinpangball'},
-                  {label:'羽毛球',value:'yumaoball'},
-                ]
-              },{
-                prop:'graduateTime',
-                label:'毕业时间',
-                type:'date',
-                default:'',
-              },{
-                prop:'grad',
-                label:'评分',
-                type:'rate',
-                default:'',
-              },{
-                prop:'selfjuge',
-                label:'自我评价',
+                prop:'sql',
+                label:'查询SQL',
                 type:'textarea',
-                number:1000,
-                default:'', 
+                numbers:3000,
               }
           ];
-          var rules = {
-                  name : [
-                    { required:true , message:'必须填写' , trigger:'blur' },
-                    { min:3 , max:10 , message:'长度再3-10个字以内' , trigger:'blur' },
-                  ],
-                  gender : [
-                    { required:true,message:'必须填写',trigger:'change' },
-                  ],
-                  educateLevel : [
-                    { required:true,message:'必须填写',trigger:'change' },
-                  ],
-              };
+         
           this.formDesign = {
-              disabled:false,  
-              rules:rules,
+              disabled:true,  
               formItems : this.formItems,
           }
        }

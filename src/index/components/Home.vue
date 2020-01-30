@@ -14,7 +14,7 @@
             {{systemName}}
           </span>
           <span class="el-user">       
-              <i class="el-icon-setting" style="margin-right: 15px"></i>
+              <i class="el-icon-setting" ></i>
               {{username}}
             </span>
         </el-header>
@@ -35,7 +35,7 @@
                 <el-submenu :key="index" :index="index+''" style="text-align:left;">
                   <template slot="title">
                     <el-tooltip v-if="item.iconCls" :content=" item.desc ? item.desc : item.name " placement="top">
-                        <i :class="item.iconCls ? item.iconCls : '' " style="margin-right:10px;" />
+                        <i :class="item.iconCls ? item.iconCls : '' " />
                     </el-tooltip>    
                     <span slot="title">{{item.name}}</span>
                   </template>
@@ -173,6 +173,7 @@
   };
   .el-tooltip{
     margin-right:10px;
+    padding-right:10px;
   }
-
+  
 </style>

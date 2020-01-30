@@ -40,27 +40,33 @@ export default {
                 {
                     path :'/pagelist',
                     name:'通用台账配置',
+                    iconCls:'el-icon-picture-outline-round',
                     realPath:'conf/page/PageList',
                 },{
                     path : '/comPageList',
                     name : '通用台账样例',
+                    iconCls:'el-icon-s-opportunity',
                     realPath:'conf/page/ComPageList',
                 },
                 {
                     path : '/comTable',
                     name : '通用表单样例01',
+                    iconCls:'el-icon-s-release',
                     realPath:'conf/form/ComTable',
                 },
                 {
                     path : '/comform',
                     name : '通用表单样例02',
+                    iconCls:'el-icon-s-order',
                     realPath:'conf/form/ComFormExp01',
-                },{
-                    path:'/commonComponent',
-                    name : '通用组件样例',
-                    realPath:'conf/form/ComComponent',
-                    iconCls:'el-icon-collection',
-                }]
+                },
+                // {
+                //     path:'/commonComponent',
+                //     name : '通用组件样例',
+                //     realPath:'conf/form/ComComponent',
+                //     iconCls:'el-icon-collection',
+                // }
+                ]
 
           } ,
           {
@@ -72,11 +78,13 @@ export default {
                 {
                     path :'/graphExp01',
                     name:'统计图标样例01',
+                    iconCls:'el-icon-s-marketing',
                     realPath:'charts/Exp01',
                 },
                 {
                     path :'/graphExp02',
                     name:'统计图标样例02',
+                    iconCls:'el-icon-tickets',
                     realPath:'charts/Exp02',
                 }
             ]  

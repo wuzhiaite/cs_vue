@@ -11,6 +11,7 @@
         <el-input v-if="item.type=='input'" v-model="form[item.prop]"></el-input>
         <el-select v-if="item.type == 'select' "
                   v-model="form[item.prop]" 
+                  :multiple = "item.multiple ? item.multiple : false "
                   :placeholder="item.placeholder?item.placeholder:'请选择'">
             <el-option  v-for="opt in  item.options"
                   :label="opt.label" :value="opt.value"/>
@@ -130,12 +131,14 @@
     data(){
       return {
         formStyle:{},
+        form:{}
       }
     },
     created:function(){
-        if( Object.keys(this.form).length == 0 ) {
-            this.formatForm()
-          };
+      //  this.formatForm()
+      //   if( Object.keys(this.form).length == 0 ) {
+      //       this.formatForm()
+      //     };
         this.formStyle = this.formDesign;
     },
     methods:{
