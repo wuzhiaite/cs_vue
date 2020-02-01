@@ -1,5 +1,6 @@
 <template>
-      <el-carousel :interval="4000" type="card" height="200px">
+  <div  class="main">
+      <el-carousel :interval="4000" type="card" >
         <el-carousel-item v-for="(url,index) in urls" :key="index">
             <el-image :src="url">
               <div slot="placeholder" class="image-slot">
@@ -8,6 +9,8 @@
             </el-image>
         </el-carousel-item>
       </el-carousel>
+      
+  </div>  
 </template>
 <script>
 
@@ -34,6 +37,10 @@ export default {
 }
 </script>
 <style scoped>
+.main{
+  overflow-x:auto;
+  overflow-y:auto;
+}
 .el-carousel__item h3 {
     color: #475669;
     font-size: 14px;

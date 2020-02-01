@@ -10,7 +10,7 @@
         :default-sort="tableParam.defaultSort ?tableParam.defaultSort :{} "
         @sort-change="sortChange"
         @selection-change="handleSelectionChange"
-        :height="height*0.66"
+        :height="height*0.7"
         :max-height="tableParam.maxHeight"
         @row-click="tableParam.events.rowClick ? tableParam.events.rowClick : null"
         style="width: 100%;height:100px;">

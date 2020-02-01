@@ -14,7 +14,7 @@ export default {
                     token : '',
                     englishName:'',
                   },
-    screenHeight:window.screen.availHeight - 100,//获取屏幕可用工作区高度
+    screenHeight:window.screen.availHeight - 90,//获取屏幕可用工作区高度
     screenWidth:window.screen.availWidth - 180,//获取屏幕可用工作区宽度         
 
 

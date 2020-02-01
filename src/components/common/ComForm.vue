@@ -166,7 +166,7 @@
   border: 1px solid #ebebeb;
   border-radius: 3px;
   transition: .2s;
-  padding:15px;
+  padding:25px;
   box-shadow: 0px 0px 10px 5px #888888;
 } 
 
