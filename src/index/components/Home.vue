@@ -59,7 +59,7 @@
       </el-aside>
     
       <el-container>  
-        <el-header height="30px" style="vertical-align:middle;margin-top:10px;">
+        <el-header height="20px"  style="vertical-align:middle;margin-top:10px;">
              <el-breadcrumb separator-class="el-icon-arrow-right"  >
                 <el-breadcrumb-item :to="{ path: '/index' }">
                     <i class="el-icon-s-home"/>首页

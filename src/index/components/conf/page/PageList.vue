@@ -156,7 +156,7 @@
     word-wrap: break-word;
     width: 45%;
     text-align: center;
-    padding: 10px;
+    padding: 5px;
 }
 span{
   width:50px;

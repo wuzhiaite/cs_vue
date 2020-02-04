@@ -50,7 +50,7 @@
                 prop:'sql',
                 label:'查询SQL',
                 type:'textarea',
-                numbers:2000,
+                numbers:1500,
               }
           ];
          
