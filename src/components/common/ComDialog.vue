@@ -10,16 +10,19 @@
        :close-on-press-escape="dialog.closeOnEscape ? dialog.closeOnEscape : true"
        :center="dialog.center ? dialog.center :false"
        :visible.sync="vis"
-       @close="dialog.close()"
-       @closed="dialog.closed()"
-       @opened="dialog.opened()"
-       @open="dialog.open()">
-
+       @close="dialog.events && dialog.events.close ? dialog.events.close() : null"
+       @closed="dialog.events && dialog.events.closed ? dialog.events.closed() : null"
+       @opened="dialog.events && dialog.events.opened ? dialog.events.opened() : null"
+       @open="dialog.events && dialog.events.open ? dialog.events.open() : null">
          <slot></slot>
-
-        <div slot="footer" class="dialog-footer">
-            <el-button  size="mini" @click="vis = false,cancel()">取 消</el-button>
-            <el-button  size="mini" type="primary" @click="vis = false,confirm()">确 定</el-button>
+        <div slot="footer" class="dialog-footer" v-if="dialog.btns && dialog.btns.length > 0">
+            <el-button v-for="(btn,index) in dialog.btns"  
+                :type="btn.type ? btn.type : 'primary'" 
+                :icon=" btn.icon ? btn.icon : '' " 
+                :disabled="btn.disabled ? btn.disabled : false"
+                @click="vis=false,btn.click?btn.click() : null"
+                :size="btn.size ? btn.size : 'mini'"
+                >{{btn.name}}</el-button>
         </div>
     </el-dialog>
 </template>

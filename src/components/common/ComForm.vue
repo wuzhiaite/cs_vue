@@ -7,10 +7,14 @@
             :disabled="formStyle.disabled ? formStyle.disabled : false "
             :label-width="formStyle.labelWidth ? formStyle.labelWidth : '20%' ">
     <el-form-item v-for="(item,index)  in  formStyle.formItems"  
+            style="font-size:10px;"
             :label="item.label">
-        <el-input v-if="item.type=='input'" v-model="form[item.prop]"></el-input>
+        <el-input v-if="item.type=='input'" 
+            :disabled="item.disabled ? item.disabled : false"
+            v-model="form[item.prop]"></el-input>
         <el-select v-if="item.type == 'select' "
                   v-model="form[item.prop]" 
+                  :disabled="item.disabled ? item.disabled : false"
                   :multiple = "item.multiple ? item.multiple : false "
                   :placeholder="item.placeholder?item.placeholder:'请选择'">
             <el-option  v-for="opt in  item.options"
@@ -19,6 +23,7 @@
         <span v-if="item.type=='dateInterval'">
           <el-col :span="11">
               <el-date-picker type="date" 
+                :disabled="item.disabled ? item.disabled : false"
                 :placeholder="item.placeholder ? item.placeholder : '选择日期' " 
                 v-model="form[item.prop+'start_time']" 
                 style="width: 100%;"/>
@@ -26,6 +31,7 @@
           <el-col class="line" :span="2">-</el-col>
           <el-col :span="11">
             <el-time-picker 
+                :disabled="item.disabled ? item.disabled : false"
                 :placeholder="item.placeholder ? item.placeholder : '选择日期' " 
                 v-model="form[item.prop+'end_time']" 
                 style="width: 100%;" />
@@ -34,6 +40,7 @@
       <el-switch v-if="item.type=='switch'"
           size="mini"
           style="width:100%;padding:0px;"
+          :disabled="item.disabled ? item.disabled : false"
           v-model="form[item.prop]" 
           :active-text="item.active"
           :inactive-text="item.inactive" />
@@ -44,12 +51,14 @@
                 <el-checkbox 
                     v-if="item.type=='checkbox'"
                     size="mini"
+                    :disabled="item.disabled ? item.disabled : false"
                     v-for="opt in item.options" 
                     :label="opt.value" :key="opt.value">{{opt.label}}</el-checkbox>
 
                 <el-checkbox-button
                     v-if="item.type=='checkbox-button'"
                     size="mini"
+                    :disabled="item.disabled ? item.disabled : false"
                     v-for="opt in item.options"  
                     :label="opt.value" :key="opt.value">{{city}}</el-checkbox-button>
             </el-checkbox-group> 
@@ -61,11 +70,13 @@
               <el-radio v-if="item.type=='radio'"
                  :border="item.border ? item.border : false"
                   size="mini"
+                  :disabled="item.disabled ? item.disabled : false"
                   v-for="opt in item.options"         
                   :label="opt.value">{{opt.label}}</el-radio>
 
               <el-radio-button v-if=" item.type == 'radio-button' "
                   size="mini"
+                  :disabled="item.disabled ? item.disabled : false"
                   v-for="opt in item.options" 
                   :label="opt.value" >{{ opt.label }}</el-radio-button>
           </el-radio-group>
@@ -84,6 +95,7 @@
         </span>  
         <span v-if="item.type=='textarea'">
             <el-input type="textarea" 
+                :disabled="item.disabled ? item.disabled : false"
                 style="width:100%;padding:0px;"
                 :rows="item.numbers ? item.numbers/100 : 5"
                 v-model="form[item.prop]"></el-input>
@@ -94,6 +106,7 @@
                 size="mini"
                 style="width:100%;padding:0px;"
                 type="date"
+                :disabled="item.disabled ? item.disabled : false"
                 :placeholder="item.placeholder ? item.placeholder : '选择日期' ">
             </el-date-picker>    
         </span>  
@@ -131,14 +144,18 @@
     data(){
       return {
         formStyle:{},
-        form:{}
       }
     },
+    watch:{
+        form :{
+          deep:true,
+          immediate:true,
+          handler:function(n,o){
+            this.$emit('update:form',this.form);
+          }
+        }
+    },
     created:function(){
-      //  this.formatForm()
-      //   if( Object.keys(this.form).length == 0 ) {
-      //       this.formatForm()
-      //     };
         this.formStyle = this.formDesign;
     },
     methods:{
@@ -169,7 +186,9 @@
   padding:25px;
   box-shadow: 0px 0px 10px 5px #888888;
 } 
-
+.el-form-item_label{
+  font-size:7px;
+}
     
 </style>
 

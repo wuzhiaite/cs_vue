@@ -43,7 +43,7 @@ export default {
                     iconCls:'el-icon-picture-outline-round',
                     realPath:'conf/page/PageList',
                 },{
-                    path : '/comPageList',
+                    path : '/comPageList/:id',
                     name : '通用台账样例',
                     iconCls:'el-icon-s-opportunity',
                     realPath:'conf/page/ComPageList',
@@ -59,14 +59,7 @@ export default {
                     name : '通用表单样例02',
                     iconCls:'el-icon-s-order',
                     realPath:'conf/form/ComFormExp01',
-                },
-                // {
-                //     path:'/commonComponent',
-                //     name : '通用组件样例',
-                //     realPath:'conf/form/ComComponent',
-                //     iconCls:'el-icon-collection',
-                // }
-                ]
+                }]
 
           } ,
           {

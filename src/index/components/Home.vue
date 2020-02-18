@@ -8,8 +8,7 @@
               <span class="el-title" >
                   <el-image 
                       class="el-img"
-                      :src="url" 
-                      preview-src-list="">
+                      :src="url" >
                     </el-image>
               </span>
               <br/>
@@ -143,9 +142,6 @@
     },
     methods:{
       openSelfInfo(){
-          this.$alert('<strong>这是 <i>HTML</i> 片段</strong>', 'HTML 片段', {
-            dangerouslyUseHTMLString: true
-          });
       },
       handleOpen(key, keyPath) {
         console.log(key, keyPath);

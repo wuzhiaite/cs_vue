@@ -1,79 +1,129 @@
 <template>
+<div>
+ 
   <div class="box-block">
-        <div>
+        <div class="el-form">
           <CommonPage :pageParam="pageParam"></CommonPage>
         </div>
         <div style="width:1px;"></div>
-        <div style="float:right;margin-top:20px;">    
-          <PageListDetail :form="form"></PageListDetail>
+        <div style="float:right;">    
+          <ComForm 
+              :formDesign="formStyle.formDesign"
+              :form="formStyle.form" 
+              :btns="formStyle.btns"></ComForm>
         </div> 
     </div>
+    <ComDialog 
+          :dialog="dialog"
+          :visable.sync="viewParam.isView" >
+          <CommonPage :pageParam="viewParam.pageParam" />
+    </ComDialog>
+</div>        
 </template>
 <script>
- import PageListDetail from './PageListDetail'
+
 
  export default {
     data(){
       return {
         tableParam:{},
-        btns:[],
-        conditions:[],
         pageParam:{},
-        form:{},
-        disabled:false,
-        conditionSelect:['name','area','age'],
-        options:[
-          {
-            name:'名称',
-            value:'name'
-          },{
-            name:'区域',
-            value:'area',
-          },{
-            name:'年龄',
-            value:'age',
-          }
-        ],
+        formStyle:{
+            formDesign:{},
+            btns:[],
+            form:{},
+        },
+        viewParam:{
+            isView:false,
+            pageParam:{}
+        },
+        dialog:{}
       }
-    },
-    components:{
-       PageListDetail,
     },
     created(){
       this.initTable();
-      this.initBtns();
       this.initPageParam();
-    },
+      this.initForm();
+      this.initDialog();
+    }, 
     methods:{
       onSubmit() {
           console.log('submit!');
       },
+      initDialog : function(){
+          this.dialog = {
+            width : '80%'
+        }
+      },
+      initForm : function(){
+          var formItems = [{
+                prop:'CONFIG_NAME',
+                label:'台账名称:',
+                type:'input',
+            },{
+                prop:'SEARCH_FILEDS',
+                label:'查询条件:',
+                type:'input',
+              },{
+                prop:'CONDITION_FILEDS',
+                label:'高级查询:',
+                type:'input',
+              },{
+                prop:'COLUMN_FILEDS',
+                label:'展示列:',
+                type:'input',
+              },{
+                prop:'SEARCH_SQL',
+                label:'查询SQL:',
+                type:'textarea',
+                numbers:1500,
+              }
+          ];
+         
+          this.formStyle.formDesign = {
+              disabled:true,  
+              formItems : formItems,
+          }
+       },
       initPageParam : function(){
+           var that = this;
            this.pageParam = {     
                 isPagination:true,//是否分页
                 isQualitySearch:false,//是否高级查询
-                btns:this.btns,//按钮
-                tableParam : this.tableParam//表单参数
+                tableParam : this.tableParam,//表单参数
+                btns : [{
+                  name : '新增',
+                  type : 'primary',
+                  icon : 'el-icon-circle-plus-outline',
+                  disabled : false,
+                  click : function(){
+                    var id = "111";
+                    that.$router.push({path:`/confPageList/${id}`});
+                  }
+                }],
+                initData:{
+                  url:'/pagelist/getpagelist',
+                  params:{
+                    "pageNum":1,
+                    "pageSize":10,
+                  },
+                },
+                events : {
+                   initCallback : function(response){
+                        if(response.result.list.length > 0){
+                           that.formStyle.form = response.result.list[0] ;
+                        }else{
+                          that.formStyle.form = {};
+                        }
+                    }
+                }
            }
       },
-      handleClick:function(row){
+      handleDelete:function(row){
          alert(JSON.stringify(row));
       },
       handleEdit : function(row){
            alert(JSON.stringify(row));
-      },
-       initBtns:function(){
-          var that = this;
-          this.btns = [
-            {
-                name : '新增',
-                type : 'primary',
-                icon : 'el-icon-delete',
-                disabled : false,
-                click : function(){
-                   
-                }
-              }]
       },
       initTable : function(){
           var that = this;
@@ -86,9 +136,12 @@
             defaultSort:{//默认排序参数
               // prop: 'date', order: 'descending'
             },
+            searchParam:{
+              placeholder:'请输入台账名称',
+            },
             columns:[{
-                prop : "name",
-                label : "姓名",
+                prop : "CONFIG_NAME",
+                label : "台账名称",
                 width : "10"
              },{
                 prop : "",
@@ -100,7 +153,9 @@
                     type:'text',
                     icon : 'el-icon-view',
                     click:function(row){
-                      that.handleClick(row);
+                      that.viewParam.pageParam = JSON.parse(row.FORM_DESIGN) ;
+                      that.dialog.title = row.CONFIG_NAME;
+                      that.viewParam.isView = true;
                     }
                   }   
                 ]
@@ -115,7 +170,7 @@
                     type:'danger',
                     icon : 'el-icon-delete',
                     click:function(row){
-                      that.handleClick(row);
+                      that.handleDelete(row);
                     }
                   },
                   {
@@ -130,14 +185,10 @@
              }],
              events:{
                 rowClick : function(row, column, event){
-                  // alert(JSON.stringify(row));
-                  that.form = row ;
-                }
+                  that.formStyle.form = row ;
+                },
              },
-             initData:{
-               url:'',
-               param:{},
-             },
+            
           }
 
       }
@@ -148,13 +199,23 @@
 
 </script>
 <style scoped>
+.el-select{
+  width:100%;
+}
+.el-form{
+  border: 1px solid #ebebeb;
+  border-radius: 3px;
+  transition: .2s;
+  padding:15px;
+  box-shadow: 0px 0px 10px 5px #888888;
+} 
 .box-block {
     width: 100%;
 }
 .box-block div {
     display: inline-block;   
     word-wrap: break-word;
-    width: 45%;
+    width: 48%;
     text-align: center;
     padding: 5px;
 }

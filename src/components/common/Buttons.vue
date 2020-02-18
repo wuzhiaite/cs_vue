@@ -4,7 +4,7 @@
                 :type="btn.type ? btn.type : 'primary'" 
                 :icon=" btn.icon ? btn.icon : '' " 
                 :disabled="btn.disabled ? btn.disabled : false"
-                @click="btn.click"
+                @click="btn.click?btn.click() : null"
                 :size="btn.size ? btn.size : 'mini'"
                 >{{btn.name}}</el-button>
     </span>             

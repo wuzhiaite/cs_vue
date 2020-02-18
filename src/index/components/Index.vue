@@ -9,7 +9,6 @@
             </el-image>
         </el-carousel-item>
       </el-carousel>
-      
   </div>  
 </template>
 <script>

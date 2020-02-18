@@ -1,7 +1,6 @@
 <template>
     <!-- 全表样式设置 -->
     <el-table 
-        v-loading="loading"
         :data="tableData"
         :size="tableParam.size ? tableParam.size:'mini'"
         :border="tableParam.border?true:false"
@@ -12,7 +11,7 @@
         @selection-change="handleSelectionChange"
         :height="height*0.7"
         :max-height="tableParam.maxHeight"
-        @row-click="tableParam.events.rowClick ? tableParam.events.rowClick : null"
+        @row-click="rowClick"
         style="width: 100%;height:100px;">
         <!-- 是否多选 -->
         <el-table-column v-if="tableParam.multi" type="selection"  width="55"></el-table-column>  
@@ -57,6 +56,10 @@ import {mapGetters} from 'vuex';
              type:Object,
              default:{}
          },
+         tableData:{
+             type:Array,
+             default:[],
+         },
          callbackParam:{
              multipleSelection:[],
          }   
@@ -64,22 +67,18 @@ import {mapGetters} from 'vuex';
     data(){
         return {
             loading : true, 
-            tableData:[],
+            flag:false,
+        }
+    },
+    watch:{
+        tableData:function(n,o){
+            console.log(this.tableData);
         }
     },
     computed:{
         ...mapGetters({height:'getScreenHeight',width:'getScreenWidth'}),
     },
-    created:function(){
-        this.initTableData();
-    },
     methods:{
-        initTableData:function(){//初始化展示列表的数据
-            if(this.tableParam.tableData){
-                this.tableData = this.tableParam.tableData;
-            }
-            this.loading = false;
-        },
         sortChange:function(row){//监听排序事件
             console.log(row);       
         },
@@ -90,6 +89,11 @@ import {mapGetters} from 'vuex';
        filterTag(value, row) {
             return row.tag === value;
        },
+       rowClick:function(row, column, event){
+           if(this.tableParam.events.rowClick){
+               this.tableParam.events.rowClick(row,column,event)
+           }
+       }
     }
  }
 

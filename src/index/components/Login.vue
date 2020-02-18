@@ -1,4 +1,5 @@
 <template>
+<div class="main">
   <el-form :rules="rules" class="login-container" label-position="left" :model="loginForm"
            label-width="0px" v-loading="loading">
     <h3 class="login_title">系统登录</h3>
@@ -16,6 +17,7 @@
       <el-button type="primary" style="width: 100%" @click="submit">登录</el-button>
     </el-form-item>
   </el-form>
+</div>
 </template>
 <script>
   export default{
@@ -43,6 +45,9 @@
   }
 </script>
 <style scoped>
+  .main{
+    background:'../img/index/sn01.jpg';
+  } 
   .login-container {
     border-radius: 15px;
     background-clip: padding-box;
