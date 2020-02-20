@@ -1,4 +1,5 @@
 <template>
+<span>
   <el-form  ref="form" 
             :model="form" 
             size="mini"
@@ -39,9 +40,14 @@
                 style="width: 100%;" />
           </el-col>
       </span>
-      <span>
-
-        
+      <span v-if="item.type == 'btns'" style="float:left;">
+          <Buttons :btns="item.btns ? item.btns : null" />
+          <Buttons :btns="form[item.prop] ? form[item.prop] : null" />
+          <el-button type="primary" 
+              style=""
+              icon="el-icon-edit" 
+              @click="item.click()" circle>
+          </el-button>
       </span>  
       <el-switch v-if="item.type=='switch'"
           size="mini"
@@ -52,6 +58,7 @@
           :inactive-text="item.inactive" />
       <span v-if="item.type=='checkbox' || item.type=='checkbox-button'">
           <el-checkbox-group 
+                    style="float:left;"
                     v-model="form[item.prop]" 
                     size="mini">
                 <el-checkbox 
@@ -114,20 +121,11 @@
                 :placeholder="item.placeholder ? item.placeholder : '选择日期' ">
             </el-date-picker>    
         </span>
-        <span v-if="item.type == 'label-input' ">
-          <span v-for="opt in item.options" style="display:block;border:1px solid #ebebeb;">
-            <el-input 
-              size="mini"
-              style="display:block;width:30px;"
-              :disabled="opt.disabled ? opt.disabled : false"
-              v-model="form[item.prop][opt]"></el-input>
-          </span>
-            
-        </span>    
     </el-form-item>  
     <el-form-item> 
       <slot></slot>
     </el-form-item>  
+      <br/>
      <el-form-item v-if="btns.length > 0">
          <el-button  v-for="btn in btns" 
             :disabled = "btn.disabled ? btn.disabled : false"
@@ -137,6 +135,8 @@
          </el-button>
     </el-form-item>
   </el-form>
+ </span>        
+
 </template>
 <script>
  
@@ -193,6 +193,13 @@
                     this.form[item.prop] = item.default ;
                 }
             }
+        },
+        btnsDesign : function(prop){
+              
+
+
+
+
         }
     }
 

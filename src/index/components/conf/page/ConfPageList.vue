@@ -26,11 +26,30 @@
        <ComDialog 
           :dialog="dialog"
           :visable.sync="isView">
-          <ComForm 
+          <ComForm v-if="bol.isColumnPage"
               :formDesign="columnForm.formDesign"
               :form.sync="columnForm.form" 
               :btns="columnForm.btns"></ComForm>
+           <ComForm v-if="bol.isBtnsPage"
+              :formDesign="btnForm.formDesign"
+              :form.sync="btnForm.form" 
+              :btns="btnForm.btns">
+              <span style="padding:15px;border:1px solid #DCDFE6;margin:15px;">
+                  <label>按钮样例：</label>
+                  <el-button 
+                    :type="btnForm.form.type " 
+                    :icon=" btnForm.form.icon ? btnForm.form.icon : '' " 
+                    :disabled="btnForm.form.disabled ? btnForm.form.disabled : false"
+                    @click="btnForm.form.click ? btnForm.form.click() : null"
+                    size='mini'
+                    :circle="btnForm.form.style && btnForm.form.style == 'circle' ? true : false"
+                    :plain="btnForm.form.style && btnForm.form.style == 'plain' ? true : false"
+                    :round="btnForm.form.style && btnForm.form.style == 'round' ? true : false"
+                    >{{btnForm.form.name}}</el-button>
+                </span>
+            </ComForm>    
       </ComDialog>
+      
     </div> 
 
 </template>
@@ -57,8 +76,17 @@
             btns:[],
             form:{},
           },
+          btnForm:{
+            formDesign:{},
+            btns:[],
+            form:{},  
+          },
           dialog:{},
           isView:false,
+          bol:{
+            isColumnPage:false,
+            isBtnsPage:false,
+          },
           tempForm:{},
       }
     },
@@ -67,7 +95,7 @@
         this.initBtn();
         this.initSqlForm();
         this.initPageDesignForm();
-        this.initDialog();
+        this.initBtnForm();
     },
     watch:{
         sqlForm:{
@@ -85,6 +113,12 @@
             }
           }
         },
+        isView:function(n,o){
+            if(!n){
+                this.bol.isColumnPage = false ;
+                this.bol.isBtnsPage = false ;
+            }
+        }
     },
     methods : {
         initBtn : function(){
@@ -143,7 +177,70 @@
                  + "ON DQBZ.LCSLBH = SL.BH"	,
 					  }     
         },
+        initBtnForm : function(){
+            var that = this;
+            var  formItems = [{
+                    prop:'name',
+                    label:'按钮名称:',
+                    type:'input',
+                  },{
+                    prop:'icon',
+                    label:'按钮类型',
+                    type:'select',
+                    options:[
+                      {label:'编辑',value:'el-icon-edit'},
+                      {label:'分享',value:'el-icon-share'},
+                      {label:'删除',value:'el-icon-delete'},
+                      {label:'查找',value:'el-icon-search'},
+                      {label:'设置',value:'el-icon-setting'},
+                      {label:'省略号',value:'el-icon-more-outline'},
+                      {label:'图片',value:'el-icon-picture-outline-round'},
+                      {label:'播放',value:'el-icon-video-play'},
+                      {label:'查看',value:'el-icon-view'},
+                    ],
+                  },{
+                     prop:'type',
+                    label:'按钮类型:',
+                    type:'select',
+                    options:[
+                      {label:'重要',value:'primary'},
+                      {label:'成功',value:'success'},
+                      {label:'信息',value:'info'},
+                      {label:'警告',value:'warning'},
+                      {label:'危险',value:'danger'},
+                      {label:'文本',value:'text'},
+                    ]  
+                  },{
+                    prop:'style',
+                    label:'按钮样式:',
+                    type:'select',
+                    options:[
+                      {label:'默认按钮',value:''},
+                      {label:'朴素按钮',value:'plain'},
+                      {label:'圆角按钮',value:'round'},
+                      {label:'原型按钮',value:'circle'},
+                    ]  
+                  }
+              ];
+            this.btnForm.formDesign = {
+              disabled:false, 
+              inline:false, 
+              formItems : formItems,
+            }
+            this.btnForm.btns = [{
+                    id : 'confirm',
+                    name : '确定',
+                    type : 'primary',
+                    icon : '',
+                    labelWidth:'0.4',
+                    disabled : false,
+                    click : function(){
+                       
+                    }
+                 }] 
+        },
         initColumnForm : function(tempArr){//初始化列别名表单数据
+          var that = this;
           var  formItems = [];
           var  rules = {};
           var  tempForm = {}
@@ -166,8 +263,42 @@
               formItems : formItems,
               rules : rules,
             }
+            this.columnForm.btns
+                =[{
+                    id : 'confirm',
+                    name : '确定',
+                    type : 'primary',
+                    icon : '',
+                    closed : true,
+                    click : function(){
+                        var form = that.columnForm.form ;
+                        var temp = {};
+                        var flag = false;
+                        for(var i in form ){
+                            if( form[i] ){
+                               flag = true ;
+                               temp[i] = form[i]
+                            }else{
+                               temp[i] = i ; 
+                            }
+                        }
+                        if(!flag){
+                          that.$message({
+                              message: '请最少为一个列设置别名！！！',
+                              type: 'error'
+                          });
+                          return ;
+                        }else{
+                            that.tempArr = temp ;
+                            that.isView = false;
+                            that.pageDesignDataFormat();
+                            that.pageDesignForm.formDesign.disabled = false;
+                        }
+                    }
+                }]
             this.columnForm.form = tempForm ;
             this.isView = true;
+            this.bol.isColumnPage = true;
         },
         initDialog : function(){
             var that = this;
@@ -225,7 +356,14 @@
               },{
                   prop:'CONFIG_BTNS',
                   label:'按钮',
-                  type:'input',
+                  type:'btns',
+                  click:function(){
+                    that.dialog.width='50%';
+                    that.dialog.titleSlot='<strong>按钮设计</strong>';
+                    that.bol.isBtnsPage = true ;
+                    that.isView = true;
+                    that.bol.isColumnPage = false;
+                  }
               },{
                   prop:'SEARCH_COLUMNS',
                   label:'模糊查询',
@@ -253,7 +391,7 @@
               }
             ];
             this.pageDesignForm.formDesign = {
-              disabled:true,  
+              disabled:false,  
               formItems : formItems,
             }
             this.pageDesignForm.form = {
@@ -262,6 +400,9 @@
             }
         },
         getSearchInfo : function(){//获取数据
+            this.dialog.width = '60%',
+            this.dialog.titleSlot = '<strong>新增列展示名称</strong>'
+            this.bol.isBtnsPage = false;
             if(!this.sqlForm.form.SEARCH_SQL)return;
             var sql =  this.sqlForm.form.SEARCH_SQL.toUpperCase();
             this.filedArr = [];
