@@ -14,13 +14,18 @@
        @closed="dialog.events && dialog.events.closed ? dialog.events.closed() : null"
        @opened="dialog.events && dialog.events.opened ? dialog.events.opened() : null"
        @open="dialog.events && dialog.events.open ? dialog.events.open() : null">
+       <div slot="title" v-if="dialog.titleSlot" v-html="dialog.titleSlot">
+           
+       </div>
          <slot></slot>
-        <div slot="footer" class="dialog-footer" v-if="dialog.btns && dialog.btns.length > 0">
+        <div slot="footer" class="dialog-footer" 
+                style="text-align:center;"
+                v-if="dialog.btns && dialog.btns.length > 0">
             <el-button v-for="(btn,index) in dialog.btns"  
                 :type="btn.type ? btn.type : 'primary'" 
                 :icon=" btn.icon ? btn.icon : '' " 
                 :disabled="btn.disabled ? btn.disabled : false"
-                @click="vis=false,btn.click?btn.click() : null"
+                @click="btn.closed ? vis=btn.closed : vis=false ,btn.click ? btn.click() : null"
                 :size="btn.size ? btn.size : 'mini'"
                 >{{btn.name}}</el-button>
         </div>

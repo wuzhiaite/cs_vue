@@ -4,12 +4,14 @@
             size="mini"
             :hide-required-asterisk="formStyle.asterisk ? formStyle.asterisk  : true"
             :rules=" formStyle.rules ? formStyle.rules : {} "
+            :inline="formStyle.inline ? formStyle.inline : false"
             :disabled="formStyle.disabled ? formStyle.disabled : false "
             :label-width="formStyle.labelWidth ? formStyle.labelWidth : '20%' ">
     <el-form-item v-for="(item,index)  in  formStyle.formItems"  
             style="font-size:10px;"
             :label="item.label">
         <el-input v-if="item.type=='input'" 
+            :placeholder="item.placeholder ? item.placeholder : '' "
             :disabled="item.disabled ? item.disabled : false"
             v-model="form[item.prop]"></el-input>
         <el-select v-if="item.type == 'select' "
@@ -37,6 +39,10 @@
                 style="width: 100%;" />
           </el-col>
       </span>
+      <span>
+
+        
+      </span>  
       <el-switch v-if="item.type=='switch'"
           size="mini"
           style="width:100%;padding:0px;"
@@ -54,13 +60,11 @@
                     :disabled="item.disabled ? item.disabled : false"
                     v-for="opt in item.options" 
                     :label="opt.value" :key="opt.value">{{opt.label}}</el-checkbox>
-
                 <el-checkbox-button
                     v-if="item.type=='checkbox-button'"
-                    size="mini"
-                    :disabled="item.disabled ? item.disabled : false"
+                    size="mini"s
                     v-for="opt in item.options"  
-                    :label="opt.value" :key="opt.value">{{city}}</el-checkbox-button>
+                    :label="opt.value" :key="opt.value">{{opt.label}}</el-checkbox-button>
             </el-checkbox-group> 
         </span>
         <span v-if="item.type=='radio'|| item.type == 'radio-button'">
@@ -109,10 +113,24 @@
                 :disabled="item.disabled ? item.disabled : false"
                 :placeholder="item.placeholder ? item.placeholder : '选择日期' ">
             </el-date-picker>    
-        </span>  
-    </el-form-item>     
+        </span>
+        <span v-if="item.type == 'label-input' ">
+          <span v-for="opt in item.options" style="display:block;border:1px solid #ebebeb;">
+            <el-input 
+              size="mini"
+              style="display:block;width:30px;"
+              :disabled="opt.disabled ? opt.disabled : false"
+              v-model="form[item.prop][opt]"></el-input>
+          </span>
+            
+        </span>    
+    </el-form-item>  
+    <el-form-item> 
+      <slot></slot>
+    </el-form-item>  
      <el-form-item v-if="btns.length > 0">
          <el-button  v-for="btn in btns" 
+            :disabled = "btn.disabled ? btn.disabled : false"
             :type=" btn.type ? btn.type : '' "
             @click="btn.click()">
              {{btn.name}}
@@ -127,7 +145,7 @@
     props:{
       formDesign:{
         type:Object,
-        default:[],
+        default:{},
         required:true
       },
       btns:{
@@ -153,7 +171,15 @@
           handler:function(n,o){
             this.$emit('update:form',this.form);
           }
+        },
+        formDesign:{
+          deep:true,
+          immediate:true,
+          handler:function(n,o){
+            this.formStyle = this.formDesign;
+          }
         }
+
     },
     created:function(){
         this.formStyle = this.formDesign;
@@ -180,14 +206,15 @@
 }
 .el-form{
   font-size:10px;
-  border: 1px solid #ebebeb;
   border-radius: 3px;
   transition: .2s;
   padding:25px;
-  box-shadow: 0px 0px 10px 5px #888888;
 } 
 .el-form-item_label{
   font-size:7px;
+}
+.el-input__inner{
+  display:block !important;
 }
     
 </style>
