@@ -18,9 +18,12 @@
       <Buttons :btns="pageParam.btns" :callbackParam.sync="callbackParam"></Buttons> 
      </el-row> 
      <!-- 条件项 -->
-    <Conditions v-if="pageParam.conditions" :conditions.sync="pageParam.conditions" 
-            @changeCondition="changeCondition" 
-            :show="show"></Conditions>   
+     <div style="height:100%;background-color:#DCDFE6;">
+        <Conditions v-if="pageParam.conditions" 
+                :conditions.sync="pageParam.conditions" 
+                @changeCondition="changeCondition" 
+                :show="show"></Conditions> 
+     </div>  
      <!-- 列表页面 -->
     <div v-loading="!flag">
         <TableList 

@@ -26,30 +26,31 @@
        <ComDialog 
           :dialog="dialog"
           :visable.sync="isView">
+          <!-- 列别名配置表单 -->
           <ComForm v-if="bol.isColumnPage"
               :formDesign="columnForm.formDesign"
               :form.sync="columnForm.form" 
               :btns="columnForm.btns"></ComForm>
+           <!-- 按钮配置页面 -->
            <ComForm v-if="bol.isBtnsPage"
               :formDesign="btnForm.formDesign"
               :form.sync="btnForm.form" 
               :btns="btnForm.btns">
               <span style="padding:15px;border:1px solid #DCDFE6;margin:15px;">
                   <label><strong>按钮样例：</strong></label>
-                  <el-button 
-                    :type="btnForm.form.type " 
-                    :icon=" btnForm.form.icon ? btnForm.form.icon : '' " 
-                    :disabled="btnForm.form.disabled ? btnForm.form.disabled : false"
-                    @click="btnForm.form.click ? btnForm.form.click() : null"
-                    size='mini'
-                    :circle="btnForm.form.style && btnForm.form.style == 'circle' ? true : false"
-                    :plain="btnForm.form.style && btnForm.form.style == 'plain' ? true : false"
-                    :round="btnForm.form.style && btnForm.form.style == 'round' ? true : false"
-                    >{{btnForm.form.name}}</el-button>
+                  <Button :btn="btnForm.form" />
                 </span>
             </ComForm>    
       </ComDialog>
-      
+      <!-- 高级条件配置页面 -->
+       <ComDialog 
+          :dialog="dialog"
+          :visable.sync="qualityConditionsForm.isView">
+          <ComForm 
+              :formDesign="qualityConditionsForm.formDesign"
+              :form.sync="qualityConditionsForm.form" 
+              :btns="qualityConditionsForm.btns"></ComForm> 
+      </ComDialog>
     </div> 
 
 </template>
@@ -57,11 +58,11 @@
  export default {
     data : function(){
       return {
-          id : 0,
-          btns : [],
+          id : 0,//当前页面的id
+          btns : [],//页面的按钮
           disabled:true,
           tempArr : [],//用于临时存储SQL列填写信息
-          sqlForm:{
+          sqlForm:{//SQL新增文本域
             formDesign:{},
             btns:[],
             form:{},
@@ -88,6 +89,7 @@
             isBtnsPage:false,
           },
           tempForm:{},
+          qualityConditionsForm : {}//高级条件项查询表单
       }
     },
     created : function(){
@@ -117,6 +119,11 @@
             if(!n){
                 this.bol.isColumnPage = false ;
                 this.bol.isBtnsPage = false ;
+            }
+        },
+        disabled:function(n,o){
+            if(n){
+                this.initQualityConditionsForm();
             }
         }
     },
@@ -179,14 +186,21 @@
         },
         initBtnForm : function(){
             var that = this;
-            var  formItems = [{
+            var  formItems = [
+                  {
+                    prop:'id',
+                    label:'按钮ID',
+                    type:'input',
+                    disabled:true,
+                    placeholder:'按钮ID',
+                  },{
                     prop:'name',
                     label:'按钮名称:',
                     type:'input',
                     placeholder:'按钮名称',
                   },{
                     prop:'icon',
-                    label:'按钮类型',
+                    label:'按钮icon',
                     type:'select',
                     options:[
                       {label:'编辑',value:'el-icon-edit'},
@@ -200,7 +214,7 @@
                       {label:'查看',value:'el-icon-view'},
                     ],
                   },{
-                     prop:'type',
+                    prop:'type',
                     label:'按钮类型:',
                     type:'select',
                     options:[
@@ -215,6 +229,7 @@
                     prop:'style',
                     label:'按钮样式:',
                     type:'select',
+                    multiple:true,
                     options:[
                       {label:'默认按钮',value:''},
                       {label:'朴素按钮',value:'plain'},
@@ -234,6 +249,7 @@
               formItems : formItems,
             }
             this.btnForm.form = {
+                id: (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
                 script:"{\n\tclick:function(){\n\n\n\n\t},\n\thover:function(){\n\n\n\n\t}\n}"
             }
             this.btnForm.btns = [{
@@ -252,9 +268,23 @@
                           break;
                        } 
                        if(flag){
-                          that.pageDesignForm.form.CONFIG_BTNS.push(form) ;
+                            var items = that.pageDesignForm.form.CONFIG_BTNS;
+                            var isModify = false ;
+                            for(var i in items){
+                                if(items[i].id == form.id){
+                                    isModify = true;
+                                    items[i] = form;
+                                }
+                            }
+                            that.pageDesignForm.form.CONFIG_BTNS = items ;
+                            if(!isModify){
+                                that.pageDesignForm.form.CONFIG_BTNS.push(form) ;
+                            } 
                           that.isView = false ;
-                          that.btnForm.form = {} ;
+                          that.btnForm.form ={
+                              id: (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
+                              script:"{\n\tclick:function(){\n\n\n\n\t},\n\thover:function(){\n\n\n\n\t}\n}"
+                          } ;
                        }else{
                            that.$message({
                               message: '请确定按钮是否配置！',
@@ -381,26 +411,43 @@
                   label:'台账名称:',
                   type:'input',
               },{
-                  prop:'CONFIG_BTNS',
-                  label:'按钮',
-                  type:'btns',
-                  click:function(){
-                    that.dialog.width='50%';
-                    that.dialog.titleSlot='<strong>按钮设计</strong>';
-                    that.bol.isBtnsPage = true ;
-                    that.isView = true;
-                    that.bol.isColumnPage = false;
-                  }
-              },{
                   prop:'SEARCH_COLUMNS',
                   label:'模糊查询',
                   type:'select',
                   multiple:true,
                   options:tempArr
               },{
+                  prop:'CONFIG_BTNS',
+                  label:'按钮',
+                  type:'btns',
+                  hoverId:-1,
+                  events:{
+                      editBtn:function(index){
+                        console.log(index);
+                         if(index != -1){
+                              var form = that.pageDesignForm.form.CONFIG_BTNS[index];
+                              console.log(form);
+                              that.btnForm.form = form;
+                          }
+                          that.dialog.width='50%';
+                          that.dialog.titleSlot='<strong>按钮设计</strong>';
+                          that.bol.isBtnsPage = true ;
+                          that.isView = true;
+                          that.bol.isColumnPage = false; 
+                      },
+                      deleteBtn:function(index){
+                         that.pageDesignForm.form.CONFIG_BTNS.splice(index,1);
+                      },
+                  }
+              },{
                   prop:'SEARCH_CONDITIONS',
                   label:'高级条件',
-                  type:'input',
+                  type:'conditions',
+                  events:{
+                    clickBtn:function(){
+                        that.qualityConditionsForm.isView = true ;
+                    }
+                  }
               },{
                   prop:'SHOW_COLUMNS',
                   label:'默认展示列',
@@ -422,9 +469,10 @@
               formItems : formItems,
             }
             this.pageDesignForm.form = {
-              SHOW_COLUMNS:[],
-              INIT_PARAM:"{\n\n\n}",
-              CONFIG_BTNS:[],
+                SHOW_COLUMNS:[],
+                INIT_PARAM:"{\n\n\n}",
+                CONFIG_BTNS:[],
+                SEARCH_CONDITIONS:[],
             }
         },
         getSearchInfo : function(){//获取数据
@@ -459,6 +507,87 @@
                 this.initColumnForm(filedArr);
             }
           
+        },
+        initQualityConditionsForm : function(){
+          var that = this;
+          this.qualityConditionsForm = {//高级条件项查询表单
+            isView:false,
+            labelWidth:'0.4',
+            formDesign:{
+              disabled:false, 
+              inline:false, 
+              formItems : [
+                {
+                  prop:'id',
+                  label:'条件项ID',
+                  type:'input',
+                  disabled:true,
+              },{
+                  prop:'label',
+                  label:'条件项名称',
+                  type:'input',
+                  placeholder:'请输入条件项名称',
+              },{
+                  prop:'prop',
+                  label:'查询字段',
+                  type:'select',
+                  placeholder:'请输入需要查询的字段',
+                  options:that.tempForm,
+              },{
+                  prop:'type',
+                  label:'类型',
+                  type:'select',
+                  options:[
+                    {label:'选择框',value:'select'},
+                    {label:'日期',value:'date'},
+                    {label:'正负',value:'bol'},
+                    {label:'日期区间',value:'interval'},
+                    {label:'单选按钮',value:'radio-buttons'},
+                    {label:'单选',value:'radio'},
+                    {label:'多选',value:'checkbox'},
+                    {label:'多选按钮',value:'checkbox-buttons'},
+                    {label:'比率',value:'rate'},
+                  ],
+                  events:{
+                    checkChange : function(){
+                       var type = that.qualityConditionsForm.form.type ;
+                       if( type == 'select' ){
+                         that.qualityConditionsForm.formDesign.formItems[4].show = true;
+                       }
+                    }
+                  }
+              },{
+                 prop:'options',
+                  label:'字段映射',
+                  type:'child-form',
+                  show:false,
+                  items:[
+                    {label:'标签名',value:'label'},
+                    {label:'对应值',value:'value'},
+                  ]
+              }],
+            },
+            btns:[{
+                    id : 'confirm',
+                    name : '确定',
+                    type : 'primary',
+                    icon : '',
+                    disabled : false,
+                    click : function(){
+                        this.isView = false;
+                        that.pageDesignForm.form.SEARCH_CONDITIONS.push(this.form);
+                    }
+                 }],
+            form:{
+              id:(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
+              options:[],
+              type:[],
+
+            },
+          }
+
+
+
         },
         doSave : function(){//保存数据
             // this.post("/pagelist/getSearchInfo",

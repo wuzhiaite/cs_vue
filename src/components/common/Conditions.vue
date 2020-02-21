@@ -63,10 +63,10 @@
                          v-model="item.value" 
                          @change="synData(index,item)"
                          :size=" item.size ? item.size : 'mini' "
-                         v-if="item.type == 'buttons'">
+                         v-if="item.type == 'radio-buttons'">
                         <el-radio-button v-for="opt in item.options" 
                            :disabled="item.disabled ? item.disabled : false"
-                           :label="opt.name" ></el-radio-button>    
+                           :label="opt.name" :key="opt.value"></el-radio-button>    
                      </el-radio-group>
 
                 </span>
@@ -132,8 +132,6 @@
 <style scoped>
 .el-condition-div{
     display:block;
-    background-color:#D1E7FE;
-    width:100%;
     margin:auto;
     text-align:left;
     font-size:12px;

@@ -14,7 +14,8 @@
         <el-input v-if="item.type=='input'" 
             :placeholder="item.placeholder ? item.placeholder : '' "
             :disabled="item.disabled ? item.disabled : false"
-            v-model="form[item.prop]"></el-input>
+            v-model="form[item.prop]">
+        </el-input>
         <el-select v-if="item.type == 'select' "
                   v-model="form[item.prop]" 
                   :disabled="item.disabled ? item.disabled : false"
@@ -40,23 +41,47 @@
                 style="width: 100%;" />
           </el-col>
       </span>
+      <!-- 按钮 -->
       <span v-if="item.type == 'btns'" style="float:left;">
           <Buttons :btns="item.btns ? item.btns : null" />
-          <Buttons  :btns="form[item.prop] ? form[item.prop] : null" ></Buttons>
+          <template v-for="(btn,index) in (form[item.prop] ? form[item.prop] : null)" >
+            <span  @mouseover="item.hoverId = btn.id" 
+                   @mouseout="item.hoverId = -1 " >
+                <Button  
+                    :btn="btn" style="margin-left:15px;" />
+                <span v-show="btn.id == item.hoverId"  
+                      style="opacity:0.6;font-size:7px;cursor:pointer;margin-left:5px;">
+                  <span @click="item.events.editBtn(index)">编辑</span>
+                  &nbsp;&nbsp;|&nbsp;&nbsp;
+                  <span @click="item.events.deleteBtn(index)">删除</span>
+                </span>
+            </span>
+          </template>
           <el-button type="primary" 
               style="margin-left:15px;"
               icon="el-icon-plus" 
-              @click="item.click()" plain circle>
-          </el-button>
+              @click="item.events.editBtn(-1)" plain circle></el-button>
       </span>  
+      <!-- 条件项配置 -->
+      <div v-if="item.type == 'conditions' ">
+          <div style="height:100%;border:1px solid #DCDFE6;">
+              <Conditions :conditions="form[item.prop]"></Conditions>
+              <el-button type="primary" 
+                size="mini"
+                style="float:right;margin-top:5px;"
+                icon="el-icon-edit-outline" 
+                @click="item.events.clickBtn()" plain/>
+          </div>
+      </div> 
       <el-switch v-if="item.type=='switch'"
           size="mini"
           style="width:100%;padding:0px;"
           :disabled="item.disabled ? item.disabled : false"
           v-model="form[item.prop]" 
           :active-text="item.active"
-          :inactive-text="item.inactive" />
-      <span v-if="item.type=='checkbox' || item.type=='checkbox-button'">
+          :inactive-text="item.inactive" 
+        />
+        <span v-if="item.type=='checkbox' || item.type=='checkbox-button'">
           <el-checkbox-group 
                     style="float:left;"
                     v-model="form[item.prop]" 
@@ -121,6 +146,10 @@
                 :placeholder="item.placeholder ? item.placeholder : '选择日期' ">
             </el-date-picker>    
         </span>
+        <span v-if="item.type == 'child-form' ">
+          <div>
+          </div>  
+        </span>  
     </el-form-item>  
     <el-form-item> 
       <slot></slot>
