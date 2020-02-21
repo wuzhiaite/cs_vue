@@ -2,7 +2,7 @@
 <div>
  
   <div class="box-block">
-        <div class="el-form">
+        <div >
           <CommonPage :pageParam="pageParam"></CommonPage>
         </div>
         <div style="width:1px;"></div>
@@ -217,7 +217,9 @@
     word-wrap: break-word;
     width: 48%;
     text-align: center;
-    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #ebebeb;
+    box-shadow: 0px 0px 10px 5px #888888;
 }
 span{
   width:50px;

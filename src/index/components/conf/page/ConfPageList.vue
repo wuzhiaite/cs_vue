@@ -35,7 +35,7 @@
               :form.sync="btnForm.form" 
               :btns="btnForm.btns">
               <span style="padding:15px;border:1px solid #DCDFE6;margin:15px;">
-                  <label>按钮样例：</label>
+                  <label><strong>按钮样例：</strong></label>
                   <el-button 
                     :type="btnForm.form.type " 
                     :icon=" btnForm.form.icon ? btnForm.form.icon : '' " 
@@ -183,6 +183,7 @@
                     prop:'name',
                     label:'按钮名称:',
                     type:'input',
+                    placeholder:'按钮名称',
                   },{
                     prop:'icon',
                     label:'按钮类型',
@@ -220,12 +221,20 @@
                       {label:'圆角按钮',value:'round'},
                       {label:'原型按钮',value:'circle'},
                     ]  
+                  },{
+                    prop:'script',
+                    label:'按钮脚本:',
+                    type:'textarea',
+                    numbers:1000,
                   }
               ];
             this.btnForm.formDesign = {
               disabled:false, 
               inline:false, 
               formItems : formItems,
+            }
+            this.btnForm.form = {
+                script:"{\n\tclick:function(){\n\n\n\n\t},\n\thover:function(){\n\n\n\n\t}\n}"
             }
             this.btnForm.btns = [{
                     id : 'confirm',
@@ -235,9 +244,27 @@
                     labelWidth:'0.4',
                     disabled : false,
                     click : function(){
+                       var form = that.btnForm.form ;
+                       var flag = false ;
+                       for(var i in form){
+                         if( i == 'script' )continue;
+                          flag = true;
+                          break;
+                       } 
+                       if(flag){
+                          that.pageDesignForm.form.CONFIG_BTNS.push(form) ;
+                          that.isView = false ;
+                          that.btnForm.form = {} ;
+                       }else{
+                           that.$message({
+                              message: '请确定按钮是否配置！',
+                              type: 'error'
+                          });
+                       }
                        
                     }
-                 }] 
+                 }];
+
         },
         initColumnForm : function(tempArr){//初始化列别名表单数据
           var that = this;
@@ -396,7 +423,8 @@
             }
             this.pageDesignForm.form = {
               SHOW_COLUMNS:[],
-              INIT_PARAM:"{\n\n\n}"
+              INIT_PARAM:"{\n\n\n}",
+              CONFIG_BTNS:[],
             }
         },
         getSearchInfo : function(){//获取数据
@@ -462,6 +490,8 @@
     text-align: center;
     margin-top: 15px;
     padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ebebeb;
     box-shadow: 0px 0px 10px 5px #888888;
 }
 </style>

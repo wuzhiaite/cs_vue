@@ -42,11 +42,11 @@
       </span>
       <span v-if="item.type == 'btns'" style="float:left;">
           <Buttons :btns="item.btns ? item.btns : null" />
-          <Buttons :btns="form[item.prop] ? form[item.prop] : null" />
+          <Buttons  :btns="form[item.prop] ? form[item.prop] : null" ></Buttons>
           <el-button type="primary" 
-              style=""
-              icon="el-icon-edit" 
-              @click="item.click()" circle>
+              style="margin-left:15px;"
+              icon="el-icon-plus" 
+              @click="item.click()" plain circle>
           </el-button>
       </span>  
       <el-switch v-if="item.type=='switch'"
@@ -194,13 +194,6 @@
                 }
             }
         },
-        btnsDesign : function(prop){
-              
-
-
-
-
-        }
     }
 
  }
