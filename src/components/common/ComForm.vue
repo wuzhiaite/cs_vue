@@ -10,7 +10,7 @@
             :label-width="formStyle.labelWidth ? formStyle.labelWidth : '20%' ">
     <el-form-item v-for="(item,index)  in  formStyle.formItems"  
             style="font-size:10px;"
-            :label="item.label">
+            :label="item.show || (typeof item.show == 'undefined' )? item.label : '' ">
         <el-input v-if="item.type=='input'" 
             :placeholder="item.placeholder ? item.placeholder : '' "
             :disabled="item.disabled ? item.disabled : false"
@@ -64,7 +64,7 @@
       </span>  
       <!-- 条件项配置 -->
       <div v-if="item.type == 'conditions' ">
-          <div style="height:100%;border:1px solid #DCDFE6;">
+          <div style="height:100%;border:1px solid #DCDFE6;border-radius: 5px;">
               <Conditions :conditions="form[item.prop]"></Conditions>
               <el-button type="primary" 
                 size="mini"
@@ -146,9 +146,26 @@
                 :placeholder="item.placeholder ? item.placeholder : '选择日期' ">
             </el-date-picker>    
         </span>
-        <span v-if="item.type == 'child-form' ">
-          <div>
-          </div>  
+        <span v-if="item.type == 'child-form' " v-show="item.show" >
+          <div  style="border:1px solid #DCDFE6;padding:10px;border-radius: 5px;">
+                <el-row v-for="(row,index) in item.rows" style="padding:5px;">
+                    <span v-for="(columns,key) in row" style="margin-left:10px;" >
+                      <template v-for="(k,v) in columns" >
+                          <label> {{v}}:</label>
+                          <el-input 
+                              style="width:25%;"
+                              size="mini"
+                              v-model="form[item.prop][index][k]"></el-input>   
+                      </template>
+                    </span> 
+                    <span style="margin-left:20px;">
+                      <el-button type="primary" size="mini" >
+                        <span @click="item.events.addColumn()" >新增</span> |
+                        <span @click="item.events.deleteColumn(index)"> 删除  </span>
+                      </el-button>
+                    </span>
+                </el-row>
+          </div> 
         </span>  
     </el-form-item>  
     <el-form-item> 

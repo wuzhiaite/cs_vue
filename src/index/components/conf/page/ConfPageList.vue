@@ -45,11 +45,12 @@
       <!-- 高级条件配置页面 -->
        <ComDialog 
           :dialog="dialog"
-          :visable.sync="qualityConditionsForm.isView">
+          :visable.sync="canView">
           <ComForm 
               :formDesign="qualityConditionsForm.formDesign"
               :form.sync="qualityConditionsForm.form" 
-              :btns="qualityConditionsForm.btns"></ComForm> 
+              :btns="qualityConditionsForm.btns">
+          </ComForm> 
       </ComDialog>
     </div> 
 
@@ -89,15 +90,22 @@
             isBtnsPage:false,
           },
           tempForm:{},
-          qualityConditionsForm : {}//高级条件项查询表单
+          canView:false,
+          qualityConditionsForm : {//高级条件项查询表单
+            isView:false,
+            formDesign:{},
+            btns:[],
+            form:{}, 
+          }
       }
     },
     created : function(){
-        this.id =  this.$route.params.id;
+        this.id = this.$route.params.id;
         this.initBtn();
         this.initSqlForm();
         this.initPageDesignForm();
         this.initBtnForm();
+        this.initQualityConditionsForm();
     },
     watch:{
         sqlForm:{
@@ -121,10 +129,13 @@
                 this.bol.isBtnsPage = false ;
             }
         },
-        disabled:function(n,o){
-            if(n){
-                this.initQualityConditionsForm();
-            }
+        tempArr:{
+          deep:true,
+          immediate:true,
+          handler:function(n,o){
+              console.log(n);
+              this.initQualityConditionsForm();
+          }
         }
     },
     methods : {
@@ -445,7 +456,8 @@
                   type:'conditions',
                   events:{
                     clickBtn:function(){
-                        that.qualityConditionsForm.isView = true ;
+                        that.dialog.title="高级查询条件配置";
+                        that.canView = true;
                     }
                   }
               },{
@@ -523,11 +535,6 @@
                   type:'input',
                   disabled:true,
               },{
-                  prop:'label',
-                  label:'条件项名称',
-                  type:'input',
-                  placeholder:'请输入条件项名称',
-              },{
                   prop:'prop',
                   label:'查询字段',
                   type:'select',
@@ -551,20 +558,68 @@
                   events:{
                     checkChange : function(){
                        var type = that.qualityConditionsForm.form.type ;
-                       if( type == 'select' ){
-                         that.qualityConditionsForm.formDesign.formItems[4].show = true;
-                       }
+                       var columns  = that.qualityConditionsForm.formDesign.formItems ;
+                      for( var i in columns ){
+                          var column = columns[i];
+                          if( column.prop == 'options' ){
+                              if( type == 'select' ){
+                                  column.show = true;
+                              }else{
+                                  column.show = false;
+                              }
+                          }
+                      }
+                      that.qualityConditionsForm.formDesign.formItems = columns ;
+                      
+                      var form = that.qualityConditionsForm.form ;
+                        if(type == 'select'){
+                            form.options = [
+                                {label:'',value:''}
+                              ] ;
+                        }else{
+                            delete form.options ;
+                        }
+                       that.qualityConditionsForm.form = form ;
                     }
                   }
               },{
-                 prop:'options',
+                  prop:'options',
                   label:'字段映射',
                   type:'child-form',
                   show:false,
-                  items:[
-                    {label:'标签名',value:'label'},
-                    {label:'对应值',value:'value'},
-                  ]
+                  rows:[
+                    [
+                      {'标签名':'label'},
+                      {'对应值':'value'},
+                    ]
+                  ],
+                  events:{
+                     addColumn : function(){
+                        var columns  = that.qualityConditionsForm.formDesign.formItems;
+                        for( var i in columns ){
+                            var column = columns[i];
+                            if( column.prop == 'options' ){
+                                var row = column.rows[0];
+                                column.rows.push(row);
+                            }
+                        }
+                        that.qualityConditionsForm.formDesign.formItems = columns ;
+                        var obj = {label:'',value:''} ;
+                        that.qualityConditionsForm.form.options.push(obj) ;
+                     },
+                     deleteColumn : function(index){
+                       if(index == 0) return;
+                      var columns  = that.qualityConditionsForm.formDesign.formItems;
+                        for( var i in columns ){
+                            var column = columns[i];
+                            if( column.prop == 'options' ){
+                                column.rows.splice(index,1);
+                            }
+                        }
+                        that.qualityConditionsForm.formDesign.formItems = columns ;
+                        that.qualityConditionsForm.form.options.splice(index,1);
+                     }
+                  }
               }],
             },
             btns:[{
@@ -574,13 +629,22 @@
                     icon : '',
                     disabled : false,
                     click : function(){
-                        this.isView = false;
-                        that.pageDesignForm.form.SEARCH_CONDITIONS.push(this.form);
+                        that.pageDesignForm.form.SEARCH_CONDITIONS.push(that.qualityConditionsForm.form);
+                        that.canView = false;
+                        that.qualityConditionsForm.form = {
+                              id:(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
+                              options:[
+                                {label:'',value:''}
+                              ],
+                              type:[],
+                            }
                     }
                  }],
             form:{
               id:(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
-              options:[],
+              options:[
+                {label:'',value:''}
+              ],
               type:[],
 
             },

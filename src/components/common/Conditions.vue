@@ -3,6 +3,7 @@
         <div class="el-condition-div" v-if="show" >
             <span   v-for="(item,index) in conditions"                 
                     class="el-span" >
+                <slot name="header"> </slot>    
                 <span class="label-span" >
                      <strong>{{item.label}}:</strong>
                 </span>
@@ -70,6 +71,7 @@
                      </el-radio-group>
 
                 </span>
+                <slot name="footer"></slot>
             </span>               
         </div> 
     </transition>  
