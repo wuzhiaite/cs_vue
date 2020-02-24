@@ -62,7 +62,6 @@
           id : 0,//当前页面的id
           btns : [],//页面的按钮
           disabled:true,
-          tempArr : [],//用于临时存储SQL列填写信息
           sqlForm:{//SQL新增文本域
             formDesign:{},
             btns:[],
@@ -90,9 +89,10 @@
             isBtnsPage:false,
           },
           tempForm:{},
+          tempArr : [],//用于临时存储SQL列填写信息
+          tempSQL : '',
           canView:false,
           qualityConditionsForm : {//高级条件项查询表单
-            isView:false,
             formDesign:{},
             btns:[],
             form:{}, 
@@ -129,12 +129,28 @@
                 this.bol.isBtnsPage = false ;
             }
         },
+        canView:function(n,o){
+          if(!n){
+              this.qualityConditionsForm.form = {
+                      id:(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
+                      options : [{label:'',value:''}],
+                      type:'',
+                 };
+          }
+        },
         tempArr:{
           deep:true,
           immediate:true,
           handler:function(n,o){
-              console.log(n);
+              this.initPageDesignForm();
               this.initQualityConditionsForm();
+          }
+        },
+        tempForm:{
+          deep:true,
+          immediate:true,
+          handler:function(n,o){
+              this.pageDesignDataFormat();
           }
         }
     },
@@ -145,7 +161,7 @@
               {
                     name : '返回',
                     type : 'primary',
-                    icon : '',
+                    icon : 'el-icon-back',
                     disabled : false,
                     click : function(){
                         that.$router.go(-1);
@@ -154,10 +170,18 @@
                 {
                   name : '保存',
                   type : 'primary',
-                  icon : '',
+                  icon : 'el-icon-star-off',
                   disabled : false,
                   click : function(){
                       that.doSave();
+                  }
+              },{
+                  name : '预览',
+                  type : 'success',
+                  icon : 'el-icon-view',
+                  disabled : true,
+                  click : function(){
+
                   }
               }
             ];
@@ -181,7 +205,7 @@
                     id : 'confirm',
                     name : '确定',
                     type : 'primary',
-                    icon : '',
+                    icon : 'el-icon-check',
                     disabled : true,
                     click : function(){
                         that.getSearchInfo();
@@ -267,7 +291,7 @@
                     id : 'confirm',
                     name : '确定',
                     type : 'primary',
-                    icon : '',
+                    icon : 'el-icon-check',
                     labelWidth:'0.4',
                     disabled : false,
                     click : function(){
@@ -312,6 +336,7 @@
           var  formItems = [];
           var  rules = {};
           var  tempForm = {}
+          //调整成需要的字段映射关系
           for(var i in tempArr){
               var temp = tempArr[i];
               var obj = {
@@ -324,98 +349,67 @@
              formItems.push(obj);
              rules[temp] =  { required: true, message: '请输入列名', trigger: 'blur' };
           }
-           this.columnForm.formDesign = {
-              disabled:false,  
-              inline:true,
-              labelWidth:'0.4',
-              formItems : formItems,
-              rules : rules,
-            }
-            this.columnForm.btns
-                =[{
-                    id : 'confirm',
-                    name : '确定',
-                    type : 'primary',
-                    icon : '',
-                    closed : true,
-                    click : function(){
-                        var form = that.columnForm.form ;
-                        var temp = {};
-                        var flag = false;
-                        for(var i in form ){
-                            if( form[i] ){
-                               flag = true ;
-                               temp[i] = form[i]
-                            }else{
-                               temp[i] = i ; 
-                            }
-                        }
-                        if(!flag){
-                          that.$message({
-                              message: '请最少为一个列设置别名！！！',
-                              type: 'error'
-                          });
-                          return ;
-                        }else{
-                            that.tempArr = temp ;
-                            that.isView = false;
-                            that.pageDesignDataFormat();
-                            that.pageDesignForm.formDesign.disabled = false;
-                        }
-                    }
-                }]
+          this.columnForm.formDesign = {
+            disabled:false,  
+            inline:true,
+            labelWidth:'0.4',
+            formItems : formItems,
+            rules : rules,
+          };
+          this.columnForm.btns
+              =[{
+                  id : 'confirm',
+                  name : '确定',
+                  type : 'primary',
+                  icon : 'el-icon-check',
+                  closed : true,
+                  click : function(){
+                      var form = that.columnForm.form ;
+                      var temp = {};
+                      var flag = false;
+                      for(var i in form ){
+                          if( form[i] ){
+                              flag = true ;
+                              temp[i] = form[i].trim();
+                          }else{
+                              temp[i] = i.trim() ; 
+                          }
+                      }
+                      if(!flag){
+                        that.$message({
+                            message: '请最少为一个列设置别名！！！',
+                            type: 'error'
+                        });
+                        return ;
+                      }else{
+                          that.tempForm = temp ;
+                          that.isView = false;
+                          that.pageDesignForm.formDesign.disabled = false;
+                      }
+                  }
+              }]
             this.columnForm.form = tempForm ;
             this.isView = true;
             this.bol.isColumnPage = true;
         },
         initDialog : function(){
-            var that = this;
             this.dialog = {
                 width:'60%',
                 titleSlot:'<strong>新增列展示名称</strong>',
-                btns:[{
-                    id : 'confirm',
-                    name : '确定',
-                    type : 'primary',
-                    icon : '',
-                    closed : true,
-                    click : function(){
-                        var form = that.columnForm.form ;
-                        var flag = false;
-                        for(var i in form ){
-                            if( form[i] ){
-                               flag = true ;
-                            }else{
-                               form[i] = i ; 
-                            }
-                        }
-                        if(!flag){
-                          that.$message({
-                              message: '请最少为一个列设置别名！！！',
-                              type: 'error'
-                          });
-                          return ;
-                        }
-                        that.tempArr = that.columnForm.form ;
-                        that.isView = false;
-                        that.pageDesignDataFormat();
-                        that.pageDesignForm.formDesign.disabled = false;
-                    }
-                }],
             }
         },
         pageDesignDataFormat : function(){
             var temp = [];
-            for(var i in this.tempArr){
+            for(var i in this.tempForm){
                  var obj = {};
-                 obj.label = this.tempArr[i];
+                 obj.label = this.tempForm[i];
                  obj.value = i ;
                  temp.push(obj);
             }
+           this.tempArr = temp;
            this.pageDesignForm.formDesign = {};
-           this.initPageDesignForm(temp);
         },
-        initPageDesignForm : function(tempArr){
+        initPageDesignForm : function(){
           var that = this;
           var  formItems = [{
                   prop:'CONFIG_NAME',
@@ -426,7 +420,7 @@
                   label:'模糊查询',
                   type:'select',
                   multiple:true,
-                  options:tempArr
+                  options:that.tempArr
               },{
                   prop:'CONFIG_BTNS',
                   label:'按钮',
@@ -434,10 +428,8 @@
                   hoverId:-1,
                   events:{
                       editBtn:function(index){
-                        console.log(index);
                          if(index != -1){
                               var form = that.pageDesignForm.form.CONFIG_BTNS[index];
-                              console.log(form);
                               that.btnForm.form = form;
                           }
                           that.dialog.width='50%';
@@ -455,16 +447,23 @@
                   label:'高级条件',
                   type:'conditions',
                   events:{
-                    clickBtn:function(){
+                    editBtn : function(index){
+                        if(index != -1){
+                            that.qualityConditionsForm.form = 
+                                  that.pageDesignForm.form.SEARCH_CONDITIONS[index] ;
+                        }
                         that.dialog.title="高级查询条件配置";
                         that.canView = true;
+                    },
+                    deleteBtn : function(index){
+                        that.pageDesignForm.form.SEARCH_CONDITIONS.splice(index,1);
                     }
                   }
               },{
                   prop:'SHOW_COLUMNS',
                   label:'默认展示列',
                   type:'checkbox-button',
-                  options:tempArr
+                  options:that.tempArr
               },{
                 prop:'REQUES_URL',
                 label:'请求url',
@@ -493,6 +492,14 @@
             this.bol.isBtnsPage = false;
             if(!this.sqlForm.form.SEARCH_SQL)return;
             var sql =  this.sqlForm.form.SEARCH_SQL.toUpperCase();
+            if(this.tempSQL == ''){
+                this.tempSQL = sql ;
+            }else if( this.tempSQL == sql ){
+                this.columnForm.form = this.tempForm ;
+                this.isView = true;
+                this.bol.isColumnPage = true;
+                return ;
+            }
             this.filedArr = [];
             var index = sql.indexOf('FROM');
             if(index == -1)return;
@@ -504,22 +511,22 @@
                 if(temp.length == 0)continue;
                 if(temp.indexOf('AS') != -1){
                     temp = temp.substring(temp.lastIndexOf('AS') + 2);
-                    filedArr.push(temp);
+                    filedArr.push(temp.trim());
                 }else if(temp.indexOf('.') != -1 ){
                     index = temp.indexOf('.');
-                    filedArr.push(temp.substring(index+1));
+                    filedArr.push(temp.substring(index+1).trim());
                 }else if(temp.indexOf(' ') != -1){
                     temp = temp.substring(temp.lastIndexOf(' ') + 1);
-                    filedArr.push(temp);
+                    filedArr.push(temp.trim());
                 }else{
-                  filedArr.push(temp);
+                  filedArr.push(temp.trim());
                 }
             }
             if(filedArr.length > 0){
                 this.initColumnForm(filedArr);
             }
           
-        },
+        },  
         initQualityConditionsForm : function(){
           var that = this;
           this.qualityConditionsForm = {//高级条件项查询表单
@@ -539,7 +546,25 @@
                   label:'查询字段',
                   type:'select',
                   placeholder:'请输入需要查询的字段',
-                  options:that.tempForm,
+                  options:that.tempArr,
+                  events:{
+                    changeSelect : function(){
+                        var prop = that.qualityConditionsForm.form.prop;
+                        var items = that.qualityConditionsForm.formDesign.formItems;
+                        for(var i in items){
+                            var item = items[i];
+                            if(item.prop == 'prop'){
+                                var options = item.options;
+                                for(var j in  options){
+                                      var opt = options[j];
+                                      if(opt.value == prop){
+                                          that.qualityConditionsForm.form.label = opt.label;
+                                      }
+                                }
+                            }
+                        }
+                    }
+                  }
               },{
                   prop:'type',
                   label:'类型',
@@ -555,38 +580,10 @@
                     {label:'多选按钮',value:'checkbox-buttons'},
                     {label:'比率',value:'rate'},
                   ],
-                  events:{
-                    checkChange : function(){
-                       var type = that.qualityConditionsForm.form.type ;
-                       var columns  = that.qualityConditionsForm.formDesign.formItems ;
-                      for( var i in columns ){
-                          var column = columns[i];
-                          if( column.prop == 'options' ){
-                              if( type == 'select' ){
-                                  column.show = true;
-                              }else{
-                                  column.show = false;
-                              }
-                          }
-                      }
-                      that.qualityConditionsForm.formDesign.formItems = columns ;
-                      
-                      var form = that.qualityConditionsForm.form ;
-                        if(type == 'select'){
-                            form.options = [
-                                {label:'',value:''}
-                              ] ;
-                        }else{
-                            delete form.options ;
-                        }
-                       that.qualityConditionsForm.form = form ;
-                    }
-                  }
               },{
                   prop:'options',
                   label:'字段映射',
                   type:'child-form',
-                  show:false,
                   rows:[
                     [
                       {'标签名':'label'},
@@ -618,6 +615,11 @@
                         }
                         that.qualityConditionsForm.formDesign.formItems = columns ;
                         that.qualityConditionsForm.form.options.splice(index,1);
+                     },
+                     isShow : function(){//
+                        var type = that.qualityConditionsForm.form.type ;   
+                        var flag = type == 'select' ;  
+                        return flag;    
                      }
                   }
               }],
@@ -626,34 +628,39 @@
                     id : 'confirm',
                     name : '确定',
                     type : 'primary',
-                    icon : '',
+                    icon : 'el-icon-check',
                     disabled : false,
                     click : function(){
-                        that.pageDesignForm.form.SEARCH_CONDITIONS.push(that.qualityConditionsForm.form);
-                        that.canView = false;
-                        that.qualityConditionsForm.form = {
-                              id:(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
-                              options:[
-                                {label:'',value:''}
-                              ],
-                              type:[],
+                        var form = that.qualityConditionsForm.form ;
+                        var searchConditions = that.pageDesignForm.form.SEARCH_CONDITIONS ;
+                        var flag = false ;
+                        for(var i in searchConditions){
+                            if(searchConditions[i].id = form.id){
+                                flag = true ;
+                                searchConditions[i] = form ;
                             }
+                        }
+                        if(!flag){
+                            that.pageDesignForm.form.SEARCH_CONDITIONS.push(that.qualityConditionsForm.form);
+                        }
+                        that.canView = false;
                     }
                  }],
             form:{
               id:(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
-              options:[
-                {label:'',value:''}
-              ],
-              type:[],
-
+              options : [{label:'',value:''}],
+              type:'',
             },
           }
-
-
-
         },
         doSave : function(){//保存数据
+            var temp = {
+                id: this.id,
+                sqlForm: this.sqlForm.form,
+                columnForm : this.tempForm,
+                pageDesignForm : this.pageDesignForm.form ,
+            };
+            console.log(temp);  
             // this.post("/pagelist/getSearchInfo",
             //           this.sqlForm.form)
             //     .then(res => {

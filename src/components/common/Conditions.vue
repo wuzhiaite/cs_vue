@@ -69,9 +69,8 @@
                            :disabled="item.disabled ? item.disabled : false"
                            :label="opt.name" :key="opt.value"></el-radio-button>    
                      </el-radio-group>
-
                 </span>
-                <slot name="footer"></slot>
+                <slot name="footer" :index="index"></slot>
             </span>               
         </div> 
     </transition>  
@@ -140,7 +139,6 @@
     padding:15px;
 }
 .el-span{
-    width:380px;
     display:inline-block;
     margin-top:15px;
 }

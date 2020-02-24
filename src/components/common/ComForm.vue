@@ -10,7 +10,7 @@
             :label-width="formStyle.labelWidth ? formStyle.labelWidth : '20%' ">
     <el-form-item v-for="(item,index)  in  formStyle.formItems"  
             style="font-size:10px;"
-            :label="item.show || (typeof item.show == 'undefined' )? item.label : '' ">
+            :label="( item.events && item.events.isShow ? item.events.isShow() : true) ? item.label : '' ">
         <el-input v-if="item.type=='input'" 
             :placeholder="item.placeholder ? item.placeholder : '' "
             :disabled="item.disabled ? item.disabled : false"
@@ -19,8 +19,9 @@
         <el-select v-if="item.type == 'select' "
                   v-model="form[item.prop]" 
                   :disabled="item.disabled ? item.disabled : false"
-                  :multiple = "item.multiple ? item.multiple : false "
-                  :placeholder="item.placeholder?item.placeholder:'请选择'">
+                  :multiple = " item.multiple ? item.multiple : false "
+                  @change=" item.events && item.events.changeSelect ? item.events.changeSelect() : null "
+                  :placeholder="item.placeholder ? item.placeholder : '请选择' ">
             <el-option  v-for="opt in  item.options"
                   :label="opt.label" :value="opt.value"/>
         </el-select>
@@ -65,12 +66,20 @@
       <!-- 条件项配置 -->
       <div v-if="item.type == 'conditions' ">
           <div style="height:100%;border:1px solid #DCDFE6;border-radius: 5px;">
-              <Conditions :conditions="form[item.prop]"></Conditions>
+              <Conditions :conditions="form[item.prop]">
+                <span slot="footer"
+                      slot-scope="data"
+                      style="opacity:0.6;font-size:10px;cursor:pointer;">
+                  <span  @click="item.events.editBtn(data.index)">编辑</span>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                  <span @click="item.events.deleteBtn(data.index)">删除</span>
+                </span>
+              </Conditions>
               <el-button type="primary" 
                 size="mini"
                 style="float:right;margin-top:5px;"
                 icon="el-icon-edit-outline" 
-                @click="item.events.clickBtn()" plain/>
+                @click="item.events.editBtn(-1)" plain/>
           </div>
       </div> 
       <el-switch v-if="item.type=='switch'"
@@ -79,8 +88,7 @@
           :disabled="item.disabled ? item.disabled : false"
           v-model="form[item.prop]" 
           :active-text="item.active"
-          :inactive-text="item.inactive" 
-        />
+          :inactive-text="item.inactive" />
         <span v-if="item.type=='checkbox' || item.type=='checkbox-button'">
           <el-checkbox-group 
                     style="float:left;"
@@ -146,9 +154,10 @@
                 :placeholder="item.placeholder ? item.placeholder : '选择日期' ">
             </el-date-picker>    
         </span>
-        <span v-if="item.type == 'child-form' " v-show="item.show" >
-          <div  style="border:1px solid #DCDFE6;padding:10px;border-radius: 5px;">
-                <el-row v-for="(row,index) in item.rows" style="padding:5px;">
+        <span v-if="item.type == 'child-form' " >
+          <div  style="border:1px solid #DCDFE6;padding:5px;border-radius: 5px;"  
+                              v-show="item.events.isShow ? item.events.isShow() : true">
+                <el-row v-for="(row,index) in item.rows" >
                     <span v-for="(columns,key) in row" style="margin-left:10px;" >
                       <template v-for="(k,v) in columns" >
                           <label> {{v}}:</label>
@@ -161,11 +170,17 @@
                     <span style="margin-left:20px;">
                       <el-button type="primary" size="mini" >
                         <span @click="item.events.addColumn()" >新增</span> |
-                        <span @click="item.events.deleteColumn(index)"> 删除  </span>
+                        <span @click="item.events.deleteColumn()"> 删除  </span>
                       </el-button>
                     </span>
                 </el-row>
           </div> 
+        </span>  
+        <span v-if="item.type == 'input-button' ">
+            <el-input v-if="item.type=='input'" 
+                :placeholder="item.placeholder ? item.placeholder : '' "
+                :disabled="item.disabled ? item.disabled : false"
+                v-model="form[item.prop]" />
         </span>  
     </el-form-item>  
     <el-form-item> 
@@ -173,19 +188,14 @@
     </el-form-item>  
       <br/>
      <el-form-item v-if="btns.length > 0">
-         <el-button  v-for="btn in btns" 
-            :disabled = "btn.disabled ? btn.disabled : false"
-            :type=" btn.type ? btn.type : '' "
-            @click="btn.click()">
-             {{btn.name}}
-         </el-button>
+         <Buttons  :btns="btns" ></Buttons>
     </el-form-item>
   </el-form>
  </span>        
 
 </template>
 <script>
- 
+import Buttons from './Buttons'; 
 
  export default {
     props:{
