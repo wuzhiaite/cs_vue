@@ -164,4 +164,7 @@ vue.config.js 配置转发路径和端口，基础路径配置等；
             }
   ```
 
+
+#### 图形拖动组件 （https://sortablejs.github.io/Vue.Draggable/#/simple）
+
   
