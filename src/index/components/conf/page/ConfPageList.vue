@@ -100,12 +100,13 @@
       }
     },
     created : function(){
-        this.id = this.$route.params.id;
-        this.initBtn();
-        this.initSqlForm();
-        this.initPageDesignForm();
-        this.initBtnForm();
-        this.initQualityConditionsForm();
+        this.id = this.$route.params.id;//台账页面的唯一ID
+        this.initBtn();//初始化主按钮
+        this.initSqlForm();//初始化SQL表单
+        this.initPageDesignForm();//初始化配置设计页面
+        this.initBtnForm();//初始化按钮表单
+        this.initQualityConditionsForm();//初始化高级查询配置表
+        this.getFormData();//根据id判断是否存在配置页面，如果存在则进行数据回写，如果没有，则不用管
     },
     watch:{
         sqlForm:{
@@ -141,10 +142,13 @@
         tempArr:{
           deep:true,
           immediate:true,
-          handler:function(n,o){
-              this.initPageDesignForm();
-              this.initQualityConditionsForm();
-          }
+          handler:function(n,o){//选中的数组大于0时，配置页面才可见
+             if(n.length > 0){
+                this.initPageDesignForm();
+                this.initQualityConditionsForm();
+                this.pageDesignForm.formDesign.disabled = false ;
+             }
+          }  
         },
         tempForm:{
           deep:true,
@@ -321,7 +325,7 @@
                               script:"{\n\tclick:function(){\n\n\n\n\t},\n\thover:function(){\n\n\n\n\t}\n}"
                           } ;
                        }else{
-                           that.$message({
+                          that.$message({
                               message: '请确定按钮是否配置！',
                               type: 'error'
                           });
@@ -384,7 +388,6 @@
                       }else{
                           that.tempForm = temp ;
                           that.isView = false;
-                          that.pageDesignForm.formDesign.disabled = false;
                       }
                   }
               }]
@@ -407,7 +410,8 @@
                  temp.push(obj);
             }
            this.tempArr = temp;
-           this.pageDesignForm.formDesign = {};
+           
+           
         },
         initPageDesignForm : function(){
           var that = this;
@@ -454,6 +458,7 @@
                         }
                         that.dialog.title="高级查询条件配置";
                         that.canView = true;
+                        that.isView = false;
                     },
                     deleteBtn : function(index){
                         that.pageDesignForm.form.SEARCH_CONDITIONS.splice(index,1);
@@ -476,7 +481,7 @@
               }
             ];
             this.pageDesignForm.formDesign = {
-              disabled:false,  
+              disabled:true,  
               formItems : formItems,
             }
             this.pageDesignForm.form = {
@@ -484,6 +489,7 @@
                 INIT_PARAM:"{\n\n\n}",
                 CONFIG_BTNS:[],
                 SEARCH_CONDITIONS:[],
+                REQUES_URL:"/pagelist/commonpage/"+this.id,
             }
         },
         getSearchInfo : function(){//获取数据
@@ -575,10 +581,6 @@
                     {label:'正负',value:'bol'},
                     {label:'日期区间',value:'interval'},
                     {label:'单选按钮',value:'radio-buttons'},
-                    {label:'单选',value:'radio'},
-                    {label:'多选',value:'checkbox'},
-                    {label:'多选按钮',value:'checkbox-buttons'},
-                    {label:'比率',value:'rate'},
                   ],
               },{
                   prop:'options',
@@ -618,7 +620,8 @@
                      },
                      isShow : function(){//
                         var type = that.qualityConditionsForm.form.type ;   
-                        var flag = type == 'select' ;  
+                        var flag = ( type == 'select' 
+                                        || type == 'radio-buttons' );  
                         return flag;    
                      }
                   }
@@ -635,7 +638,7 @@
                         var searchConditions = that.pageDesignForm.form.SEARCH_CONDITIONS ;
                         var flag = false ;
                         for(var i in searchConditions){
-                            if(searchConditions[i].id = form.id){
+                            if(searchConditions[i].id == form.id){
                                 flag = true ;
                                 searchConditions[i] = form ;
                             }
@@ -660,23 +663,22 @@
                 columnForm : this.tempForm,
                 pageDesignForm : this.pageDesignForm.form ,
             };
-            console.log(temp);  
-            // this.post("/pagelist/getSearchInfo",
-            //           this.sqlForm.form)
-            //     .then(res => {
-            //         console.log(res);
-            //     })
-        }
-
-
+            
+            this.post("/pagelist/modifyPageList",
+                      temp)
+                .then(res => {
+                    console.log(res);
+                })
+        },
+        getFormData : function(){//根据id获取表单的数据
+             this.post("/pagelist/addOrModifyPageList",
+                      {id:this.id})
+                .then(res => {
+                    console.log(res);
+                })
+        },
     }
-
-
-
  }
-
-
-
 </script>
 <style scoped>
 .box-block {

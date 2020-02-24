@@ -67,7 +67,7 @@
                          v-if="item.type == 'radio-buttons'">
                         <el-radio-button v-for="opt in item.options" 
                            :disabled="item.disabled ? item.disabled : false"
-                           :label="opt.name" :key="opt.value"></el-radio-button>    
+                           :label="opt.label" :key="opt.value"></el-radio-button>    
                      </el-radio-group>
                 </span>
                 <slot name="footer" :index="index"></slot>
@@ -149,7 +149,7 @@
 .label-span {
     display:inline-block;
     width:70px;
-    margin-right:15px;
+    margin-right:5px;
     margin-bottom: 15px;
     word-wrap: break-word;
     word-break: break-all;
