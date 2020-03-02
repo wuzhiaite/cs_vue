@@ -9,9 +9,9 @@ import router from './routers/ConfigRouter';
 import '../plugin/ComBindPlugin';
 import '../plugin/index';
 import '../plugin/VueAxiosPlugin';
-
-
-
+import VueDraggable from 'vue-draggable'
+ 
+Vue.use(VueDraggable);//可拖动动画
 Vue.use(ElementUI);
 
 

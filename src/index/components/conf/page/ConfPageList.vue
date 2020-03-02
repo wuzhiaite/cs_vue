@@ -8,7 +8,8 @@
       </div>
       <div style="height:20px;"/>
       <div class="box-block">
-          <div style="float:left;">
+          <div style="float:left;width:35%;">
+            <label><strong> 台账查询SQL </strong></label>
             <ComForm 
               :formDesign="sqlForm.formDesign"
               :form.sync="sqlForm.form" 
@@ -16,7 +17,8 @@
               </ComForm>
           </div>
           <span style="width:1px;"></span>
-          <div style="float:right;">    
+          <div style="margin-left:20px;float:left;width:60%;">  
+            <label><strong> 台账页面样式配置 </strong></label>  
             <ComForm 
               :formDesign="pageDesignForm.formDesign"
               :form="pageDesignForm.form" 
@@ -82,6 +84,9 @@
             btns:[],
             form:{},  
           },
+          baseForm:{
+            formDesign:{},
+          },
           dialog:{},
           isView:false,
           bol:{
@@ -103,8 +108,8 @@
         this.id = this.$route.params.id;//台账页面的唯一ID
         this.initBtn();//初始化主按钮
         this.initSqlForm();//初始化SQL表单
-        this.initPageDesignForm();//初始化配置设计页面
-        this.initBtnForm();//初始化按钮表单
+        this.initPageDesignForm();//初始化配置设计页面,
+        this.initBaseForm();//表单配置基本页面
         this.initQualityConditionsForm();//初始化高级查询配置表
         this.getFormData();//根据id判断是否存在配置页面，如果存在则进行数据回写，如果没有，则不用管
     },
@@ -684,16 +689,18 @@
 .box-block {
     width: 100%;
     position:relative;
+    margin:0px;
 }
 .box-block div {
     display: inline-block;   
     word-wrap: break-word;
-    width: 48%;
+    width: 45%;
     text-align: center;
     margin-top: 15px;
     padding: 5px;
     border-radius: 5px;
     border: 1px solid #ebebeb;
+    padding-top:15px;
     box-shadow: 0px 0px 10px 5px #888888;
 }
 </style>

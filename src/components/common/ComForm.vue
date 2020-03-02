@@ -102,9 +102,13 @@
                     :label="opt.value" :key="opt.value">{{opt.label}}</el-checkbox>
                 <el-checkbox-button
                     v-if="item.type=='checkbox-button'"
-                    size="mini"s
+                    size="mini"
                     v-for="opt in item.options"  
-                    :label="opt.value" :key="opt.value">{{opt.label}}</el-checkbox-button>
+                    :label="opt.value" :key="opt.value">
+                      <span  @click="item.events && item.events.click ? item.events.click(opt) : null">
+                       {{opt.label}}
+                      </span>
+                    </el-checkbox-button>
             </el-checkbox-group> 
         </span>
         <span v-if="item.type=='radio'|| item.type == 'radio-button'">
