@@ -1,6 +1,13 @@
 <template>
 <div>
- 
+  <ComForm 
+      :formDesign="tableForm.formDesign"
+      :form.sync="tableForm.form" 
+      :btns="tableForm.btns">
+  </ComForm> 
+  <div>
+
+  </div>
 </div>        
 </template>
 <script>
@@ -9,14 +16,80 @@
  export default {
     data(){
       return {
-       
+         tableForm:{}
+      }
+    },
+    props:{
+      tempArr:{
+        default:[],
+        required:false,
+        type:Object,
       }
     },
     created(){
-      
+       this.initForm();
     }, 
     methods:{
-            
+         initForm : function(){
+           this.formDesign = {
+             disabled :false,
+             formItems :[{
+                prop:'border',
+                label:'是否有边框:',
+                type:'switch',
+              },{
+                prop:'multi',
+                label:'是否多选',
+                type:'switch',
+              },{
+                prop:'highlightCurrentRow',
+                label:'选中行高亮',
+                type:'switch'
+              },{
+                 prop:'columns',
+                  label:'展示列',
+                  type:'child-form',
+                  form:[
+                    [
+                      {'label':'列名称','prop':'colName','type':'input',disabled:true},
+                      {'label':'宽度','prop':'value','type':'input'},
+                      {'label':'是否固定',
+                       'prop':'fixed',
+                       'type':'select',
+                       'options':[
+                         {label:'无',value:''},
+                         {label:'左',value:'left'},
+                         {label:'右',value:'right'}
+                       ]},{
+                          'label':'是否排序',
+                          'prop':'sortable',
+                          'type':'switch',
+                       },{
+                         'label':'其他动作',
+                         'prop':'opers',
+                         'type':'btns'
+                       }
+                    ]
+                  ],
+                  events:{
+                     addRow : function(){
+                     },
+                     deleteRow : function(index){
+                     },
+                     getRows : function(){
+
+                     }
+                  }
+              }
+              ]
+
+
+
+           }
+
+
+
+         }   
 
     }
 

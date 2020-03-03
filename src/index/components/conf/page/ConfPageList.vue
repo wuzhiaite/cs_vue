@@ -14,7 +14,7 @@
               :formDesign="sqlForm.formDesign"
               :form.sync="sqlForm.form" 
               :btns="sqlForm.btns">
-              </ComForm>
+            </ComForm>
           </div>
           <span style="width:1px;"></span>
           <div style="margin-left:20px;float:left;width:60%;">  
@@ -25,39 +25,38 @@
               :btns="pageDesignForm.btns"></ComForm>
           </div> 
       </div>
+       <!-- 列别名配置表单 -->
        <ComDialog 
-          :dialog="dialog"
-          :visable.sync="isView">
-          <!-- 列别名配置表单 -->
-          <ComForm v-if="bol.isColumnPage"
+          :dialog="dialog.columns"
+          :visable.sync="bol.isColumnPage">
+          <ComForm 
               :formDesign="columnForm.formDesign"
               :form.sync="columnForm.form" 
               :btns="columnForm.btns"></ComForm>
-           <!-- 按钮配置页面 -->
-           <ComForm v-if="bol.isBtnsPage"
-              :formDesign="btnForm.formDesign"
-              :form.sync="btnForm.form" 
-              :btns="btnForm.btns">
-              <span style="padding:15px;border:1px solid #DCDFE6;margin:15px;">
-                  <label><strong>按钮样例：</strong></label>
-                  <Button :btn="btnForm.form" />
-                </span>
-            </ComForm>    
       </ComDialog>
+      <!-- 按钮配置页面 -->
+      <ComDialog 
+          :dialog="dialog.btns"
+          :visable.sync="bol.isBtnsPage">
+           <BtnDesignForm  :form.sync="btnForm" @callback="btnConfirm"></BtnDesignForm>
+      </ComDialog>
+
       <!-- 高级条件配置页面 -->
        <ComDialog 
-          :dialog="dialog"
-          :visable.sync="canView">
-          <ComForm 
-              :formDesign="qualityConditionsForm.formDesign"
-              :form.sync="qualityConditionsForm.form" 
-              :btns="qualityConditionsForm.btns">
-          </ComForm> 
+          :dialog="dialog.quality"
+          :visable.sync="bol.isQualityPage">
+          <QualityConditionForm :tempArr="tempArr" :form.sync="qualityConditionsForm" @callback="qualityConfirm"/>
       </ComDialog>
+      <!-- 配置列信息 -->
+
+
     </div> 
 
 </template>
 <script>
+import BtnDesignForm from  '../com/BtnDesignForm';
+import QualityConditionForm  from './QualityConditionForm'
+
  export default {
     data : function(){
       return {
@@ -79,38 +78,43 @@
             btns:[],
             form:{},
           },
-          btnForm:{
-            formDesign:{},
-            btns:[],
-            form:{},  
+          tableForm:{},
+          btnForm:{},
+          dialog:{
+            columns:{
+                width:'60%',
+                titleSlot:'<strong>新增列展示名称</strong>',
+              },
+            btns:{
+              width:'60%',
+              titleSlot:'<strong>新增按钮</strong>',
+            },
+            quality:{
+               width:'60%',
+              titleSlot:'<strong>高级查询</strong>',
+            }
           },
-          baseForm:{
-            formDesign:{},
-          },
-          dialog:{},
-          isView:false,
           bol:{
             isColumnPage:false,
             isBtnsPage:false,
+            isQualityPage:false,
           },
           tempForm:{},
           tempArr : [],//用于临时存储SQL列填写信息
           tempSQL : '',
           canView:false,
-          qualityConditionsForm : {//高级条件项查询表单
-            formDesign:{},
-            btns:[],
-            form:{}, 
-          }
+          qualityConditionsForm : {}
       }
+    },
+    components:{
+        BtnDesignForm,//按钮表单
+        QualityConditionForm,//高级查询项表单
     },
     created : function(){
         this.id = this.$route.params.id;//台账页面的唯一ID
         this.initBtn();//初始化主按钮
         this.initSqlForm();//初始化SQL表单
         this.initPageDesignForm();//初始化配置设计页面,
-        this.initBaseForm();//表单配置基本页面
-        this.initQualityConditionsForm();//初始化高级查询配置表
         this.getFormData();//根据id判断是否存在配置页面，如果存在则进行数据回写，如果没有，则不用管
     },
     watch:{
@@ -129,28 +133,12 @@
             }
           }
         },
-        isView:function(n,o){
-            if(!n){
-                this.bol.isColumnPage = false ;
-                this.bol.isBtnsPage = false ;
-            }
-        },
-        canView:function(n,o){
-          if(!n){
-              this.qualityConditionsForm.form = {
-                      id:(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
-                      options : [{label:'',value:''}],
-                      type:'',
-                 };
-          }
-        },
         tempArr:{
           deep:true,
           immediate:true,
           handler:function(n,o){//选中的数组大于0时，配置页面才可见
              if(n.length > 0){
                 this.initPageDesignForm();
-                this.initQualityConditionsForm();
                 this.pageDesignForm.formDesign.disabled = false ;
              }
           }  
@@ -161,7 +149,7 @@
           handler:function(n,o){
               this.pageDesignDataFormat();
           }
-        }
+        },
     },
     methods : {
         initBtn : function(){
@@ -228,117 +216,38 @@
                  + "ON DQBZ.LCSLBH = SL.BH"	,
 					  }     
         },
-        initBtnForm : function(){
+        btnConfirm : function(form){
             var that = this;
-            var  formItems = [
-                  {
-                    prop:'id',
-                    label:'按钮ID',
-                    type:'input',
-                    disabled:true,
-                    placeholder:'按钮ID',
-                  },{
-                    prop:'name',
-                    label:'按钮名称:',
-                    type:'input',
-                    placeholder:'按钮名称',
-                  },{
-                    prop:'icon',
-                    label:'按钮icon',
-                    type:'select',
-                    options:[
-                      {label:'编辑',value:'el-icon-edit'},
-                      {label:'分享',value:'el-icon-share'},
-                      {label:'删除',value:'el-icon-delete'},
-                      {label:'查找',value:'el-icon-search'},
-                      {label:'设置',value:'el-icon-setting'},
-                      {label:'省略号',value:'el-icon-more-outline'},
-                      {label:'图片',value:'el-icon-picture-outline-round'},
-                      {label:'播放',value:'el-icon-video-play'},
-                      {label:'查看',value:'el-icon-view'},
-                    ],
-                  },{
-                    prop:'type',
-                    label:'按钮类型:',
-                    type:'select',
-                    options:[
-                      {label:'重要',value:'primary'},
-                      {label:'成功',value:'success'},
-                      {label:'信息',value:'info'},
-                      {label:'警告',value:'warning'},
-                      {label:'危险',value:'danger'},
-                      {label:'文本',value:'text'},
-                    ]  
-                  },{
-                    prop:'style',
-                    label:'按钮样式:',
-                    type:'select',
-                    multiple:true,
-                    options:[
-                      {label:'默认按钮',value:''},
-                      {label:'朴素按钮',value:'plain'},
-                      {label:'圆角按钮',value:'round'},
-                      {label:'原型按钮',value:'circle'},
-                    ]  
-                  },{
-                    prop:'script',
-                    label:'按钮脚本:',
-                    type:'textarea',
-                    numbers:1000,
-                  }
-              ];
-            this.btnForm.formDesign = {
-              disabled:false, 
-              inline:false, 
-              formItems : formItems,
+            if(JSON.stringify(form) == "{}")return;//为空返回
+            var items = that.pageDesignForm.form.CONFIG_BTNS;
+            var isModify = false ;
+            for(var i in items){
+                if(items[i].id == form.id){
+                    isModify = true;
+                    items[i] = form;
+                }
             }
-            this.btnForm.form = {
-                id: (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
-                script:"{\n\tclick:function(){\n\n\n\n\t},\n\thover:function(){\n\n\n\n\t}\n}"
+            that.pageDesignForm.form.CONFIG_BTNS = items ;
+            if(!isModify){
+                that.pageDesignForm.form.CONFIG_BTNS.push(form) ;
+            } 
+            that.isView = false ;
+        },
+        qualityConfirm : function(form){
+            var that = this;
+            var searchConditions = that.pageDesignForm.form.SEARCH_CONDITIONS ;
+            var flag = false ;
+            for(var i in searchConditions){
+                if(searchConditions[i].id == form.id){
+                    flag = true ;
+                    searchConditions[i] = form ;
+                }
             }
-            this.btnForm.btns = [{
-                    id : 'confirm',
-                    name : '确定',
-                    type : 'primary',
-                    icon : 'el-icon-check',
-                    labelWidth:'0.4',
-                    disabled : false,
-                    click : function(){
-                       var form = that.btnForm.form ;
-                       var flag = false ;
-                       for(var i in form){
-                         if( i == 'script' )continue;
-                          flag = true;
-                          break;
-                       } 
-                       if(flag){
-                            var items = that.pageDesignForm.form.CONFIG_BTNS;
-                            var isModify = false ;
-                            for(var i in items){
-                                if(items[i].id == form.id){
-                                    isModify = true;
-                                    items[i] = form;
-                                }
-                            }
-                            that.pageDesignForm.form.CONFIG_BTNS = items ;
-                            if(!isModify){
-                                that.pageDesignForm.form.CONFIG_BTNS.push(form) ;
-                            } 
-                          that.isView = false ;
-                          that.btnForm.form ={
-                              id: (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
-                              script:"{\n\tclick:function(){\n\n\n\n\t},\n\thover:function(){\n\n\n\n\t}\n}"
-                          } ;
-                       }else{
-                          that.$message({
-                              message: '请确定按钮是否配置！',
-                              type: 'error'
-                          });
-                       }
-                       
-                    }
-                 }];
-
+            that.pageDesignForm.form.SEARCH_CONDITIONS = searchConditions ;
+            if(!flag){
+                that.pageDesignForm.form.SEARCH_CONDITIONS.push(form);
+            }
+            that.bol.isQualityPage = false;
         },
         initColumnForm : function(tempArr){//初始化列别名表单数据
           var that = this;
@@ -392,19 +301,12 @@
                         return ;
                       }else{
                           that.tempForm = temp ;
-                          that.isView = false;
+                          that.bol.isColumnPage = false;
                       }
                   }
               }]
             this.columnForm.form = tempForm ;
-            this.isView = true;
             this.bol.isColumnPage = true;
-        },
-        initDialog : function(){
-            this.dialog = {
-                width:'60%',
-                titleSlot:'<strong>新增列展示名称</strong>',
-            }
         },
         pageDesignDataFormat : function(){
             var temp = [];
@@ -414,9 +316,7 @@
                  obj.value = i ;
                  temp.push(obj);
             }
-           this.tempArr = temp;
-           
-           
+           this.tempArr = temp;      
         },
         initPageDesignForm : function(){
           var that = this;
@@ -439,13 +339,12 @@
                       editBtn:function(index){
                          if(index != -1){
                               var form = that.pageDesignForm.form.CONFIG_BTNS[index];
-                              that.btnForm.form = form;
+                              form.isEdit = true ;
+                              that.btnForm = form;
+                          }else{
+                             that.btnForm = {};
                           }
-                          that.dialog.width='50%';
-                          that.dialog.titleSlot='<strong>按钮设计</strong>';
                           that.bol.isBtnsPage = true ;
-                          that.isView = true;
-                          that.bol.isColumnPage = false; 
                       },
                       deleteBtn:function(index){
                          that.pageDesignForm.form.CONFIG_BTNS.splice(index,1);
@@ -458,12 +357,12 @@
                   events:{
                     editBtn : function(index){
                         if(index != -1){
-                            that.qualityConditionsForm.form = 
+                            that.qualityConditionsForm = 
                                   that.pageDesignForm.form.SEARCH_CONDITIONS[index] ;
+                        }else{
+                           that.qualityConditionsForm = {};
                         }
-                        that.dialog.title="高级查询条件配置";
-                        that.canView = true;
-                        that.isView = false;
+                        that.bol.isQualityPage = true;
                     },
                     deleteBtn : function(index){
                         that.pageDesignForm.form.SEARCH_CONDITIONS.splice(index,1);
@@ -473,7 +372,12 @@
                   prop:'SHOW_COLUMNS',
                   label:'默认展示列',
                   type:'checkbox-button',
-                  options:that.tempArr
+                  options:that.tempArr,
+                  events:{
+                    addClick:function(){
+
+                    }
+                  }
               },{
                 prop:'REQUES_URL',
                 label:'请求url',
@@ -498,8 +402,6 @@
             }
         },
         getSearchInfo : function(){//获取数据
-            this.dialog.width = '60%',
-            this.dialog.titleSlot = '<strong>新增列展示名称</strong>'
             this.bol.isBtnsPage = false;
             if(!this.sqlForm.form.SEARCH_SQL)return;
             var sql =  this.sqlForm.form.SEARCH_SQL.toUpperCase();
@@ -538,129 +440,6 @@
             }
           
         },  
-        initQualityConditionsForm : function(){
-          var that = this;
-          this.qualityConditionsForm = {//高级条件项查询表单
-            isView:false,
-            labelWidth:'0.4',
-            formDesign:{
-              disabled:false, 
-              inline:false, 
-              formItems : [
-                {
-                  prop:'id',
-                  label:'条件项ID',
-                  type:'input',
-                  disabled:true,
-              },{
-                  prop:'prop',
-                  label:'查询字段',
-                  type:'select',
-                  placeholder:'请输入需要查询的字段',
-                  options:that.tempArr,
-                  events:{
-                    changeSelect : function(){
-                        var prop = that.qualityConditionsForm.form.prop;
-                        var items = that.qualityConditionsForm.formDesign.formItems;
-                        for(var i in items){
-                            var item = items[i];
-                            if(item.prop == 'prop'){
-                                var options = item.options;
-                                for(var j in  options){
-                                      var opt = options[j];
-                                      if(opt.value == prop){
-                                          that.qualityConditionsForm.form.label = opt.label;
-                                      }
-                                }
-                            }
-                        }
-                    }
-                  }
-              },{
-                  prop:'type',
-                  label:'类型',
-                  type:'select',
-                  options:[
-                    {label:'选择框',value:'select'},
-                    {label:'日期',value:'date'},
-                    {label:'正负',value:'bol'},
-                    {label:'日期区间',value:'interval'},
-                    {label:'单选按钮',value:'radio-buttons'},
-                  ],
-              },{
-                  prop:'options',
-                  label:'字段映射',
-                  type:'child-form',
-                  rows:[
-                    [
-                      {'标签名':'label'},
-                      {'对应值':'value'},
-                    ]
-                  ],
-                  events:{
-                     addColumn : function(){
-                        var columns  = that.qualityConditionsForm.formDesign.formItems;
-                        for( var i in columns ){
-                            var column = columns[i];
-                            if( column.prop == 'options' ){
-                                var row = column.rows[0];
-                                column.rows.push(row);
-                            }
-                        }
-                        that.qualityConditionsForm.formDesign.formItems = columns ;
-                        var obj = {label:'',value:''} ;
-                        that.qualityConditionsForm.form.options.push(obj) ;
-                     },
-                     deleteColumn : function(index){
-                       if(index == 0) return;
-                      var columns  = that.qualityConditionsForm.formDesign.formItems;
-                        for( var i in columns ){
-                            var column = columns[i];
-                            if( column.prop == 'options' ){
-                                column.rows.splice(index,1);
-                            }
-                        }
-                        that.qualityConditionsForm.formDesign.formItems = columns ;
-                        that.qualityConditionsForm.form.options.splice(index,1);
-                     },
-                     isShow : function(){//
-                        var type = that.qualityConditionsForm.form.type ;   
-                        var flag = ( type == 'select' 
-                                        || type == 'radio-buttons' );  
-                        return flag;    
-                     }
-                  }
-              }],
-            },
-            btns:[{
-                    id : 'confirm',
-                    name : '确定',
-                    type : 'primary',
-                    icon : 'el-icon-check',
-                    disabled : false,
-                    click : function(){
-                        var form = that.qualityConditionsForm.form ;
-                        var searchConditions = that.pageDesignForm.form.SEARCH_CONDITIONS ;
-                        var flag = false ;
-                        for(var i in searchConditions){
-                            if(searchConditions[i].id == form.id){
-                                flag = true ;
-                                searchConditions[i] = form ;
-                            }
-                        }
-                        if(!flag){
-                            that.pageDesignForm.form.SEARCH_CONDITIONS.push(that.qualityConditionsForm.form);
-                        }
-                        that.canView = false;
-                    }
-                 }],
-            form:{
-              id:(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
-              options : [{label:'',value:''}],
-              type:'',
-            },
-          }
-        },
         doSave : function(){//保存数据
             var temp = {
                 id: this.id,

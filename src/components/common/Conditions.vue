@@ -70,7 +70,9 @@
                            :label="opt.label" :key="opt.value"></el-radio-button>    
                      </el-radio-group>
                 </span>
-                <slot name="footer" :index="index"></slot>
+                <span style="margin-right:15px;">
+                    <slot name="footer" :index="index"></slot>
+                </span>
             </span>               
         </div> 
     </transition>  
@@ -145,14 +147,16 @@
 .el-condition-span {
     display:inline-block;
     margin-right:15px;
+    margin-left:0px;
 }
 .label-span {
     display:inline-block;
-    width:70px;
+    width:60px;
     margin-right:5px;
     margin-bottom: 15px;
     word-wrap: break-word;
     word-break: break-all;
+    text-align:right;
     white-space: pre-wrap !important;
 }
 

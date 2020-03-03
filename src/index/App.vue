@@ -43,6 +43,11 @@ export default {
                     iconCls:'el-icon-picture-outline-round',
                     realPath:'conf/page/PageList',
                 },{
+                    path :'/tableconf',
+                    name:'展示列表配置',
+                    iconCls:'el-icon-picture-outline-round',
+                    realPath:'conf/page/ConfTable',
+                },{
                     path : '/comPageList/:id',
                     name : '通用台账样例',
                     iconCls:'el-icon-s-opportunity',
