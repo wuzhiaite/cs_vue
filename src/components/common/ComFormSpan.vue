@@ -31,27 +31,6 @@
               style="width: 100%;" />
         </el-col>
       </span>
-      <!-- 按钮 -->
-      <span v-if="item.type == 'btns'" style="float:left;">
-          <Buttons :btns="item.btns ? item.btns : null" />
-          <template v-for="(btn,index) in (form[item.prop] ? form[item.prop] : null)" >
-            <span  @mouseover="item.hoverId = btn.id" 
-                  @mouseout="item.hoverId = -1 " >
-                <Button  
-                    :btn="btn" style="margin-left:15px;" />
-                <span v-show="btn.id == item.hoverId"  
-                      style="opacity:0.6;font-size:7px;cursor:pointer;margin-left:5px;">
-                  <span @click="item.events.editBtn(index)">编辑</span>
-                  &nbsp;&nbsp;|&nbsp;&nbsp;
-                  <span @click="item.events.deleteBtn(index)">删除</span>
-                </span>
-            </span>
-          </template>
-          <el-button type="primary" 
-              style="margin-left:15px;"
-              icon="el-icon-plus" 
-              @click="item.events.editBtn(-1)" plain circle></el-button>
-      </span>  
       <!-- 条件项配置 -->
       <div v-if="item.type == 'conditions' ">
           <div style="height:100%;border:1px solid #DCDFE6;border-radius: 5px;margin-right:10px;">
@@ -157,12 +136,16 @@
               :placeholder="item.placeholder ? item.placeholder : '选择日期' ">
           </el-date-picker>    
       </span>
+       <!-- 按钮配置 -->
+      <ButtonsAdd v-if="item.type == 'btns'" :item="item" :form="form" />
     
  </span>        
 
 </template>
 <script>
 import Buttons from './Buttons'; 
+import ButtonsAdd from './ButtonsAdd';
+
 
  export default {
     props:{
@@ -182,6 +165,7 @@ import Buttons from './Buttons';
     },
     components:{
       Buttons,
+      ButtonsAdd,
     },
     watch:{
         form :{

@@ -34,12 +34,6 @@
               :form.sync="columnForm.form" 
               :btns="columnForm.btns"></ComForm>
       </ComDialog>
-      <!-- 按钮配置页面 -->
-      <ComDialog 
-          :dialog="dialog.btns"
-          :visable.sync="bol.isBtnsPage">
-           <BtnDesignForm  :form.sync="btnForm" @callback="btnConfirm"></BtnDesignForm>
-      </ComDialog>
 
       <!-- 高级条件配置页面 -->
        <ComDialog 
@@ -54,7 +48,7 @@
 
 </template>
 <script>
-import BtnDesignForm from  '../com/BtnDesignForm';
+
 import QualityConditionForm  from './QualityConditionForm'
 
  export default {
@@ -107,7 +101,7 @@ import QualityConditionForm  from './QualityConditionForm'
       }
     },
     components:{
-        BtnDesignForm,//按钮表单
+        
         QualityConditionForm,//高级查询项表单
     },
     created : function(){

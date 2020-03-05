@@ -1,19 +1,12 @@
 <template>
-<div  style="border:1px solid #DCDFE6;padding:5px;border-radius: 5px;"  
-                    v-show="isShow()">
-    <el-row v-for="(row,index) in getRows()" >
-        <span v-for="(columns,key) in row" style="margin-left:10px;" >
-            <template v-for="(k,v) in columns" >
-                {{k}}
-                <label> {{v}}:</label>
-                <ComFormSpan  :item="columns" :form="form[item.prop][index]" ></ComFormSpan>
-                <!-- <el-input 
-                    style="width:25%;"
-                    size="mini"
-                    v-model="form[item.prop][index][k]"></el-input>    -->
-            </template>
+<!-- 嵌套的子列表 -->
+<div  class="mian" v-show="isShow()">
+    <el-row  inline=true v-for="(row,index) in getRows()" class="form-row" >
+        <span v-for="(column,key) in row" style="margin-left:20px;" >
+            <label>{{ column.label }} : </label>
+            <ComFormSpan class="inline-span" :item="column" :form="form[item.prop][index][column.prop]" />
         </span> 
-        <span style="margin-left:20px;">
+        <span style="margin-left:20px;vertical-align:middle;">
             <el-button type="primary" size="mini" >
                 <span @click="addRow" >新增</span> |
                 <span @click="deleteRow"> 删除  </span>
@@ -54,16 +47,22 @@ export default {
                 if(type == 'select' || type == 'radio' || type == 'checkbox'
                             || type == 'checkbox-button' || type == 'radio-button'
                             || type == 'conditions' || type == 'btns' ){
-                    temp[prop] = [] ;            
+                    temp[prop] = {} ;            
+                }else if (type == 'switch'){
+                    temp[prop] = {} ;
                 }else{
-                    temp[prop] = '' ;
+                    temp[prop] = {};
                 }
             }
             return temp ;
         },
         addRow : function(){
             var obj = this.getFormInfo();
-            this.form.push(obj) ;
+            var length = this.form[this.item.prop].length ; 
+            if(!length || length == 0){
+                this.form[this.item.prop] = [] ;
+            } 
+            this.form[this.item.prop].push(obj);
             if( this.item.events && this.item.events.addRow ){
                 this.item.events.addRow();
             } 
@@ -83,14 +82,15 @@ export default {
         },
         getRows : function(){
             var options = this.form[this.item.prop];
-            var row = this.item.row ;
+            var row = this.item.form ;
             var temp = [];   
-            if(options.length > 0){
+            if(options  && options.length > 0){
                 for(var i =0 ;i < options.length ; i++){
                     temp.push(row)
                 }    
             }else{
-                temp.push(row)
+                temp.push(row) ;
+                this.addRow();
             }
             return temp;
         },
@@ -106,7 +106,19 @@ export default {
 }
 </script>
 <style scoped>
-
-
-
+.mian{
+    border:1px solid #DCDFE6;
+    padding:5px;
+    border-radius: 5px;
+}
+.inline-span{
+    display:inline-block;
+    width:25%;
+}
+.form-row{
+   border:1px solid #DCDFE6;
+    padding:5px;
+    margin:10px;
+    border-radius: 5px; 
+}
 </style>

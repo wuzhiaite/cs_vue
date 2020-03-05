@@ -16,8 +16,7 @@
             <ComFormSpan :item="item" :form="form" ></ComFormSpan>
             <!-- 子表单 -->
             <span v-if="item.type=='select-form'" >
-              {{item}}
-              <SelectForm  :item="item" :form="form[item.prop]"  />
+              <SelectForm  :item="item" :form="form"  />
             </span>  
         
 
