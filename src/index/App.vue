@@ -84,7 +84,7 @@ export default {
                     name:'统计图标样例02',
                     iconCls:'el-icon-tickets',
                     realPath:'charts/Exp02',
-                }
+                },
             ]  
           } 
         ];
@@ -104,6 +104,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height:100%;
+  background-image: url();
+  background-repeat: no-repeat;  
+  background-size: 100% 100%;    
 }
 </style>

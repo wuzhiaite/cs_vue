@@ -11,7 +11,17 @@
     <el-form-item v-for="(item,index)  in  formStyle.formItems"  
             style="font-size:10px;"
             :label="( item.events && item.events.isShow ? item.events.isShow() : true) ? item.label : '' ">
+            
+            <!-- 通用组件 -->
             <ComFormSpan :item="item" :form="form" ></ComFormSpan>
+            <!-- 子表单 -->
+            <span v-if="item.type=='select-form'" >
+              {{item}}
+              <SelectForm  :item="item" :form="form[item.prop]"  />
+            </span>  
+        
+
+
     </el-form-item>  
     <el-form-item> 
       <slot></slot>

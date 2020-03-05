@@ -478,9 +478,9 @@ import QualityConditionForm  from './QualityConditionForm'
     margin-top: 15px;
     padding: 5px;
     border-radius: 5px;
-    border: 1px solid #ebebeb;
     padding-top:15px;
-    box-shadow: 0px 0px 10px 5px #888888;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 0 5px 5px #cac6c6;
 }
 </style>
 
