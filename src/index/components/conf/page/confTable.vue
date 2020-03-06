@@ -1,23 +1,31 @@
 <template>
-<div>
+<div style="padding:10px;">
   <el-collapse v-model="activeNames" @change="handleChange">
     <el-collapse-item title="基本信息" name="baseinfo">
-      <div>
+      <div class="box-form" style="padding:0px;">
         <ComForm 
+            :btns="[]"
             :formDesign="tableForm"
             :form.sync="form">
         </ComForm> 
       </div>  
     </el-collapse-item>
-    <el-collapse-item title="反馈 Feedback" name="2">
-      <div>
-        <ComForm 
-            :formDesign="tableForm"
+    <el-collapse-item title="列配置信息" name="confinfo">
+      <div class="box-form" style="padding:15px;">
+        <ChildTable 
+            :item="columnForm"
             :form.sync="form">
-        </ComForm> 
+        </ChildTable> 
       </div>
     </el-collapse-item>
   </el-collapse>
+  <div class="box-form" style="padding:20px;margin-top:20px;">
+    <TableList  :tableData="[]" :tableParam="form"/>
+  </div>
+  <div class="btn-span">
+    <Buttons  :btns="btns" ></Buttons>
+  </div> 
+
 </div>      
 </template>
 <script>
@@ -28,28 +36,117 @@
       return {
          tableForm:{},
          columnForm:{},
-         form:{},
-         btns:{},
+         btns:[],
          activeNames:[],
+         form:{
+           columns:[],
+         }
       }
     },
     props:{
-      // tempArr:{
-      //   default:[],
-      //   required:false,
-      //   type:Array,
-      // }
+      tempArr:{
+        default:[],
+        required:true,
+        type:Array,
+      },
+    },
+    watch:{
+      tempArr : {
+        deep:true,
+        immediate:true,
+        handler:function(n,o){
+          this.formateColumns();
+        }
+      }
     },
     created(){
-       this.initForm();
+       this.initTableForm();
+       this.initColumnForm();
        this.initBtn();
     }, 
     methods:{
+         initBtn : function(){
+           var that = this;
+           this.btns = [{
+                    id : 'confirm',
+                    name : '确定',
+                    type : 'primary',
+                    icon : 'el-icon-check',
+                    disabled : false,
+                    click : function(){
+                        var form = that.form ;
+                        console.log(form);
+                        that.$emit('callback',form);
+                    }
+                 }];
+         },
+         initColumnForm : function(){
+           var that = this;
+            this.columnForm 
+                  = {
+                        prop:'columns',
+                        label:'展示列',
+                        type:'child-form',
+                        form:[
+                            {
+                              'label':'列名称',
+                              'prop':'prop',
+                              'type':'select',
+                              'disabled':false,
+                              'options':that.tempArr,
+                              'allowCreate':true,
+                            },{
+                              'label':'宽度',
+                              'prop':'width',
+                              'type':'input'
+                            },{
+                              'label':'是否固定',
+                              'prop':'fixedDirect',
+                              'type':'select',
+                              options:[
+                                {label:'左',value:'left'},
+                                {label:'右',value:'right'}
+                                ],
+                              },{
+                                'label':'是否排序',
+                                'prop':'sortable',
+                                'type':'switch',
+                            },{
+                              'label':'按钮操作',
+                              'prop':'opers',
+                              'type':'btns',
+                            }
+                          ],
+                          
+                    }
+         },
+         formateColumns : function(){//格式化列数据
+            var tempArr = this.tempArr ;
+            var length = tempArr.length;
+            var avgLen = Math.floor(100 / length) ; 
+            var arr = [];
+            for(var i in tempArr){
+              var value = tempArr[i].value ;
+              var label = tempArr[i].label ;
+              var obj = {
+                 prop:value,
+                 label:label,
+                 width: avgLen, 
+                 fixedDirect:'',
+                 switch:false,
+                 opers:[]
+
+              };
+              arr.push(obj);
+            }
+          this.form.columns = arr ;
+
+         },
          initTableForm : function(){
            this.tableForm = {
                       disabled :false,
-                      inline :true,
-                      labelWidth:'25%',
+                      inline :false,
+                      labelWidth:'30%',
                       formItems :[{
                           prop:'border',
                           label:'是否有边框:',
@@ -69,54 +166,37 @@
                           active:"true",
                           inactive:'false'
                         },
-                        // {
-                        //   prop:'columns',
-                        //     label:'展示列',
-                        //     type:'select-form',
-                        //     form:[
-                        //         {'label':'列名称','prop':'colName','type':'input',disabled:true},
-                        //         {'label':'宽度','prop':'value','type':'input'},
-                        //         {'label':'是否固定',
-                        //         'prop':'fixed',
-                        //         'type':'select',
-                        //         'options':[
-                        //           {label:'无',value:''},
-                        //           {label:'左',value:'left'},
-                        //           {label:'右',value:'right'}
-                        //         ]},{
-                        //             'label':'是否排序',
-                        //             'prop':'sortable',
-                        //             'type':'switch',
-                        //         },{
-                        //           'label':'其他动作',
-                        //           'prop':'opers',
-                        //           'type':'btns',
-                        //         }
-                        //       ],
-                        //       events:{
-                        //         isShow:function(){
-                        //           return true;
-                        //         }
-                        //       }
-                        // }
-                        ]}
+                ]};
+            },
+            handleChange:function(){
+
+
+
+
             }
                  
-         }
+         
 
-     }
+   
+   }
            
   
 
-    }
+    
 
  }
 
 
 </script>
 <style scoped>
-
-
+.box-form{
+  border-radius: 10px;
+  border: 1px solid #eaeaea;
+  padding:0px;
+}
+.btn-span{
+  margin:20px;
+}
 
 </style>
 

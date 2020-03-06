@@ -42,14 +42,21 @@
           <QualityConditionForm :tempArr="tempArr" :form.sync="qualityConditionsForm" @callback="qualityConfirm"/>
       </ComDialog>
       <!-- 配置列信息 -->
-
-
+      <ComDialog  
+            :dialog="dialog.confTable"
+            :visable.sync="bol.isConfTablePage">
+            <ConfTable  
+                :tempArr="tempArr" 
+                :form="pageDesignForm.form" 
+                @callback="confTableConfirm" />
+      </ComDialog>     
     </div> 
 
 </template>
 <script>
 
-import QualityConditionForm  from './QualityConditionForm'
+import QualityConditionForm  from './QualityConditionForm';
+import ConfTable from './ConfTable';
 
  export default {
     data : function(){
@@ -62,7 +69,7 @@ import QualityConditionForm  from './QualityConditionForm'
             btns:[],
             form:{},
           },
-          pageDesignForm:{
+          pageDesignForm:{//页面设计表单
             formDesign:{},
             btns:[],
             form:{},
@@ -77,21 +84,27 @@ import QualityConditionForm  from './QualityConditionForm'
           dialog:{
             columns:{
                 width:'60%',
-                titleSlot:'<strong>新增列展示名称</strong>',
+                titleSlot:'<strong>配置列别名</strong>',
               },
             btns:{
               width:'60%',
               titleSlot:'<strong>新增按钮</strong>',
             },
             quality:{
-               width:'60%',
+              width:'60%',
               titleSlot:'<strong>高级查询</strong>',
+            },
+            confTable:{
+                width:'80%',
+                titleSlot:'<strong>展示列表配置</strong>',
+                direction:'ltr'
             }
           },
           bol:{
             isColumnPage:false,
             isBtnsPage:false,
             isQualityPage:false,
+            isConfTablePage:false,
           },
           tempForm:{},
           tempArr : [],//用于临时存储SQL列填写信息
@@ -101,7 +114,7 @@ import QualityConditionForm  from './QualityConditionForm'
       }
     },
     components:{
-        
+        ConfTable,//列配置信息
         QualityConditionForm,//高级查询项表单
     },
     created : function(){
@@ -243,6 +256,10 @@ import QualityConditionForm  from './QualityConditionForm'
             }
             that.bol.isQualityPage = false;
         },
+        confTableConfirm:function(form){//展示列配置
+           this.pageDesignForm.form.columns = form.columns ;
+           this.bol.isConfTablePage = false ;
+        },
         initColumnForm : function(tempArr){//初始化列别名表单数据
           var that = this;
           var  formItems = [];
@@ -295,6 +312,7 @@ import QualityConditionForm  from './QualityConditionForm'
                         return ;
                       }else{
                           that.tempForm = temp ;
+                          console.log(temp);
                           that.bol.isColumnPage = false;
                       }
                   }
@@ -369,7 +387,7 @@ import QualityConditionForm  from './QualityConditionForm'
                   options:that.tempArr,
                   events:{
                     addClick:function(){
-
+                        that.bol.isConfTablePage = true ;
                     }
                   }
               },{
@@ -393,6 +411,7 @@ import QualityConditionForm  from './QualityConditionForm'
                 CONFIG_BTNS:[],
                 SEARCH_CONDITIONS:[],
                 REQUES_URL:"/pagelist/commonpage/"+this.id,
+                conlumns:[],
             }
         },
         getSearchInfo : function(){//获取数据

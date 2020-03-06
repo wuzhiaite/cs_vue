@@ -2,22 +2,22 @@
     <!-- 全表样式设置 -->
     <el-table 
         :data="tableData"
-        :size="tableParam.size ? tableParam.size:'mini'"
-        :border="tableParam.border?true:false"
-        :script="tableParam.script?true:false"
-        :highlight-current-row="tableParam.highlightCurrentRow?true:false"
+        :size="tableParam.size ? tableParam.size : 'mini'"
+        :border="tableParam.border ? true:false"
+        :script="tableParam.script ? true:false"
+        :highlight-current-row="tableParam.highlightCurrentRow ? true:false"
         :default-sort="tableParam.defaultSort ?tableParam.defaultSort :{} "
         @sort-change="sortChange"
         @selection-change="handleSelectionChange"
-        :height="height*0.7"
-        :max-height="tableParam.maxHeight"
+        :height="tableParam.height ? tableParam.height : height*0.7"
+        :max-height="tableParam.maxHeight ? tableParam.maxHeight : 1000 "
         @row-click="rowClick"
         style="width: 100%;height:100px;">
         <!-- 是否多选 -->
-        <el-table-column v-if="tableParam.multi" type="selection"  width="55"></el-table-column>  
+        <el-table-column v-if="tableParam.multi ? tableParam.multi : false" type="selection"  width="55"></el-table-column>  
         <!-- 数据列遍历 -->
         <el-table-column v-for="(item,index) in tableParam.columns"
-            :fixed="item.fixed?item.fixed:false"
+            :fixed="item.fixedDirect?item.fixedDirect:false"
             :prop="item.prop?item.prop:''"
             :label="item.label?item.label:''"
             :width="item.width?item.width/100*width:0.25*width" 
@@ -36,6 +36,7 @@
                        v-for="(oper,index)  in item.opers" @click="oper.click(scope.row)" >
                    {{ oper.name }}
                  </el-button>  
+                 <!-- 标签过滤 -->
                  <el-tag  v-if="item.types"
                     size="mini"
                    :type="item.types[scope.row[item.prop]]"

@@ -1,12 +1,16 @@
 <template>
 <span>
       <el-input v-if="item.type=='input'" 
+          size="mini"
           :placeholder="item.placeholder ? item.placeholder : '' "
           :disabled="item.disabled ? item.disabled : false"
           v-model="form[item.prop]">
       </el-input>
       <el-select v-if="item.type == 'select' "
                 v-model="form[item.prop]" 
+                size="mini"
+                filterable
+                :allow-create=" item.allowCreate ? item.allowCreate : false "
                 :disabled="item.disabled ? item.disabled : false"
                 :multiple = " item.multiple ? item.multiple : false "
                 @change=" item.events && item.events.changeSelect ? item.events.changeSelect() : null "
@@ -17,6 +21,7 @@
       <span v-if="item.type=='dateInterval'">
         <el-col :span="11">
             <el-date-picker type="date" 
+              size="mini"
               :disabled="item.disabled ? item.disabled : false"
               :placeholder="item.placeholder ? item.placeholder : '选择日期' " 
               v-model="form[item.prop+'start_time']" 
@@ -25,6 +30,7 @@
         <el-col class="line" :span="2">-</el-col>
         <el-col :span="11">
           <el-time-picker 
+              size="mini"
               :disabled="item.disabled ? item.disabled : false"
               :placeholder="item.placeholder ? item.placeholder : '选择日期' " 
               v-model="form[item.prop+'end_time']" 
@@ -83,6 +89,7 @@
           </el-checkbox-group> 
           <span v-if="item.events&&item.events.addClick" style="text-align:left;">
               <el-button type="primary" 
+                size="mini"
                 style="margin-left:15px;"
                 icon="el-icon-plus" 
                 @click="item.events.addClick()" plain circle></el-button>
@@ -108,6 +115,7 @@
       </span> 
       <span v-if="item.type=='rate'">
         <el-rate
+          size="mini"
           :show-text="item.showText ? item.showText : true"
           v-model="form[item.prop]" >
         </el-rate>
@@ -120,6 +128,7 @@
       </span>  
       <span v-if="item.type=='textarea'">
           <el-input type="textarea" 
+               size="mini"
               :disabled="item.disabled ? item.disabled : false"
               style="width:100%;padding:0px;"
               :rows="item.numbers ? item.numbers/100 : 5"

@@ -4,7 +4,7 @@
        :width="dialog.width ? dialog.width : '50%' "      
        :modal="dialog.modal ? dialog.modal : true"
        :fullscreen="dialog.fullscreen ? dialog.fullscreen : false"
-       :modal-append-to-body="dialog.appendToBody ? dialog.appendToBody : true"
+       :modal-append-to-body="dialog.appendToBody ? dialog.appendToBody : false"
        :lock-scroll="dialog.localScroll ? dialog.localScroll : false"
        :close-on-click-modal="dialog.closeOnModal ? dialog.closeOnModal : true"
        :close-on-press-escape="dialog.closeOnEscape ? dialog.closeOnEscape : true"

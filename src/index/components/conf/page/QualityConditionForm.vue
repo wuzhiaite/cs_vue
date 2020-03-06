@@ -90,35 +90,22 @@ export default {
                   prop:'options',
                   label:'字段映射',
                   type:'select-form',
+                  form:[{
+                       prop:'label',
+                       label:'标签',
+                       type:'input',  
+                    },{
+                       prop:'value',
+                       label:'对应值',
+                       type:'input', 
+                    }],
                   events:{
-                     addRow : function(){
-                        var obj = {label:'',value:''} ;
-                        that.qualityConditionsForm.form.options.push(obj) ;
-                     },
-                     deleteRow : function(index){
-                       if(index == 0) return;
-                        that.qualityConditionsForm.form.options.splice(index,1);
-                     },
                      isShow : function(){//
                         var type = that.qualityConditionsForm.form.type ;   
                         var flag = ( type == 'select' 
                                         || type == 'radio-buttons' );  
                         return flag;    
                      },
-                     getRows : function(){
-                        var options = that.qualityConditionsForm.form.options;
-                        var row = [{'标签名':'label'},
-                                    {'对应值':'value'},];
-                        var temp = [];   
-                        if(options.length > 0){
-                            for(var i =0 ;i < options.length ; i++){
-                                temp.push(row)
-                            }    
-                        }else{
-                            temp.push(row)
-                        }
-                        return temp;
-                     }
                   }
               }],
             },
@@ -135,7 +122,7 @@ export default {
                  }],
             form:{
               id:(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
-              options : [{label:'',value:''}],
+              options:[],
               type:'',
             },
           }

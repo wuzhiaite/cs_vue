@@ -21,7 +21,7 @@ import ComFormSpan from './ComFormSpan';
 export default {
     data:function(){
         return {
-            row:{},
+            
         }
     },
     props:{
@@ -47,22 +47,23 @@ export default {
                 if(type == 'select' || type == 'radio' || type == 'checkbox'
                             || type == 'checkbox-button' || type == 'radio-button'
                             || type == 'conditions' || type == 'btns' ){
-                    temp[prop] = {} ;            
+                    temp[prop] = [] ;            
                 }else if (type == 'switch'){
-                    temp[prop] = {} ;
+                    temp[prop] = false ;
                 }else{
-                    temp[prop] = {};
+                    temp[prop] = '';
                 }
             }
             return temp ;
         },
-        addRow : function(){
+        addRow : function(index){
             var obj = this.getFormInfo();
             var length = this.form[this.item.prop].length ; 
             if(!length || length == 0){
                 this.form[this.item.prop] = [] ;
             } 
-            this.form[this.item.prop].push(obj);
+            this.form[this.item.prop].splice(index+1,0,obj);
+            // this.form[this.item.prop].push(obj);
             if( this.item.events && this.item.events.addRow ){
                 this.item.events.addRow();
             } 

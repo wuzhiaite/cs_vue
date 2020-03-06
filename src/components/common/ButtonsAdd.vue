@@ -15,6 +15,7 @@
             </span>
         </template>
         <el-button type="primary" 
+            size="mini"
             style="margin-left:15px;"
             icon="el-icon-plus" 
             @click="editBtn(-1)" plain circle></el-button>     

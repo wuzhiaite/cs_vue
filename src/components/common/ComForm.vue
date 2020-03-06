@@ -15,10 +15,9 @@
             <!-- 通用组件 -->
             <ComFormSpan :item="item" :form="form" ></ComFormSpan>
             <!-- 子表单 -->
-            <span v-if="item.type=='select-form'" >
-              <SelectForm  :item="item" :form="form"  />
-            </span>  
-        
+            <SelectForm v-if="item.type=='select-form'" :item="item" :form="form"  />
+            <!-- 子表 -->
+            <ChildTable v-if="item.type=='child-form'" :item="item" :form="form"/>
 
 
     </el-form-item>  
