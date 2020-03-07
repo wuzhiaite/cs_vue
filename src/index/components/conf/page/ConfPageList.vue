@@ -422,9 +422,10 @@ import ConfTable from './ConfTable';
             }
             this.pageDesignForm.form = {
                 SHOW_COLUMNS:[],
-                INIT_PARAM:"{\n\n\n}",
+                INIT_PARAM:"{\n\tpageNum:1,\n\tpageSize:10,\n}",
                 CONFIG_BTNS:[],
                 SEARCH_CONDITIONS:[],
+                SEARCH_COLUMNS:[],
                 REQUES_URL:"/pagelist/commonpage/"+this.id,
                 conlumns:[],
             }

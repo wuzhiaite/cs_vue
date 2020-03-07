@@ -72,22 +72,24 @@
                   style="float:left;"
                   v-model="form[item.prop]" 
                   size="mini">
-              <span v-if="item.events&&item.events.addClick" style="text-align:left;">
+              <span v-if="item.events&&item.events.addClick" style="margin-right:0px;">
                   <el-button type="primary" 
                       size="mini"
-                      style="margin-left:15px;float:left;margin-right:0px;"
+                      style="float:left;margin:0px;"
                       icon="el-icon-plus" 
                       @click="item.events.addClick()" plain ></el-button>
               </span>    
               <el-checkbox 
                   v-if="item.type=='checkbox'"
                   size="mini"
+                  style="margin:0px; "
                   :disabled="item.disabled ? item.disabled : false"
                   v-for="opt in item.options" 
                   :label="opt.value" :key="opt.value">{{opt.label}}</el-checkbox>
               <el-checkbox-button
                   v-if="item.type=='checkbox-button'"
                   size="mini"
+                  style="margin:0px; "
                   v-for="opt in item.options"  
                   :label="opt.value" :key="opt.value">
                     <span  @click="item.events && item.events.click ? item.events.click(opt) : null">

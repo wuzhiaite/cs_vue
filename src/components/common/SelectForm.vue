@@ -4,7 +4,7 @@
     <el-row  inline=true v-for="(row,index) in getRows()" class="form-row" >
         <span v-for="(column,key) in row" style="margin-left:20px;" >
             <label>{{ column.label }} : </label>
-            <ComFormSpan class="inline-span" :item="column" :form="form[item.prop][index][column.prop]" />
+            <ComFormSpan class="inline-span" :item="column" :form="form[item.prop][index]" />
         </span> 
         <span style="margin-left:20px;vertical-align:middle;">
             <el-button type="primary" size="mini" >

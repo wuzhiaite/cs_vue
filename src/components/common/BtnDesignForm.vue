@@ -36,7 +36,7 @@ export default {
                  }else{
                      this.data = { 
                         id: (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
-                        script:"{\n\tclick:function(){\n\n\n\n\t},\n\thover:function(){\n\n\n\n\t}\n}",
+                        events:"{\n\tclick:function(){\n\n\n\n\t},\n\thover:function(){\n\n\n\n\t}\n}",
                     }
                 }  
                 this.initForm(); 
@@ -101,7 +101,7 @@ export default {
                             {label:'原型按钮',value:'circle'},
                             ]  
                         },{
-                            prop:'script',
+                            prop:'events',
                             label:'按钮脚本:',
                             type:'textarea',
                             numbers:1000,

@@ -81,6 +81,7 @@ export default {
 <style scoped>
 .el-select{
     width:100%;
+    text-align:center;
 }
 </style>
 

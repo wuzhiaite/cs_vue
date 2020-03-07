@@ -123,8 +123,6 @@
     },
     methods:{
         synData:function(index,item){
-            console.log(item);
-            this.$alert(JSON.stringify(item)+'&index='+index);
             this.$emit("conditions:update",this.conditions);
         }
     }
