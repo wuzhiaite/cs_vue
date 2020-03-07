@@ -67,10 +67,18 @@
         </el-switch>  
       </span>
       <span v-if="item.type=='checkbox' || item.type=='checkbox-button'" style="float:left;">
+          
         <el-checkbox-group 
                   style="float:left;"
                   v-model="form[item.prop]" 
                   size="mini">
+              <span v-if="item.events&&item.events.addClick" style="text-align:left;">
+                  <el-button type="primary" 
+                      size="mini"
+                      style="margin-left:15px;float:left;margin-right:0px;"
+                      icon="el-icon-plus" 
+                      @click="item.events.addClick()" plain ></el-button>
+              </span>    
               <el-checkbox 
                   v-if="item.type=='checkbox'"
                   size="mini"
@@ -87,13 +95,7 @@
                     </span>
                   </el-checkbox-button>
           </el-checkbox-group> 
-          <span v-if="item.events&&item.events.addClick" style="text-align:left;">
-              <el-button type="primary" 
-                size="mini"
-                style="margin-left:15px;"
-                icon="el-icon-plus" 
-                @click="item.events.addClick()" plain circle></el-button>
-          </span>
+       
       </span>
       <span v-if="item.type=='radio'|| item.type == 'radio-button'">
         <el-radio-group  

@@ -19,9 +19,6 @@
       </div>
     </el-collapse-item>
   </el-collapse>
-  <div class="box-form" style="padding:20px;margin-top:20px;">
-    <TableList  :tableData="[]" :tableParam="form"/>
-  </div>
   <div class="btn-span">
     <Buttons  :btns="btns" ></Buttons>
   </div> 
@@ -75,6 +72,13 @@
                     disabled : false,
                     click : function(){
                         var form = that.form ;
+                        var columns = form.columns ;
+                        for(var i in columns){
+                            var column = columns[i];
+                            if(!column.label){
+                                columns[i].label = column.prop ;
+                            }
+                        }
                         console.log(form);
                         that.$emit('callback',form);
                     }

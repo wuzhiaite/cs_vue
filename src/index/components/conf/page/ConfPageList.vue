@@ -83,7 +83,7 @@ import ConfTable from './ConfTable';
           btnForm:{},
           dialog:{
             columns:{
-                width:'60%',
+                width:'40%',
                 titleSlot:'<strong>配置列别名</strong>',
               },
             btns:{
@@ -97,7 +97,6 @@ import ConfTable from './ConfTable';
             confTable:{
                 width:'80%',
                 titleSlot:'<strong>展示列表配置</strong>',
-                direction:'ltr'
             }
           },
           bol:{
@@ -110,7 +109,7 @@ import ConfTable from './ConfTable';
           tempArr : [],//用于临时存储SQL列填写信息
           tempSQL : '',
           canView:false,
-          qualityConditionsForm : {}
+          qualityConditionsForm : {},
       }
     },
     components:{
@@ -257,7 +256,23 @@ import ConfTable from './ConfTable';
             that.bol.isQualityPage = false;
         },
         confTableConfirm:function(form){//展示列配置
-           this.pageDesignForm.form.columns = form.columns ;
+           this.pageDesignForm.form.tableParam = form ;
+           var columns = form.columns ; 
+           var temp = [];
+           for(var i in columns){
+               var obj = {
+                   label : columns[i].label,
+                   value : columns[i].prop,
+               }
+               temp.push(obj);
+           }
+           var items = this.pageDesignForm.formDesign.formItems ; 
+            for(var i in items){
+                var prop = items[i].prop ;
+                if( prop == 'SHOW_COLUMNS' ){
+                    items[i].options = temp ;
+                }
+            }
            this.bol.isConfTablePage = false ;
         },
         initColumnForm : function(tempArr){//初始化列别名表单数据
@@ -280,8 +295,8 @@ import ConfTable from './ConfTable';
           }
           this.columnForm.formDesign = {
             disabled:false,  
-            inline:true,
-            labelWidth:'0.4',
+            inline:false,
+            labelWidth:'25%',
             formItems : formItems,
             rules : rules,
           };
@@ -384,7 +399,7 @@ import ConfTable from './ConfTable';
                   prop:'SHOW_COLUMNS',
                   label:'默认展示列',
                   type:'checkbox-button',
-                  options:that.tempArr,
+                  options:[],
                   events:{
                     addClick:function(){
                         that.bol.isConfTablePage = true ;
