@@ -6,7 +6,7 @@
               style="position:absolute;"
               :btns="btns"/>
       </div>
-      <div style="height:20px;"/>
+      <div style="height:25px;"/>
       <div class="box-block">
           <div style="float:left;width:35%;">
             <label><strong> 台账查询SQL </strong></label>
@@ -39,7 +39,10 @@
        <ComDialog 
           :dialog="dialog.quality"
           :visable.sync="bol.isQualityPage">
-          <QualityConditionForm :tempArr="tempArr" :form.sync="qualityConditionsForm" @callback="qualityConfirm"/>
+          <QualityConditionForm 
+            :tempArr="tempArr" 
+            :form.sync="qualityConditionsForm" 
+            @callback="qualityConfirm"/>
       </ComDialog>
       <!-- 配置列信息 -->
       <ComDialog  
@@ -49,7 +52,13 @@
                 :tempArr="tempArr" 
                 :form="pageDesignForm.form" 
                 @callback="confTableConfirm" />
-      </ComDialog>     
+      </ComDialog>    
+      <!-- 台账展示页面 -->
+       <ComDialog 
+            :dialog="dialog.pageList"
+            :visable.sync="bol.isPageList">
+            <CommonPage :pageParam="pageParam" />
+       </ComDialog> 
     </div> 
 
 </template>
@@ -84,19 +93,22 @@ import ConfTable from './ConfTable';
           dialog:{
             columns:{
                 width:'40%',
-                titleSlot:'<strong>配置列别名</strong>',
+                title:'配置列别名',
               },
             btns:{
               width:'60%',
-              titleSlot:'<strong>新增按钮</strong>',
+              title:'新增按钮',
             },
             quality:{
               width:'60%',
-              titleSlot:'<strong>高级查询</strong>',
+              title:'高级查询',
             },
             confTable:{
                 width:'80%',
-                titleSlot:'<strong>展示列表配置</strong>',
+                title:'展示列表配置',
+            },
+            pageList : {
+                width:'80%',
             }
           },
           bol:{
@@ -104,12 +116,14 @@ import ConfTable from './ConfTable';
             isBtnsPage:false,
             isQualityPage:false,
             isConfTablePage:false,
+            isPageList:false,
+            savePageList:false,
           },
           tempForm:{},
           tempArr : [],//用于临时存储SQL列填写信息
           tempSQL : '',
-          canView:false,
           qualityConditionsForm : {},
+          pageParam:{},
       }
     },
     components:{
@@ -182,9 +196,9 @@ import ConfTable from './ConfTable';
                   name : '预览',
                   type : 'success',
                   icon : 'el-icon-view',
-                  disabled : true,
+                  disabled : !that.bol.savePageList,
                   click : function(){
-
+                      that.isPageList = true ;
                   }
               }
             ];
@@ -427,7 +441,6 @@ import ConfTable from './ConfTable';
                 SEARCH_CONDITIONS:[],
                 SEARCH_COLUMNS:[],
                 REQUES_URL:"/pagelist/commonpage/"+this.id,
-                conlumns:[],
             }
         },
         getSearchInfo : function(){//获取数据
@@ -470,17 +483,52 @@ import ConfTable from './ConfTable';
           
         },  
         doSave : function(){//保存数据
+            var that = this ;
+            if(!this.sqlForm.form){
+                this.$message({
+                    type:'error',
+                    message:'请写入SQL，重新点击保存。'
+                });
+            }
+            //模糊查询列
+            var columns = this.pageDesignForm.form.SEARCH_COLUMNS ;
+            var str = '';
+            for(var i in columns){
+                var column = columns[i] ;
+                var label = this.tempForm[column] ;
+                str += '|' + label ; 
+            }
+            str = str.substring(1) ;
+            this.dialog.pageList.title = this.pageDesignForm.form.CONFIG_NAME ;
+            var tableParam = this.pageDesignForm.form.tableParam ;
+            tableParam.initData = {
+               url : this.pageDesignForm.form.REQUES_URL,
+               params : this.pageDesignForm.form.INIT_PARAM,
+            };
+            this.pageParam = {     
+                    isPagination:true,//是否分页
+                    isQualitySearch:true,//是否高级查询
+                    searchParam : '请输入'+str+'字段查询',
+                    conditions:this.pageDesignForm.form.SEARCH_CONDITIONS,//高级查询项
+                    btns:this.pageDesignForm.form.CONFIG_BTNS,//按钮
+                    tableParam : tableParam, //表单参数
+                };
+            console.log(this.pageParam);
+            this.bol.isPageList = true ;  
             var temp = {
                 id: this.id,
                 sqlForm: this.sqlForm.form,
                 columnForm : this.tempForm,
                 pageDesignForm : this.pageDesignForm.form ,
-            };
-            
-            this.post("/pagelist/modifyPageList",
+                pageParam : this.pageParam ,
+            };  
+            this.post("/pagelist/savePageList",
                       temp)
                 .then(res => {
                     console.log(res);
+                    that.bol.savePageList = true ;
+
+                    
                 })
         },
         getFormData : function(){//根据id获取表单的数据

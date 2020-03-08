@@ -36,6 +36,9 @@
          btns:[],
          activeNames:[],
          form:{
+           border:true,
+           multi:true,
+           highlightCurrentRow:true,
            columns:[],
          }
       }
@@ -155,20 +158,20 @@
                           prop:'border',
                           label:'是否有边框:',
                           type:'switch',
-                          active:"true",
-                          inactive:'false'
+                          active:"false",
+                          inactive:'true'
                         },{
                           prop:'multi',
                           label:'是否多选',
                           type:'switch',
-                          active:"true",
-                          inactive:'false'
+                          active:"false",
+                          inactive:'true'
                         },{
                           prop:'highlightCurrentRow',
                           label:'选中行高亮',
                           type:'switch',
-                          active:"true",
-                          inactive:'false'
+                          active:"false",
+                          inactive:'true'
                         },
                 ]};
             },

@@ -5,7 +5,7 @@
         <div >
           <CommonPage :pageParam="pageParam"></CommonPage>
         </div>
-        <div style="width:1px;"></div>
+        <div style="width:1px;border:0px ;"></div>
         <div style="float:right;">    
           <ComForm 
               :formDesign="formStyle.formDesign"
@@ -97,7 +97,7 @@
                   icon : 'el-icon-circle-plus-outline',
                   disabled : false,
                   click : function(){
-                    var id = "111";
+                    var id = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1) ;
                     that.$router.push({path:`/confPageList/${id}`});
                   }
                 }],
