@@ -39,7 +39,7 @@
                       <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  />
                   </el-tooltip>    
                   <span slot="title">
-                    <strong>{{item.name}}</strong>
+                    {{item.name}}
                   </span>
                 </template>
                 <el-menu-item 
@@ -153,6 +153,9 @@
   }
 </script>
 <style>
+.el-container{
+  background-color:white ;
+}
   .el-icon{
     margin-right:15px;
   }

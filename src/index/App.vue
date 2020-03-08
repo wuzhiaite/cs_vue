@@ -104,6 +104,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color:rgb(238, 238, 238);;
   background-image: url();
   background-repeat: no-repeat;  
   background-size: 100% 100%;    

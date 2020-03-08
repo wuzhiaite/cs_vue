@@ -2,7 +2,7 @@
 <div>
  
   <div class="box-block">
-        <div >
+        <div style="border:0px;">
           <CommonPage :pageParam="pageParam"></CommonPage>
         </div>
         <div style="width:1px;border:0px ;"></div>
@@ -212,7 +212,6 @@
     text-align: center;
     border-radius: 10px;
     border: 1px solid #eaeaea;
-    box-shadow: 0 0 5px 5px #cac6c6;
 }
 span{
   width:50px;
@@ -227,7 +226,6 @@ span{
   width:100%;
 }
 table td, table th{
-  border: 1px solid #cad9ea;
   color: #666;
   height: 30px;
 }
