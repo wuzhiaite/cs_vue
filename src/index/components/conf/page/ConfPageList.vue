@@ -557,6 +557,7 @@ import ConfTable from './ConfTable';
     border-radius: 5px;
     padding-top:15px;
     border: 1px solid #eaeaea;
+    background-color:white;
 }
 </style>
 

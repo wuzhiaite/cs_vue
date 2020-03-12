@@ -14,8 +14,8 @@ export default {
   name: 'app',
   data(){
     return {
-      screenHeight : document.body.clientHeight,
-      screenWidth : document.body.clientWidth,
+      // screenHeight : document.body.clientHeight,
+      // screenWidth : document.body.clientWidth,
     }
   },
   created(){
@@ -23,25 +23,25 @@ export default {
     this.menusInfo();
   },
   mounted(){
-      const that = this
-      window.onresize = () => {
-          return (() => {
-              that.screenHeight = document.body.clientHeight;
-              that.screenWidth = document.body.clientWidth;
-          })()
-      }
+      // const that = this
+      // window.onresize = () => {
+      //     return (() => {
+      //         that.screenHeight = document.body.clientHeight;
+      //         that.screenWidth = document.body.clientWidth;
+      //     })()
+      // }
     },
   watch:{
-    screenHeight:function(n,o){
-      this.setScreenHeight(n);
-    },
-    screenWidth:function(n,o){
-      this.setScreenWidth(n);
-    }
+    // screenHeight:function(n,o){
+    //   this.setScreenHeight(n);
+    // },
+    // screenWidth:function(n,o){
+    //   this.setScreenWidth(n);
+    // }
   },
   methods:{  
     ...mapActions(['setUserAction','setSystemName']),
-    ...mapMutations(['setScreenHeight','setScreenWidth']),
+    // ...mapMutations(['setScreenHeight','setScreenWidth']),
     login(){
         var user= {
           userId : '20191227',
@@ -54,18 +54,20 @@ export default {
       this.setSystemName(systemName);
     },
     menusInfo(){
-      var csMenus = [     
+      var csMenus = [  
           {
             path:'/home',
             name:'通用配置管理',  
             iconCls:'el-icon-setting',
             realPath:'Home',
+            hidden:false, 
             children : [
                 {
                     path :'/pagelist',
                     name:'通用台账配置',
                     iconCls:'el-icon-picture-outline-round',
                     realPath:'conf/page/PageList',
+                     hidden:false, 
                 }]
           } ,
           {
@@ -73,18 +75,21 @@ export default {
             name:'图表样式',  
             iconCls:'el-icon-s-shop',
             realPath:'Home',
+            hidden:false, 
             children : [
                 {
                     path :'/graphExp01',
                     name:'统计图标样例01',
                     iconCls:'el-icon-s-marketing',
                     realPath:'charts/Exp01',
+                    hidden:false, 
                 },
                 {
                     path :'/graphExp02',
                     name:'统计图标样例02',
                     iconCls:'el-icon-tickets',
                     realPath:'conf/form/GrantPaper',
+                    hidden:false, 
                 },
             ]  
           } 
@@ -113,9 +118,10 @@ export default {
   background-size: 100% 100%;    
 }
 
-body{
+body,html{
 	margin: 0; 
 	padding: 0;
 	border: 0;
+  height:100%;
 }
 </style>

@@ -11,6 +11,7 @@ export const formatRoutes = (routes)=> {
         iconCls,
         realPath,
         desc,
+        hidden,
         children
       } = router;
       if (children && children instanceof Array) {
@@ -27,7 +28,8 @@ export const formatRoutes = (routes)=> {
         name: name,
         iconCls: iconCls,
         meta: meta,
-        desc,
+        desc:desc,
+        hidden:hidden,
         children: children
       };
       fmRoutes.push(fmRouter);

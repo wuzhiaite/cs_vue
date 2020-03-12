@@ -1,6 +1,5 @@
 <template>
 <div>
- 
   <div class="box-block">
         <div style="border:0px;">
           <CommonPage :pageParam="pageParam"></CommonPage>
@@ -212,6 +211,7 @@
     text-align: center;
     border-radius: 10px;
     border: 1px solid #eaeaea;
+    background-color:white;
 }
 span{
   width:50px;

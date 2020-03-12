@@ -1,9 +1,7 @@
 <template>
-  <div :style="{height : screenHeight + 'px',padding:'0px' }">
-    <el-container style="height: 100%; border: 1px solid #eee;"> 
-      <el-aside :width="( collapse ? 64+'px' : '200px') " 
-          style="background-color: ; " >
-         
+  <div :style="{height : screenHeight + 'px' }">
+    <el-container style="height: 100%; "> 
+      <el-aside :width="( collapse ? 64+'px' : '200px') "  >    
           <el-menu 
               :collapse=" collapse"
               background-color="" 
@@ -12,16 +10,15 @@
               style="border:0px;"
               :default-active="$route.path"
               unique-opened router>
-              <div class="el-system">
+              <div class="el-system" >
                 <i class="el-icon-eleme"/>
                 <span class="el-title" v-show="!collapse">
                   {{systemName}}
                 </span>
-            </div>
- 
+              </div>
               <el-submenu 
                   v-for="(item,index) in routes" v-if="!item.hidden" class="title"
-                  :key="index" :index="index+''" style="text-align:left;">
+                  :key="index" :index="index+''" style="text-align:left; ">
                 <template slot="title">
                   <el-tooltip v-if="item.iconCls" :content=" item.desc ? item.desc : item.name " placement="top">
                       <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  />
@@ -42,7 +39,7 @@
             </el-menu>
       </el-aside>
     
-      <el-container>  
+      <el-container style="background-color:#eee;">  
         <el-header class="system-header">
           <el-row>
             <el-col :span="2" >
@@ -70,27 +67,26 @@
             </el-col>
           </el-row>
         </el-header>
-        
-        <el-main>
-          <el-header height="40px" style="line-height:40px;" >
-             <el-breadcrumb separator-class="el-icon-arrow-right"  >
-                <el-breadcrumb-item :to="{ path: '/index' }">
-                    <i class="el-icon-house"/>&nbsp;首页
-                </el-breadcrumb-item>
-                <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
+        <el-header class="el-baber-title" height="50px">
+            <el-breadcrumb separator="/" style="padding:15px;">
+              <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+              <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
             </el-breadcrumb>
-         </el-header>  
-            <keep-alive>
-                <router-view />
-            </keep-alive>
-        </el-main> 
+         </el-header> 
+         <div style="overflow-y:auto;">
+            <el-main>
+                <keep-alive>
+                    <router-view />
+                </keep-alive>
+            </el-main> 
+         </div>
       </el-container> 
     </el-container>
   </div>
 </template>
 
 <script>
-  import {mapGetters} from  'vuex';
+  import {mapGetters,mapMutations} from  'vuex';
 
   export default {
     name:'home',
@@ -99,32 +95,45 @@
         collapse: false,
         url: '',
         srcList: [],
+        screenHeight : document.body.clientHeight,
+        screenWidth : document.body.clientWidth,
       }
     },
     created:function(){
         var url = require('../img/logo.jpg');
         this.url = url;
         this.srcList.push(url);
-        console.log(this.screenWidth);
+    },
+    mounted:function(){
+        const that = this
+        window.onresize = () => {
+            return (() => {
+                that.screenHeight = document.body.clientHeight;
+                that.screenWidth = document.body.clientWidth;
+            })()
+        }
     },
     computed:{
        ...mapGetters({
-              screenHeight:'getScreenHeight',
-              screenWidth:'getScreenWidth',
               routes:'cs/getMenus',
               systemName : 'getSystemName',
               username : 'getUsername'}),
     },
    watch:{
      screenWidth:function(n,o){
+        this.setScreenWidth(n);
         if(n < 1000){
           this.collapse = true;
         }else{
           this.collapse = false ;
         }
-     }
+     },
+    screenHeight:function(n,o){
+      this.setScreenHeight(n);
+    },
    },
     methods:{
+      ...mapMutations(['setScreenHeight','setScreenWidth']),
       openSelfInfo(){
       },
       handleOpen(key, keyPath) {
@@ -137,6 +146,11 @@
   }
 </script>
 <style>
+.el-baber-title{
+  line-height:50px;
+  border-left: 1px solid #eee;
+  background-color:white;
+}
 i{
   font-size:20px;
 }
@@ -202,14 +216,15 @@ i{
     font-size:20px;
     color:white;
     height:60px;
-    box-shadow: 0 2px 12px 5 rgba(0, 0, 0, 0.1);
-}
-  .el-main{
-     vertical-align:middle;
-     border-left: 1px solid #eee;
+    border:0px !important;
   }
-
   el-header el-row el-col{
     line-height:60px;
   }
+  .el-breadcrumb-item {
+      height:60px;
+      line-height:60px;
+  }
+
+
 </style>
