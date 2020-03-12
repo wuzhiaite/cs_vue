@@ -1,36 +1,24 @@
 <template>
-  <div :style="{height : screenHeight + 'px' }">
-    <el-container style="height: 100%; border: 1px solid #eee;margin:0px;"> 
-      <el-aside :width="( collapse ? 64+'px' : screenWidth * 0.16 + 'px') " 
-          style="background-color: #eee;" 
-          router="true" mode="horizontal" >
-          <div class="el-system">
-              <span class="el-title" >
-                  <el-image 
-                      class="el-img"
-                      :src="url" >
-                    </el-image>
-              </span>
-              <br/>
-              <span class="el-title" v-show="!collapse">
-                {{systemName}}
-              </span>
-              <br/><br/>
-              <span class="el-user" 
-                  v-show="!collapse"
-                  style="font-size:12px;cursor:pointer;" 
-                  @click="openSelfInfo">       
-                <i class="el-icon-setting" ></i>
-                  {{username}}
-              </span>
-          </div>
+  <div :style="{height : screenHeight + 'px',padding:'0px' }">
+    <el-container style="height: 100%; border: 1px solid #eee;"> 
+      <el-aside :width="( collapse ? 64+'px' : '200px') " 
+          style="background-color: ; " >
+         
           <el-menu 
               :collapse=" collapse"
-              background-color="#eee" 
+              background-color="" 
               text-color=""
               active-text-color=""
+              style="border:0px;"
               :default-active="$route.path"
               unique-opened router>
+              <div class="el-system">
+                <i class="el-icon-eleme"/>
+                <span class="el-title" v-show="!collapse">
+                  {{systemName}}
+                </span>
+            </div>
+ 
               <el-submenu 
                   v-for="(item,index) in routes" v-if="!item.hidden" class="title"
                   :key="index" :index="index+''" style="text-align:left;">
@@ -47,10 +35,7 @@
                       style="padding-left: 30px;text-align: left"
                       v-for="child in item.children"
                       :index="child.path"
-                      :key="child.path">
-                        <el-tooltip :content=" child.desc ? child.desc : child.name " placement="top">
-                          <i :class="child.iconCls ? child.iconCls : ''" class="el-icon"/>
-                        </el-tooltip>       
+                      :key="child.path">      
                             {{child.name}}
                 </el-menu-item>
               </el-submenu>
@@ -58,15 +43,43 @@
       </el-aside>
     
       <el-container>  
-        <el-header height="20px"  style="vertical-align:middle;margin-top:10px;">
+        <el-header class="system-header">
+          <el-row>
+            <el-col :span="2" >
+                <div style="font-size:20px;text-align:left;" @click="collapse=!collapse">
+                   <i v-show="collapse" class="el-icon-d-arrow-right"/>
+                   <i v-show="!collapse" class="el-icon-d-arrow-left"/>
+                </div>
+            </el-col>
+            <el-col :span="3" :offset="16">
+                <div style="font-size:15px;text-align:left;">
+                  <span class="el-title" >
+                      <el-image 
+                          class="el-img"
+                          :src="url" >
+                      </el-image>
+                  </span>
+                  <span>王小虎</span>
+                </div>
+            </el-col>
+            <el-col :span="2">
+              <div class="grid-content bg-purple">
+                 <i class="el-icon-switch-button"/>
+                退出登录
+              </div>
+            </el-col>
+          </el-row>
+        </el-header>
+        
+        <el-main>
+          <el-header height="40px" style="line-height:40px;" >
              <el-breadcrumb separator-class="el-icon-arrow-right"  >
                 <el-breadcrumb-item :to="{ path: '/index' }">
-                    <i class="el-icon-s-home"/>首页
+                    <i class="el-icon-house"/>&nbsp;首页
                 </el-breadcrumb-item>
                 <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
             </el-breadcrumb>
-        </el-header>  
-        <el-main>
+         </el-header>  
             <keep-alive>
                 <router-view />
             </keep-alive>
@@ -86,60 +99,31 @@
         collapse: false,
         url: '',
         srcList: [],
-        screenWidth:document.body.clientWidth,
       }
     },
     created:function(){
         var url = require('../img/logo.jpg');
         this.url = url;
         this.srcList.push(url);
+        console.log(this.screenWidth);
     },
     computed:{
        ...mapGetters({
+              screenHeight:'getScreenHeight',
+              screenWidth:'getScreenWidth',
               routes:'cs/getMenus',
               systemName : 'getSystemName',
               username : 'getUsername'}),
-       screenHeight:{
-          get(){
-             return this.$store.state.screenHeight ;
-          },
-          set(value){
-             this.$store.state.screenHeight = value ;
-          }
-       },
     },
-    mounted(){
-      const that = this
-      window.onresize = () => {
-          return (() => {
-              window.screenHeight = window.screen.availHeight  ;
-              that.screenHeight = window.screenHeight - 90 ;
-              that.screenWidth = document.body.clientWidth;
-              that.$store.state.screenWidth = that.screenWidth ;
-
-          })()
-      }
-    },
-    watch:{
-        screenHeight(val){
-          // 为了避免频繁触发resize函数导致页面卡顿，使用定时器
-          if(!this.timer){
-              // 一旦监听到的screenWidth值改变，就将其重新赋给data里的screenWidth
-              this.screenHeight = val
-              this.timer = true
-              let that = this
-              this.$store.dispatch("setScreenHeight",this.screenHeight);
-              setTimeout(function(){
-                  // 打印screenWidth变化的值
-                  console.log(that.screenWidth)
-                  that.timer = false
-              },400)
-          }
-        },
-        screenWidth(){
-          this.collapse = this.screenWidth * 0.16 < 180 
+   watch:{
+     screenWidth:function(n,o){
+        if(n < 1000){
+          this.collapse = true;
+        }else{
+          this.collapse = false ;
         }
-    },
+     }
+   },
     methods:{
       openSelfInfo(){
       },
@@ -153,6 +137,9 @@
   }
 </script>
 <style>
+i{
+  font-size:20px;
+}
 .el-container{
   background-color:white ;
 }
@@ -167,11 +154,23 @@
     box-shadow: 0 2px 12px 5 rgba(0, 0, 0, 0.1);
     vertical-align:middle;
   }
+  .el-row{
+    cursor:pointer;
+  }
+  .system-header{
+      font-size:13px;
+      color:white;
+      text-align:right;
+      height:60px;
+      line-height:60px;
+      text-align:right;
+      padding:5px;
+      background-color:#409EFF;
+  }
   .el-img{
      border-radius:50%;
-     width:55px;
-     height:55px;
-     margin:2.5px;
+     width:30px;
+     height:30px;
      margin-right:10px;
      cursor:pointer;
   }
@@ -198,10 +197,19 @@
     padding-right:10px;
   }
   .el-system{
-    background-color: #409EFF;padding:5px;
+    background-color: #409EFF;
+    line-height:60px;
     font-size:20px;
     color:white;
+    height:60px;
     box-shadow: 0 2px 12px 5 rgba(0, 0, 0, 0.1);
 }
-  
+  .el-main{
+     vertical-align:middle;
+     border-left: 1px solid #eee;
+  }
+
+  el-header el-row el-col{
+    line-height:60px;
+  }
 </style>

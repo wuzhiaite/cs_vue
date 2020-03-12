@@ -12,12 +12,36 @@ import  {formatRoutes}  from  './menus-util';
 
 export default {
   name: 'app',
+  data(){
+    return {
+      screenHeight : document.body.clientHeight,
+      screenWidth : document.body.clientWidth,
+    }
+  },
   created(){
     this.login();
     this.menusInfo();
   },
+  mounted(){
+      const that = this
+      window.onresize = () => {
+          return (() => {
+              that.screenHeight = document.body.clientHeight;
+              that.screenWidth = document.body.clientWidth;
+          })()
+      }
+    },
+  watch:{
+    screenHeight:function(n,o){
+      this.setScreenHeight(n);
+    },
+    screenWidth:function(n,o){
+      this.setScreenWidth(n);
+    }
+  },
   methods:{  
     ...mapActions(['setUserAction','setSystemName']),
+    ...mapMutations(['setScreenHeight','setScreenWidth']),
     login(){
         var user= {
           userId : '20191227',
@@ -42,30 +66,7 @@ export default {
                     name:'通用台账配置',
                     iconCls:'el-icon-picture-outline-round',
                     realPath:'conf/page/PageList',
-                },{
-                    path :'/tableconf',
-                    name:'展示列表配置',
-                    iconCls:'el-icon-picture-outline-round',
-                    realPath:'conf/page/ConfTable',
-                },{
-                    path : '/comPageList/:id',
-                    name : '通用台账样例',
-                    iconCls:'el-icon-s-opportunity',
-                    realPath:'conf/page/ComPageList',
-                },
-                {
-                    path : '/comTable',
-                    name : '通用表单样例01',
-                    iconCls:'el-icon-s-release',
-                    realPath:'conf/form/ComTable',
-                },
-                {
-                    path : '/comform',
-                    name : '通用表单样例02',
-                    iconCls:'el-icon-s-order',
-                    realPath:'conf/form/ComFormExp01',
                 }]
-
           } ,
           {
             path:'/home',
@@ -83,7 +84,7 @@ export default {
                     path :'/graphExp02',
                     name:'统计图标样例02',
                     iconCls:'el-icon-tickets',
-                    realPath:'charts/Exp02',
+                    realPath:'conf/form/GrantPaper',
                 },
             ]  
           } 
@@ -99,6 +100,8 @@ export default {
 </script>
 <style>
 #app {
+  padding:0px;
+  margin:0px;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -108,5 +111,11 @@ export default {
   background-image: url();
   background-repeat: no-repeat;  
   background-size: 100% 100%;    
+}
+
+body{
+	margin: 0; 
+	padding: 0;
+	border: 0;
 }
 </style>

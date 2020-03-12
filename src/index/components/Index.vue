@@ -1,5 +1,6 @@
 <template>
   <div  class="main">
+    <div style="width:40%;height:10%;">
       <el-carousel :interval="4000" type="card" >
         <el-carousel-item v-for="(url,index) in urls" :key="index">
             <el-image :src="url">
@@ -9,6 +10,8 @@
             </el-image>
         </el-carousel-item>
       </el-carousel>
+    </div>
+      
   </div>  
 </template>
 <script>

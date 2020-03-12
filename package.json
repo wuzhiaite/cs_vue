@@ -19,6 +19,7 @@
     "lodash": "^4.17.15",
     "mand-mobile": "^2.5.5",
     "node-sass": "^4.13.0",
+    "pdfjs-dist": "^2.2.228",
     "qs": "^6.9.1",
     "sass-loader": "^8.0.0",
     "save": "^2.4.0",
