@@ -39,7 +39,7 @@
             </el-menu>
       </el-aside>
     
-      <el-container style="background-color:#eee;">  
+      <el-container style="background-color:#f6f6f6;">  
         <el-header class="system-header">
           <el-row>
             <el-col :span="2" >
@@ -56,7 +56,7 @@
                           :src="url" >
                       </el-image>
                   </span>
-                  <span>王小虎</span>
+                  <span style="font-size:14px;">王小虎</span>
                 </div>
             </el-col>
             <el-col :span="2">
@@ -148,7 +148,8 @@
 <style>
 .el-baber-title{
   line-height:50px;
-  border-left: 1px solid #eee;
+  border-left: 1px solid  #d9d9d9;
+  border-bottom:1px solid  #d9d9d9;
   background-color:white;
 }
 i{
