@@ -522,7 +522,7 @@ import ConfTable from './ConfTable';
                 pageDesignForm : this.pageDesignForm.form ,
                 pageParam : this.pageParam ,
             };  
-            this.post("/pagelist/savePageList",
+            this.$axios.post("/pagelist/savePageList",
                       temp)
                 .then(res => {
                     console.log(res);
@@ -544,7 +544,6 @@ import ConfTable from './ConfTable';
 <style scoped>
 .box-block {
     width: 100%;
-    position:relative;
     margin:0px;
 }
 .box-block div {

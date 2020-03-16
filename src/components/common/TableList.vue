@@ -9,7 +9,7 @@
         :default-sort="tableParam.defaultSort ?tableParam.defaultSort :{} "
         @sort-change="sortChange"
         @selection-change="handleSelectionChange"
-        :height="tableParam.height ? tableParam.height : height*0.7"
+        :height="tableParam.height ? tableParam.height : height*0.65"
         :max-height="tableParam.maxHeight ? tableParam.maxHeight : 1000 "
         @row-click="rowClick"
         style="width: 100%;height:100px;">

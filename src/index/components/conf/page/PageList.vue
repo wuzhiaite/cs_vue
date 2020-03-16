@@ -131,7 +131,7 @@
             highlightCurrentRow:true,//单行选择
             maxHeight:"1500",//最大高度
             multi:false,//是否为多选
-            height:'600px',
+            height:'500px',
             defaultSort:{//默认排序参数
               // prop: 'date', order: 'descending'
             },

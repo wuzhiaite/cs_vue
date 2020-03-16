@@ -2,8 +2,9 @@
 import G2 from  '@antv/g2'
 import {DataSet} from '@antv/data-set';
 import Vue from 'vue'
-import {get,post} from '../util/api'
 import * as lodash from 'lodash';
+import axios from 'axios'
+
 
 let ComBindPlugin = {};
 
@@ -13,8 +14,10 @@ ComBindPlugin.install = function(Vue,options){
     window.DataSet = DataSet;
     window.lodash = lodash;//注册使用lodash
     Vue.prototype.$lodash = lodash;//注册使用lodash
-    Vue.prototype.get = get;
-    Vue.prototype.post = post;
+    Vue.prototype.axios = axios;
+    Vue.prototype.$http = axios ;
+    axios.defaults.headers.post['Content-Type'] = 'application/json';
+    
 }
 
 Vue.use(ComBindPlugin);

@@ -128,8 +128,9 @@
             this.getTableData();
         },
         getTableData:function(){//获取表单数据
-            this.post(this.url,this.reqParam)
-                .then(res =>{
+            this.$axios.post(this.url,this.reqParam)
+                .then(result =>{
+                    var res = result.data;
                     if(res.code == 1){
                         if(this.pageParam.isPagination){
                              this.pagination =   res.result;
@@ -141,7 +142,11 @@
                         if(this.pageParam.events.initCallback){
                             this.pageParam.events.initCallback(res);
                         }  
-                          
+                    }else{
+                        this.$message({
+                            message : res.message,
+                            type: 'error',
+                        });
                     }   
                 });    
         },

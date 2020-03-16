@@ -13,8 +13,8 @@
                 <el-input type="password" v-model="loginForm.password"
                           auto-complete="off" placeholder="密码"></el-input>
               </el-form-item>
-              <el-checkbox class="login_remember" v-model="checked"
-                          label-position="left">记住密码</el-checkbox>
+              <!-- <el-checkbox class="login_remember" v-model="checked"
+                          label-position="left">记住密码</el-checkbox> -->
               <el-form-item style="width: 100%">
                 <el-button type="primary" style="width: 100%" @click="submit">登录</el-button>
               </el-form-item>
@@ -24,7 +24,7 @@
 </div>
 </template>
 <script>
- 
+ import {mapActions, mapMutations} from 'vuex';
 
   export default{
     data(){
@@ -35,7 +35,7 @@
         },
         checked: true,
         loginForm: {
-          username: 'admin',
+          username: 'root',
           password: '123'
         },
         loading: false,
@@ -51,10 +51,33 @@
       }
     },
     methods: {
+      ...mapActions(["setUserAction"]),
+      ...mapMutations(["setToken"]),
       submit: function () {
-        var path = this.$route.query.redirect;
-        this.$router
-              .replace({path: path == '/' || path == undefined ? '/index' : path});
+          localStorage.clear();
+          this.$axios.spost("/user/login",
+          {
+              username:this.loginForm.username,
+              password:this.loginForm.password,
+          }).then(result=>{
+              var res = result.data ;
+              if(res.code == 1){
+                  var result = res.result ;
+                  this.setToken(result.token);
+                  this.setUserAction(result.user);
+                  var path = this.$route.query.redirect;
+                  this.$router
+                        .replace({path: path == '/' || path == undefined ? '/index' : path});
+              }else{
+                  this.$message.error('登录失败，请检查你的账户密码是否正确！');
+              }
+
+
+          });
+
+
+
+        
       }
     }
   }
