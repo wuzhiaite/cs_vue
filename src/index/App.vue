@@ -12,44 +12,13 @@ import  {formatRoutes}  from  './menus-util';
 
 export default {
   name: 'app',
-  data(){
-    return {
-      // screenHeight : document.body.clientHeight,
-      // screenWidth : document.body.clientWidth,
-    }
-  },
   created(){
     this.login();
     this.menusInfo();
   },
-  mounted(){
-      // const that = this
-      // window.onresize = () => {
-      //     return (() => {
-      //         that.screenHeight = document.body.clientHeight;
-      //         that.screenWidth = document.body.clientWidth;
-      //     })()
-      // }
-    },
-  watch:{
-    // screenHeight:function(n,o){
-    //   this.setScreenHeight(n);
-    // },
-    // screenWidth:function(n,o){
-    //   this.setScreenWidth(n);
-    // }
-  },
   methods:{  
     ...mapActions(['setUserAction','setSystemName']),
-    // ...mapMutations(['setScreenHeight','setScreenWidth']),
     login(){
-        var user= {
-          userId : '20191227',
-          username : '罗小黑',
-          token : '987654321',
-          englishName:'cat luo',
-        };
-      this.setUserAction(user);
       var systemName = '通用配置系统';
       this.setSystemName(systemName);
     },

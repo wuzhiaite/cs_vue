@@ -56,7 +56,7 @@
                           :src="url" >
                       </el-image>
                   </span>
-                  <span style="font-size:14px;">王小虎</span>
+                  <span style="font-size:14px;">{{username}}</span>
                 </div>
             </el-col>
             <el-col :span="2">
