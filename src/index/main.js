@@ -25,15 +25,13 @@ new Vue({
 
 //页面跳转处理
 Vue.config.productionTip = false
-
+window.document.title = '配置管理系统';
 
 
 
 // router.js文件
 // 全局路由守卫，动态改变tille
 router.beforeEach((to, from, next) => {
-  window.document.title = to.meta.title || '配置管理系统';
-  console.log(to.path);
   if(store.state.token ){
     if(to.path === '/'){
       //登录状态下 访问login.vue页面 会跳到index.vue
@@ -64,8 +62,30 @@ Vue.use(VueAxiosPlugin, {
   },
   reqErrorFunc: error => Promise.reject(error),
   // 响应拦截处理
-  resHandleFunc: response => response,
-  resErrorFunc: error => Promise.reject(error)
+  resHandleFunc: response => {
+    return response ;
+  },
+  resErrorFunc: err => {
+    let message = "";
+    if (err.response.status == 504 || err.response.status == 404) {
+      message = '服务器被吃了⊙﹏⊙∥';
+    } else if (err.response.status == 403) {
+      message = '无访问权限，请先登录';
+      alert(message);
+      localStorage.setItem("token","");
+      router.push({path : "/"});
+    } else if (err.response.status == 401) {
+      message = err.response.data.msg ;
+    } else {
+      if (err.response.data.msg) {
+        message = err.response.data.msg;
+      }else{
+         message = '未知错误!' ;
+      }
+    }
+    alert(message);
+    return err ;
+  }
 });
 
 

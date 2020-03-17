@@ -55,14 +55,15 @@
       ...mapMutations(["setToken"]),
       submit: function () {
           localStorage.clear();
-          this.$axios.spost("/user/login",
+          this.$axios.post("/user/login",
           {
               username:this.loginForm.username,
               password:this.loginForm.password,
-          }).then(result=>{
-              var res = result.data ;
-              if(res.code == 1){
-                  var result = res.result ;
+          }).then(res =>{
+              var data = res.data ;
+              console.log(data);
+              if(data.code == 1){
+                  var result = data.result ;
                   this.setToken(result.token);
                   this.setUserAction(result.user);
                   var path = this.$route.query.redirect;

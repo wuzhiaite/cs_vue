@@ -532,7 +532,7 @@ import ConfTable from './ConfTable';
                 })
         },
         getFormData : function(){//根据id获取表单的数据
-             this.post("/pagelist/addOrModifyPageList",
+             this.$axios.post("/pagelist/addOrModifyPageList",
                       {id:this.id})
                 .then(res => {
                     console.log(res);

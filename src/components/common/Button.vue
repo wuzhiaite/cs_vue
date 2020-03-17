@@ -1,13 +1,13 @@
 <template>
     <span >
-        <el-button   
+        <el-button  
+            size="mini"
             :id="btn.id ? btn.id : 0 "
             :type="btn.type ? btn.type : 'primary'" 
             :icon=" btn.icon ? btn.icon : '' " 
             :disabled="btn.disabled ? btn.disabled : false"
             @click="btn.click ? btn.click() : null"
             @hover="btn.hover ? btn.hover() : null "
-            :size="btn.size ? btn.size : 'mini'"
             :circle="btn.style && JSON.stringify(btn.style).indexOf('circle') != -1 ? true : false"
             :plain="btn.style && JSON.stringify(btn.style).indexOf('plain') != -1  ? true : false"
             :round="btn.style && JSON.stringify(btn.style).indexOf('round') != -1  ? true : false"
