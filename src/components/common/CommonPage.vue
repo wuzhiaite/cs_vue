@@ -8,7 +8,7 @@
                                 : '请输入内容' "
             :clearable=" pageParam.searchParam && pageParam.searchParam.clearable 
                                 ? pageParam.searchParam.clearable : true"
-            size="small"
+            size="mini"
             :maxlength="pageParam.searchParam && pageParam.searchParam.maxlength
                                     ? pageParam.searchParam.maxlength : 1000"
             :prefix-icon="pageParam.searchParam && pageParam.searchParam.icon 
@@ -99,6 +99,7 @@
               name : '查询',
               type : 'primary',
               icon : 'el-icon-search',
+              size: 'mini',
               disabled : false,
               click : function(){
                  that.doSearch();   

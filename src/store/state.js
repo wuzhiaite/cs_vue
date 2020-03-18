@@ -1,7 +1,7 @@
 export default {
     //正在登录的用户名
     username : localStorage.getItem("username") 
-                ? localStorage.getItem("username") : '如花',
+                ? localStorage.getItem("username") : '',
     token :  localStorage.getItem("token") 
                      ? localStorage.getItem("token") : '',                       
     //系统名称

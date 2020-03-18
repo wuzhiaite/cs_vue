@@ -228,13 +228,7 @@ import ConfTable from './ConfTable';
                         that.getSearchInfo();
                     }
                  }]
-            this.sqlForm.form = {
-                'SEARCH_SQL' :  "SELECT  SL.BH "
-                 + ",SL.B_DWMC,SL.ZT,,RWQX，JBXX.XH AS LADJXH ,LCXX.BZMC , CASE WHEN LCXX.YWZT ='Finished' THEN '已结束' WHEN LCXX.YWZT ='Underway' THEN '正在办理' END AS YWZT  FROM T_XZCF_JBXX JBXX JOIN (SELECT distinct SL.BH" 
-                 + ",SL.B_DWMC,SL.YWZT,BZDY.BZMC,RWQX FROM T_WORKFLOW_GZLCSL SL" 
-                 + "LEFT JOIN (SELECT LCSLBH,BZDYBH FROM T_WORKFLOW_DQBZ WHERE SFZB != 'READER' GROUP BY LCSLBH,BZDYBH) DQBZ "
-                 + "ON DQBZ.LCSLBH = SL.BH"	,
-					  }     
+               
         },
         btnConfirm : function(form){
             var that = this;
@@ -463,8 +457,8 @@ import ConfTable from './ConfTable';
             var filedArr = [];
             for(var i in tempArr){
                 var temp = tempArr[i].trim();
-                if(temp.length == 0)continue;
-                if(temp.indexOf('AS') != -1){
+                if( temp.length == 0 ) continue;
+                if( temp.indexOf('AS') != -1 && temp.indexOf(' ') != -1 ){
                     temp = temp.substring(temp.lastIndexOf('AS') + 2);
                     filedArr.push(temp.trim());
                 }else if(temp.indexOf('.') != -1 ){
@@ -501,7 +495,7 @@ import ConfTable from './ConfTable';
             str = str.substring(1) ;
             this.dialog.pageList.title = this.pageDesignForm.form.CONFIG_NAME ;
             var tableParam = this.pageDesignForm.form.tableParam ;
-            tableParam.initData = {
+            var initData = {
                url : this.pageDesignForm.form.REQUES_URL,
                params : this.pageDesignForm.form.INIT_PARAM,
             };
@@ -512,30 +506,71 @@ import ConfTable from './ConfTable';
                     conditions:this.pageDesignForm.form.SEARCH_CONDITIONS,//高级查询项
                     btns:this.pageDesignForm.form.CONFIG_BTNS,//按钮
                     tableParam : tableParam, //表单参数
+                    initData : initData , //初始化数据
                 };
-            console.log(this.pageParam);
+            
+
             this.bol.isPageList = true ;  
-            var temp = {
+            var detail = {
+                ID : this.pageDesignForm.form.id ,
+                SEARCH_SQL : this.sqlForm.form.SEARCH_SQL ,
+                SHOW_COLUMNS : this.pageDesignForm.form.SHOW_COLUMNS,
+                CONFIG_NAME:this.pageDesignForm.form.CONFIG_NAME,
+                SEARCH_FILEDS : this.pageDesignForm.form.SEARCH_COLUMNS,
+                CONDITION_FILEDS : this.pageDesignForm.form.SEARCH_CONDITIONS,
+            };
+            var param = {
                 id: this.id,
                 sqlForm: this.sqlForm.form,
                 columnForm : this.tempForm,
                 pageDesignForm : this.pageDesignForm.form ,
                 pageParam : this.pageParam ,
-            };  
-            this.$axios.post("/pagelist/savePageList",
-                      temp)
-                .then(res => {
-                    console.log(res);
-                    that.bol.savePageList = true ;
+                detail : detail ,
+            }; 
 
-                    
+            console.log(JSON.stringify(param)); 
+            this.$axios.post("/pagelist/savePageList",
+                      param)
+                .then(res => {
+                     if(res.status == 200 ){
+                         if(res.data.result == 2){
+                             this.message({
+                                message: '保存成功' ,
+                                type : 'success'
+                            });
+                         }else{
+                            this.message({
+                                message: '请点击保存重试' ,
+                                type : 'warning'
+                            });  
+                         }
+                     }else{
+                         this.message({
+                            message:result.message ,
+                            type : 'error'
+                        });
+                     }
+                    // that.bol.savePageList = true ;
                 })
         },
         getFormData : function(){//根据id获取表单的数据
-             this.$axios.post("/pagelist/addOrModifyPageList",
-                      {id:this.id})
+             this.$axios.post("/pagelist/pageconfig/"+this.id)
                 .then(res => {
-                    console.log(res);
+                    if(res.status == 200 ){
+                         var result = res.data.result;  
+                         if(result){
+                            this.sqlForm = result.sqlForm ;
+                            this.pageDesignForm = result.pageDesignForm ;
+                            this.columnForm = result.columnForm ;
+                            this.tableForm = result.tableForm ;
+                            this.btnForm = result.btnForm ; 
+                         }e
+                    }else{
+                        this.message({
+                            message:result.message ,
+                            type : 'error'
+                        });
+                    }
                 })
         },
     }

@@ -1,7 +1,7 @@
 <template>
     <span >
         <el-button  
-            size="mini"
+            :size="btn.size ? btn.size : 'mini' "
             :id="btn.id ? btn.id : 0 "
             :type="btn.type ? btn.type : 'primary'" 
             :icon=" btn.icon ? btn.icon : '' " 
@@ -28,9 +28,13 @@
 
 
 </script>
-<style scoped>
+<style >
 
-
+.el-button--mini{
+    padding:4px 10px;
+    font-size:12px;
+    border-radius:3px;
+}
 
 
 </style>

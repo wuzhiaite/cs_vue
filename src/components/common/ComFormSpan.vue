@@ -72,7 +72,7 @@
                   style="float:left;"
                   v-model="form[item.prop]" 
                   size="mini">
-              <span v-if="item.events&&item.events.addClick" style="margin-right:0px;">
+              <span v-if="item.events&&item.events.addClick" style="margin:0px;">
                   <el-button type="primary" 
                       size="mini"
                       style="float:left;margin:0px;"

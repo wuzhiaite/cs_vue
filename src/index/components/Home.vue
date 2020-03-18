@@ -146,6 +146,12 @@
   }
 </script>
 <style>
+.el-button--mini{
+    padding:4px 10px;
+    font-size:12px;
+    border-radius:3px;
+}
+
 .el-baber-title{
   line-height:50px;
   border-left: 1px solid  #d9d9d9;

@@ -9,7 +9,7 @@ import router from './routers/ConfigRouter';
 import '../plugin/ComBindPlugin';
 import '../plugin/index';
 import VueDraggable from 'vue-draggable'
-import VueAxiosPlugin from 'vue-axios-plugin'
+import VueAxiosPlugin from 'vue-axios-plugin';
 
 
 Vue.use(VueDraggable);//可拖动动画
@@ -70,9 +70,11 @@ Vue.use(VueAxiosPlugin, {
     if (err.response.status == 504 || err.response.status == 404) {
       message = '服务器被吃了⊙﹏⊙∥';
     } else if (err.response.status == 403) {
-      message = '无访问权限，请先登录';
-      alert(message);
-      localStorage.setItem("token","");
+      ElementUI.Message({
+        message: '无访问权限，请先登录',
+        type: 'error'
+      });
+      localStorage.setItem("token","");//本地保存的token设置为空
       router.push({path : "/"});
     } else if (err.response.status == 401) {
       message = err.response.data.msg ;
@@ -83,7 +85,10 @@ Vue.use(VueAxiosPlugin, {
          message = '未知错误!' ;
       }
     }
-    alert(message);
+    ElementUI.Message({
+        message: message,
+        type: 'warning'
+    });
     return err ;
   }
 });
