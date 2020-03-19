@@ -65,16 +65,17 @@ import {mapGetters} from 'vuex';
              multipleSelection:[],
          }   
     },
-    data(){
-        return {
-            loading : true, 
-            flag:false,
+    watch:{
+        tableData:{
+            deep:true,
+            immediate:true,
+            handler:function(n,o){
+                console.log(n);
+            }  
         }
     },
-    watch:{
-        tableData:function(n,o){
-            console.log(this.tableData);
-        }
+    created:function(){
+        console.log(this.tableData);
     },
     computed:{
         ...mapGetters({height:'getScreenHeight',width:'getScreenWidth'}),

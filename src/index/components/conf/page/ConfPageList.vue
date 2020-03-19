@@ -135,7 +135,7 @@ import ConfTable from './ConfTable';
         this.initBtn();//初始化主按钮
         this.initSqlForm();//初始化SQL表单
         this.initPageDesignForm();//初始化配置设计页面,
-        this.getFormData();//根据id判断是否存在配置页面，如果存在则进行数据回写，如果没有，则不用管
+        // this.getFormData();//根据id判断是否存在配置页面，如果存在则进行数据回写，如果没有，则不用管
     },
     watch:{
         sqlForm:{
@@ -508,49 +508,49 @@ import ConfTable from './ConfTable';
                     tableParam : tableParam, //表单参数
                     initData : initData , //初始化数据
                 };
-            
-
-            this.bol.isPageList = true ;  
             var detail = {
-                ID : this.pageDesignForm.form.id ,
+                ID : this.id ,
                 SEARCH_SQL : this.sqlForm.form.SEARCH_SQL ,
-                SHOW_COLUMNS : this.pageDesignForm.form.SHOW_COLUMNS,
-                CONFIG_NAME:this.pageDesignForm.form.CONFIG_NAME,
-                SEARCH_FILEDS : this.pageDesignForm.form.SEARCH_COLUMNS,
-                CONDITION_FILEDS : this.pageDesignForm.form.SEARCH_CONDITIONS,
+                SHOW_COLUMNS : JSON.stringify(this.pageDesignForm.form.SHOW_COLUMNS),
+                CONFIG_NAME: this.pageDesignForm.form.CONFIG_NAME,
+                SEARCH_FILEDS : JSON.stringify(this.pageDesignForm.form.SEARCH_COLUMNS),
+                CONDITION_FILEDS : JSON.stringify(this.pageDesignForm.form.SEARCH_CONDITIONS),
             };
-            var param = {
-                id: this.id,
-                sqlForm: this.sqlForm.form,
-                columnForm : this.tempForm,
-                pageDesignForm : this.pageDesignForm.form ,
-                pageParam : this.pageParam ,
-                detail : detail ,
+            var form = {
+                ID: this.id,
+                SQL_FORM: JSON.stringify(this.sqlForm.form),
+                COLUMN_FORM : JSON.stringify(this.tempForm),
+                PAGE_DESIGN_FORM : JSON.stringify(this.pageDesignForm.form)  ,
+                PAGE_PARAM : JSON.stringify(this.pageParam) ,
             }; 
-
+            var param = {
+                FORM : form ,
+                DETAIL : detail
+            }
             console.log(JSON.stringify(param)); 
             this.$axios.post("/pagelist/savePageList",
                       param)
                 .then(res => {
                      if(res.status == 200 ){
                          if(res.data.result == 2){
-                             this.message({
+                             this.$message({
                                 message: '保存成功' ,
                                 type : 'success'
                             });
                          }else{
-                            this.message({
+                            this.$message({
                                 message: '请点击保存重试' ,
                                 type : 'warning'
                             });  
                          }
+                         that.bol.savePageList = true ;
                      }else{
-                         this.message({
+                         this.$message({
                             message:result.message ,
                             type : 'error'
                         });
                      }
-                    // that.bol.savePageList = true ;
+                    
                 })
         },
         getFormData : function(){//根据id获取表单的数据

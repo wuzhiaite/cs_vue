@@ -25,9 +25,8 @@
                 :show="show"></Conditions> 
      </div>  
      <!-- 列表页面 -->
-    <div v-loading="!flag">
+    <div v-loading="flag">
         <TableList 
-            v-if="flag"
             :tableParam="pageParam.tableParam" 
             :tableData="tableData"
             ></TableList>
@@ -64,6 +63,7 @@
           } ,
           flag:false ,
           pagination:{},    
+          tableData:[],
       }
     },
     props:{
@@ -129,17 +129,18 @@
             this.getTableData();
         },
         getTableData:function(){//获取表单数据
+            this.flag = true;
             this.$axios.post(this.url,this.reqParam)
                 .then(result =>{
                     var res = result.data;
                     if(res.code == 1){
+                       
                         if(this.pageParam.isPagination){
-                             this.pagination =   res.result;
+                             this.pagination = res.result;
                              this.tableData = res.result.list; 
                         }else{
                              this.tableData = res.result;     
-                        }
-                        this.flag = true;   
+                        }   
                         if(this.pageParam.events.initCallback){
                             this.pageParam.events.initCallback(res);
                         }  
@@ -148,7 +149,8 @@
                             message : res.message,
                             type: 'error',
                         });
-                    }   
+                    } 
+                    this.flag = false;  
                 });    
         },
         handleSizeChange : function(val) {//pageSize调整
