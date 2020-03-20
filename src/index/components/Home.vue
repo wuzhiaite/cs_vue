@@ -60,7 +60,7 @@
                 </div>
             </el-col>
             <el-col :span="2">
-              <div class="grid-content bg-purple">
+              <div class="grid-content bg-purple" @click="logout">
                  <i class="el-icon-switch-button"/>
                 退出登录
               </div>
@@ -141,6 +141,13 @@
       },
       handleClose(key, keyPath) {
         console.log(key, keyPath);
+      },
+      logout(){
+        localStorage.setItem("token","");
+        localStorage.setItem("username","");
+        localStorage.setItem("systemName","");
+        localStorage.setItem("user","");
+        this.$router.push({path:"/"});
       }
     }
   }

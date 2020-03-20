@@ -20,7 +20,7 @@
 </div>        
 </template>
 <script>
-
+import {format} from '../../../../util/base/commonUtil';
 
  export default {
     data(){
@@ -36,7 +36,8 @@
             isView:false,
             pageParam:{}
         },
-        dialog:{}
+        dialog:{},
+        tempArr:[],
       }
     },
     created(){
@@ -44,7 +45,7 @@
       this.initPageParam();
       this.initForm();
       this.initDialog();
-    }, 
+    },
     methods:{
       onSubmit() {
           console.log('submit!');
@@ -55,6 +56,7 @@
         }
       },
       initForm : function(){
+          var that = this;
           var formItems = [{
                 prop:'CONFIG_NAME',
                 label:'台账名称:',
@@ -62,15 +64,19 @@
             },{
                 prop:'SEARCH_FILEDS',
                 label:'查询条件:',
-                type:'input',
+                multiple:true,
+                type:'select',
+                options:that.tempArr,
               },{
                 prop:'CONDITION_FILEDS',
                 label:'高级查询:',
-                type:'input',
+                type:'conditions',
               },{
-                prop:'COLUMN_FILEDS',
+                prop:'SHOW_COLUMNS',
                 label:'展示列:',
-                type:'input',
+                multiple:true,
+                type:'select',
+                options:that.tempArr
               },{
                 prop:'SEARCH_SQL',
                 label:'查询SQL:',
@@ -110,7 +116,19 @@
                 events : {
                    initCallback : function(response){
                         if(response.result.list.length > 0){
-                           that.formStyle.form = response.result.list[0] ;
+                           var columnForm = response.result.list[0].COLUMN_FORM ;
+                           var options = JSON.parse(columnForm); 
+                           var arr = [] ;
+                           for(var i in options){
+                             var obj = {
+                               value : i ,
+                               label : options[i] ,
+                             };
+                             arr.push(obj);  
+                           }
+                          that.tempArr = arr ;
+                          that.formStyle.form = format.formatJSON(response.result.list[0]);
+                          console.log( that.formStyle.form );
                         }else{
                           that.formStyle.form = {};
                         }
@@ -141,18 +159,20 @@
             columns:[{
                 prop : "CONFIG_NAME",
                 label : "台账名称",
-                width : "10"
+                width : "10",
+                fixed : 'left' ,
              },{
                 prop : "",
                 label : "台账预览",
                 width : "10",
+                fixed : 'right' ,
                 opers:[
                   {
                     name:"台账预览",
                     type:'text',
                     icon : 'el-icon-view',
                     click:function(row){
-                      that.viewParam.pageParam = JSON.parse(row.FORM_DESIGN) ;
+                      that.viewParam.pageParam = JSON.parse(row.PAGE_PARAM) ;
                       that.dialog.title = row.CONFIG_NAME;
                       that.viewParam.isView = true;
                     }
@@ -184,13 +204,13 @@
              }],
              events:{
                 rowClick : function(row, column, event){
-                  that.formStyle.form = row ;
+                  that.formStyle.form =  format.formatJSON(row);
                 },
              },
             
           }
 
-      }
+      },
     }
 
  }

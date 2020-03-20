@@ -486,6 +486,12 @@ import ConfTable from './ConfTable';
             }
             //模糊查询列
             var columns = this.pageDesignForm.form.SEARCH_COLUMNS ;
+            if(!columns){
+                this.$message({
+                    type:'error',
+                    message:'请选择展示列'
+                });
+            }
             var str = '';
             for(var i in columns){
                 var column = columns[i] ;

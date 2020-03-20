@@ -43,6 +43,7 @@
               <Conditions :conditions="form[item.prop]">
                 <span slot="footer"
                       slot-scope="data"
+                      v-if="item.events"
                       style="opacity:0.6;font-size:10px;cursor:pointer;">
                   <span  @click="item.events.editBtn(data.index)">编辑</span>
                     &nbsp;&nbsp;|&nbsp;&nbsp;
@@ -50,6 +51,7 @@
                 </span>
               </Conditions>
               <el-button type="primary" 
+                v-if="item.events && item.events.editBtn"
                 size="mini"
                 style="float:right;margin-top:5px;"
                 icon="el-icon-edit-outline" 

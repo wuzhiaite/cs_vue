@@ -25,7 +25,7 @@
             :filters="item.filters ? item.filters : null"
             :filter-method="item.filters ? item.filterTag : null "
             :formatter="item.formatter ? item.formatter : null"> 
-            <template slot-scope="scope" >   
+            <template slot-scope="scope" v-if="item.isShow ? item.isShow : true ">   
                 <!-- 普通数据渲染 -->
                  <i v-if="item.icon" :class="item.icon"></i>
                  <span v-if="item.prop&&!item.types" style="margin-left: 10px"> {{scope.row[item.prop]}}</span>   
@@ -64,18 +64,6 @@ import {mapGetters} from 'vuex';
          callbackParam:{
              multipleSelection:[],
          }   
-    },
-    watch:{
-        tableData:{
-            deep:true,
-            immediate:true,
-            handler:function(n,o){
-                console.log(n);
-            }  
-        }
-    },
-    created:function(){
-        console.log(this.tableData);
     },
     computed:{
         ...mapGetters({height:'getScreenHeight',width:'getScreenWidth'}),
