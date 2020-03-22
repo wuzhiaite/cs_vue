@@ -107,7 +107,7 @@ import {format} from '../../../../util/base/commonUtil';
                   }
                 }],
                 initData:{
-                  url:'/pagelist/getpagelist',
+                  url:'/api/pagelist/getpagelist',
                   params:{
                     "pageNum":1,
                     "pageSize":10,

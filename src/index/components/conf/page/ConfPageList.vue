@@ -263,6 +263,7 @@ import ConfTable from './ConfTable';
             }
             that.bol.isQualityPage = false;
         },
+
         confTableConfirm:function(form){//展示列配置
            this.pageDesignForm.form.tableParam = form ;
            var columns = form.columns ; 
@@ -534,7 +535,7 @@ import ConfTable from './ConfTable';
                 DETAIL : detail
             }
             console.log(JSON.stringify(param)); 
-            this.$axios.post("/pagelist/savePageList",
+            this.$axios.post("/api/pagelist/savePageList",
                       param)
                 .then(res => {
                      if(res.status == 200 ){
@@ -560,7 +561,7 @@ import ConfTable from './ConfTable';
                 })
         },
         getFormData : function(){//根据id获取表单的数据
-             this.$axios.post("/pagelist/pageconfig/"+this.id)
+             this.$axios.post("/api/pagelist/pageconfig/"+this.id)
                 .then(res => {
                     if(res.status == 200 ){
                          var result = res.data.result;  

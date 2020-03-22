@@ -55,7 +55,7 @@
       ...mapMutations(["setToken"]),
       submit: function () {
           localStorage.clear();
-          this.$axios.post("/user/login",
+          this.$axios.post("/api/user/login",
           {
               username:this.loginForm.username,
               password:this.loginForm.password,

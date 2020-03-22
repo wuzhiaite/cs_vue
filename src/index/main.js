@@ -55,6 +55,7 @@ Vue.use(VueAxiosPlugin, {
   // 请求拦截处理
   reqHandleFunc: config =>{
     let token = store.state.token;
+    console.log(token);
     if (token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
         config.headers.Authorization = "Bearer "+token;
     }

@@ -35,7 +35,12 @@ module.exports = {
     },
     devServer : { //代理
         port : 9876,
-        proxy: "http://127.0.0.1:8001"
+        proxy: {
+            '/api': {
+                ws: false,
+                target:'http://127.0.0.1:8002'
+            }
+        }
     },
     pages : {
         index : {           
