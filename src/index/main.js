@@ -10,6 +10,13 @@ import '../plugin/ComBindPlugin';
 import '../plugin/index';
 import VueDraggable from 'vue-draggable'
 import VueAxiosPlugin from 'vue-axios-plugin';
+import filters from '../util/com-filter';//通用filter
+
+//全局filter注册
+Object.keys(filters).forEach(key => {
+    Vue.filter(key, filters[key])
+})
+
 
 
 Vue.use(VueDraggable);//可拖动动画

@@ -38,28 +38,6 @@ export const dateFormat = {
 
 }
 
-//字符串转换通用方法
-export const strFormat = {
-    convertStockcode: function(data){//股票代码进行转换
-        var index = data.lastIndexOf(".");
-        var preStr = data.substring(0,index);
-        var subStr = data.substring(index + 1);
-        var temp = '';
-        switch(subStr){
-            case 'HK': temp = 'E' ; break;
-            case 'SZ': temp = 'A' ; break;
-        }
-        return temp + preStr;
-    }
-
-
-
-
-
-
-
-}
-
 
 
 
