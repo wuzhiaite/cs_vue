@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="chart">
       <div class="quarter-div" >
         <BarGraph></BarGraph>
       </div>
@@ -33,14 +33,16 @@ export default {
 
 }
 </script>
-<style>
-*{
+<style scoped>
+.chart{
   margin: 0;
   padding: 0;
+  background-color:white;
+  overflow:hidden;
 }
-.main{
+.chart{
   width: 80%;
-  height: 80%;
+  height: 75%;
   position: absolute;
 }
 .quarter-div{

@@ -11,16 +11,17 @@ import '../plugin/index';
 import VueDraggable from 'vue-draggable'
 import VueAxiosPlugin from 'vue-axios-plugin';
 import filters from '../util/com-filter';//通用filter
+import '../util/base/commonUtil';
+
+
+Vue.use(VueDraggable);//可拖动动画
+Vue.use(ElementUI);
+
 
 //全局filter注册
 Object.keys(filters).forEach(key => {
     Vue.filter(key, filters[key])
 })
-
-
-
-Vue.use(VueDraggable);//可拖动动画
-Vue.use(ElementUI);
 
 
 new Vue({
@@ -33,8 +34,6 @@ new Vue({
 //页面跳转处理
 Vue.config.productionTip = false
 window.document.title = '配置管理系统';
-
-
 
 // router.js文件
 // 全局路由守卫，动态改变tille
@@ -62,7 +61,6 @@ Vue.use(VueAxiosPlugin, {
   // 请求拦截处理
   reqHandleFunc: config =>{
     let token = store.state.token;
-    console.log(token);
     if (token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
         config.headers.Authorization = "Bearer "+token;
     }

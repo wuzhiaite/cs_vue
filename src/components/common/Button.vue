@@ -24,6 +24,31 @@
             required:false
         }
     },
+    watch:{
+        btn:{
+            deep:true,
+            immediate:true,
+            handler(n,o){
+                if(n && n.events){
+                    console.log(n.events);
+                    var events = n.events ;
+                    var click = JSON.parse(str,function(k,v){
+                            if(v.indexOf && v.indexOf('function') > -1){
+                            return eval("(function(){return "+v+" })()")
+                            }
+                            return v;
+                        });
+
+                    
+                    // var events = JSON.parse(n.events) ;
+                    // this.btn.click = events.click ;
+                    // this.btn.hover = events.hover ;
+                }    
+
+
+            }
+        }
+    }
  }
 
 

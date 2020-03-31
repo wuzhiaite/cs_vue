@@ -47,12 +47,15 @@ import {format} from '../../../../util/base/commonUtil';
       this.initDialog();
     },
     methods:{
-      onSubmit() {
-          console.log('submit!');
-      },
       initDialog : function(){
+          var that = this ;
           this.dialog = {
-            width : '80%'
+            width : '80%',
+            events:{
+              closed:function(){//关闭页面后，页面重新初始化
+                  that.viewParam.pageParam = {};
+              }
+            }
         }
       },
       initForm : function(){
@@ -88,6 +91,10 @@ import {format} from '../../../../util/base/commonUtil';
           this.formStyle.formDesign = {
               disabled:true,  
               formItems : formItems,
+              form:{
+                CONDITION_FILEDS:[],   
+              }
+
           }
        },
       initPageParam : function(){
@@ -137,7 +144,28 @@ import {format} from '../../../../util/base/commonUtil';
            }
       },
       handleDelete:function(row){
-         alert(JSON.stringify(row));
+         this.$confirm("请确定是否要删除？")
+          .then(()=>{
+               this.$axios
+                  .post("/api/pagelist/deletepage/"+row.ID)
+                    .then(res => {
+                        if(res.status == 200 && res.data.result == 2){
+                            this.$message({
+                              type:"success",
+                              message:"删除成功"
+                            });
+                            setTimeout(function(){
+                               window.location.reload();
+                            },500);
+                        }else{
+                          this.$message({
+                            type:"error",
+                            message:'删除失败，请稍后重试！！！'
+                          });
+                        }
+                    });
+          });
+         
       },
       handleEdit : function(row){
            alert(JSON.stringify(row));

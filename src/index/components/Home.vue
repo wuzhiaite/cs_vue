@@ -73,7 +73,7 @@
               <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
             </el-breadcrumb>
          </el-header> 
-         <div style="overflow-y:auto;">
+         <div style="overflow-y:auto;overflow-x:auto;">
             <el-main>
                 <keep-alive>
                     <router-view />
@@ -92,7 +92,7 @@
     name:'home',
     data() {
       return {
-        collapse: false,
+        collapse: true,
         url: '',
         srcList: [],
         screenHeight : document.body.clientHeight,

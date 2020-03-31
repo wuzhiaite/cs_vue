@@ -38,7 +38,7 @@ module.exports = {
         proxy: {
             '/api': {
                 ws: false,
-                target:'http://127.0.0.1:8002'
+                target:'http://127.0.0.1:8001'
             }
         }
     },

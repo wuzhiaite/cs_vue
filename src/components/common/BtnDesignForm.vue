@@ -36,7 +36,7 @@ export default {
                  }else{
                      this.data = { 
                         id: (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
-                        events:"{\n\tclick:function(){\n\n\n\n\t},\n\thover:function(){\n\n\n\n\t}\n}",
+                        events:'{\n"click":function(){\n\n\n\n\t},\n"hover":function(){\n\n\n\n\t}\n}',
                     }
                 }  
                 this.initForm(); 

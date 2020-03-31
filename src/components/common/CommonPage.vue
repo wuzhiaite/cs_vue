@@ -84,8 +84,20 @@
       Buttons,
       Conditions,
     },
+    watch:{
+        pageParam:{
+            deep:true,
+            immediate:true,
+            handler(n,o){
+                if(n != o){
+                    this.addQualitySearch();
+                    this.$nextTick();
+                }  
+            }
+        }
+    },
     created(){
-        this.addQualitySearch();//判断是否有高级查询需求 
+        // this.addQualitySearch();//判断是否有高级查询需求 
         this.initData();//初始化数据
     },
     methods:{
@@ -94,6 +106,7 @@
             this.getTableData(); 
         },
         addQualitySearch:function(){//增加高级查询,和普通查询
+          console.log("addQualitySearch");
           var that = this;
           var selectBtn = {
               name : '查询',
@@ -124,7 +137,13 @@
             }
         },
         initData:function(){//初始化渲染数据
-            this.reqParam = this.pageParam.initData.params;
+            var param = this.pageParam.initData.params ;
+            var flag = this.isJSON(param);
+            if(flag){
+                this.reqParam = JSON.parse(param) ;
+            }else{
+                this.reqParam = param ;
+            }      
             this.url = this.pageParam.initData.url;
             this.getTableData();
         },
@@ -134,14 +153,13 @@
                 .then(result =>{
                     var res = result.data;
                     if(res.code == 1){
-                       
                         if(this.pageParam.isPagination){
                              this.pagination = res.result;
                              this.tableData = res.result.list; 
                         }else{
                              this.tableData = res.result;     
                         }   
-                        if(this.pageParam.events.initCallback){
+                        if(this.pageParam.events && this.pageParam.events.initCallback){
                             this.pageParam.events.initCallback(res);
                         }  
                     }else{

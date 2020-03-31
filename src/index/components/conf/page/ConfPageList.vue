@@ -181,7 +181,7 @@ import ConfTable from './ConfTable';
                     icon : 'el-icon-back',
                     disabled : false,
                     click : function(){
-                        that.$router.go(-1);
+                        that.$router.replace({path:'/pagelist'});
                     }
                },
                 {
@@ -431,11 +431,11 @@ import ConfTable from './ConfTable';
             }
             this.pageDesignForm.form = {
                 SHOW_COLUMNS:[],
-                INIT_PARAM:"{\n\tpageNum:1,\n\tpageSize:10,\n}",
+                INIT_PARAM:'{\n\t"pageNum":1,\n\t"pageSize":10\n}',
                 CONFIG_BTNS:[],
                 SEARCH_CONDITIONS:[],
                 SEARCH_COLUMNS:[],
-                REQUES_URL:"/pagelist/commonpage/"+this.id,
+                REQUES_URL:"/api/pagelist/commonpage/"+this.id,
             }
         },
         getSearchInfo : function(){//获取数据
@@ -534,12 +534,12 @@ import ConfTable from './ConfTable';
                 FORM : form ,
                 DETAIL : detail
             }
-            console.log(JSON.stringify(param)); 
             this.$axios.post("/api/pagelist/savePageList",
                       param)
                 .then(res => {
                      if(res.status == 200 ){
                          if(res.data.result == 2){
+                             that.bol.savePageList = true ;
                              this.$message({
                                 message: '保存成功' ,
                                 type : 'success'
@@ -550,10 +550,9 @@ import ConfTable from './ConfTable';
                                 type : 'warning'
                             });  
                          }
-                         that.bol.savePageList = true ;
                      }else{
                          this.$message({
-                            message:result.message ,
+                            message:res.data.result.message ,
                             type : 'error'
                         });
                      }

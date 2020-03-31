@@ -80,7 +80,8 @@ import {mapGetters} from 'vuex';
             return row.tag === value;
        },
        rowClick:function(row, column, event){
-           if(this.tableParam.events.rowClick){
+           if(this.tableParam.events 
+                        && this.tableParam.events.rowClick){
                this.tableParam.events.rowClick(row,column,event)
            }
        }
