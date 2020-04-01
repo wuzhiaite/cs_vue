@@ -135,7 +135,7 @@ import ConfTable from './ConfTable';
         this.initBtn();//初始化主按钮
         this.initSqlForm();//初始化SQL表单
         this.initPageDesignForm();//初始化配置设计页面,
-        // this.getFormData();//根据id判断是否存在配置页面，如果存在则进行数据回写，如果没有，则不用管
+        this.getFormData();//根据id判断是否存在配置页面，如果存在则进行数据回写，如果没有，则不用管
     },
     watch:{
         sqlForm:{
@@ -565,12 +565,12 @@ import ConfTable from './ConfTable';
                     if(res.status == 200 ){
                          var result = res.data.result;  
                          if(result){
-                            this.sqlForm = result.sqlForm ;
-                            this.pageDesignForm = result.pageDesignForm ;
-                            this.columnForm = result.columnForm ;
-                            this.tableForm = result.tableForm ;
-                            this.btnForm = result.btnForm ; 
-                         }e
+                            this.sqlForm.form = JSON.parse(result.SQL_FORM) ;
+                            this.tempForm = JSON.parse(result.COLUMN_FORM);
+                            this.columnForm.form = this.tempForm ;
+                            this.pageDesignForm.form = this.formatJSON(result.PAGE_DESIGN_FORM);
+                            this.pageParam = this.formatJSON(result.PAGE_PARAM);
+                         }
                     }else{
                         this.message({
                             message:result.message ,

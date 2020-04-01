@@ -168,7 +168,7 @@ import {format} from '../../../../util/base/commonUtil';
          
       },
       handleEdit : function(row){
-           alert(JSON.stringify(row));
+          this.$router.push({path:`/confPageList/`+row.ID});
       },
       initTable : function(){
           var that = this;
