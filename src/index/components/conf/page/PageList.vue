@@ -135,7 +135,6 @@ import {format} from '../../../../util/base/commonUtil';
                            }
                           that.tempArr = arr ;
                           that.formStyle.form = format.formatJSON(response.result.list[0]);
-                          console.log( that.formStyle.form );
                         }else{
                           that.formStyle.form = {};
                         }

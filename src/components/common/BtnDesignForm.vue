@@ -104,7 +104,7 @@ export default {
                             prop:'events',
                             label:'按钮脚本:',
                             type:'textarea',
-                            numbers:1000,
+                            numbers:2000,
                         }
                     ],
                 },

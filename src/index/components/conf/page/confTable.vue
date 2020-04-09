@@ -34,13 +34,7 @@
          tableForm:{},
          columnForm:{},
          btns:[],
-         activeNames:[],
-         form:{
-           border:true,
-           multi:true,
-           highlightCurrentRow:true,
-           columns:[],
-         }
+         activeNames:[]
       }
     },
     props:{
@@ -49,13 +43,24 @@
         required:true,
         type:Array,
       },
+      form:{
+        default:{
+           border:true,
+           multi:true,
+           highlightCurrentRow:true,
+           columns:[],
+         },
+         required:true,
+      }
     },
     watch:{
       tempArr : {
         deep:true,
         immediate:true,
         handler:function(n,o){
-          this.formateColumns();
+          if(!this.form){
+              this.formateColumns();
+          }
         }
       }
     },
@@ -82,7 +87,6 @@
                                 columns[i].label = column.prop ;
                             }
                         }
-                        console.log(form);
                         that.$emit('callback',form);
                     }
                  }];

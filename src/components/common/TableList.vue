@@ -30,11 +30,13 @@
                  <i v-if="item.icon" :class="item.icon"></i>
                  <span v-if="item.prop&&!item.types" style="margin-left: 10px"> {{scope.row[item.prop]}}</span>   
                  <!-- 按钮操作渲染 -->
-                 <el-button  v-if="item.opers.length>0"
+                 <Buttons 
+                     :btns="getOpers(item.opers)" ></Buttons> 
+                 <!-- <el-button  v-if="item.opers.length>0"
                        size="mini" :type="oper.type?oper.type:''"
                        :icon="oper.icon ? oper.icon:''"
-                       v-for="(oper,index)  in item.opers" @click="oper.click(scope.row)" >
-                   {{ oper.name }}
+                       v-for="(oper,index)  in getOpers(item.opers)" @click="oper.click(scope.row)" >
+                   {{ oper.name }} -->
                  </el-button>  
                  <!-- 标签过滤 -->
                  <el-tag  v-if="item.types"
@@ -84,6 +86,22 @@ import {mapGetters} from 'vuex';
                         && this.tableParam.events.rowClick){
                this.tableParam.events.rowClick(row,column,event)
            }
+       },
+       getOpers:function(op){
+           if(typeof op == 'string'){
+               var tempOpers = (new Function( 'return '+op))();
+               for(var i in tempOpers){
+                    var temp = tempOpers[i] ;
+                    console.log(temp);
+                    if(temp.events){
+                        var funcTest = (new Function('return '+temp.events))() ;
+                        tempOpers[i].events.click = funcTest.click ;
+                        tempOpers[i].events.hover = funcTest.hover ; 
+                    }
+               }
+               return tempOpers ; 
+           } 
+        return op;
        }
     }
  }

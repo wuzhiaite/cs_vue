@@ -21,11 +21,13 @@ export const format ={
         var temp = {};
         for(var i in obj){
             var str = obj[i];
-            if( str && ( str.indexOf("{")!= -1 || str.indexOf("[") != -1 ) ){
+            if( str && (typeof str == "string") 
+                    && ( str.indexOf("{")!= -1 || str.indexOf("[") != -1 ) ){
                 str = JSON.parse(obj[i]);
             }
            temp[i] = str ;
         }
+        // console.log(temp);
         return temp ;
     },
     isJSON : function (str) {//判断是否为JSON

@@ -50,7 +50,7 @@
             :visable.sync="bol.isConfTablePage">
             <ConfTable  
                 :tempArr="tempArr" 
-                :form="pageDesignForm.form" 
+                :form="pageDesignForm.form.tableParam" 
                 @callback="confTableConfirm" />
       </ComDialog>    
       <!-- 台账展示页面 -->
@@ -135,6 +135,9 @@ import ConfTable from './ConfTable';
         this.initBtn();//初始化主按钮
         this.initSqlForm();//初始化SQL表单
         this.initPageDesignForm();//初始化配置设计页面,
+    },
+    beforeMount:function(){
+        // this.pageDesignForm.form = {};
         this.getFormData();//根据id判断是否存在配置页面，如果存在则进行数据回写，如果没有，则不用管
     },
     watch:{
@@ -196,7 +199,7 @@ import ConfTable from './ConfTable';
                   name : '预览',
                   type : 'success',
                   icon : 'el-icon-view',
-                  disabled : !that.bol.savePageList,
+                  disabled : true,
                   click : function(){
                       that.isPageList = true ;
                   }
@@ -263,7 +266,6 @@ import ConfTable from './ConfTable';
             }
             that.bol.isQualityPage = false;
         },
-
         confTableConfirm:function(form){//展示列配置
            this.pageDesignForm.form.tableParam = form ;
            var columns = form.columns ; 
@@ -531,6 +533,7 @@ import ConfTable from './ConfTable';
                 PAGE_PARAM : JSON.stringify(this.pageParam) ,
             }; 
             var param = {
+                ID : this.id,
                 FORM : form ,
                 DETAIL : detail
             }
@@ -540,6 +543,7 @@ import ConfTable from './ConfTable';
                      if(res.status == 200 ){
                          if(res.data.result == 2){
                              that.bol.savePageList = true ;
+                             this.$nextTick();
                              this.$message({
                                 message: '保存成功' ,
                                 type : 'success'
@@ -560,6 +564,7 @@ import ConfTable from './ConfTable';
                 })
         },
         getFormData : function(){//根据id获取表单的数据
+             var that = this ;
              this.$axios.post("/api/pagelist/pageconfig/"+this.id)
                 .then(res => {
                     if(res.status == 200 ){
@@ -568,8 +573,12 @@ import ConfTable from './ConfTable';
                             this.sqlForm.form = JSON.parse(result.SQL_FORM) ;
                             this.tempForm = JSON.parse(result.COLUMN_FORM);
                             this.columnForm.form = this.tempForm ;
-                            this.pageDesignForm.form = this.formatJSON(result.PAGE_DESIGN_FORM);
-                            this.pageParam = this.formatJSON(result.PAGE_PARAM);
+                            var temp = JSON.parse(result.PAGE_DESIGN_FORM);
+                            setTimeout(function(){
+                                 that.pageDesignForm.form = temp ;   
+                                 that.confTableConfirm(temp.tableParam);
+                            },500);
+                            this.pageParam = this.formatJSON(JSON.parse(result.PAGE_PARAM));
                          }
                     }else{
                         this.message({

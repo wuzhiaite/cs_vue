@@ -125,7 +125,7 @@
         if(n < 1000){
           this.collapse = true;
         }else{
-          this.collapse = false ;
+          // this.collapse = false ;
         }
      },
     screenHeight:function(n,o){

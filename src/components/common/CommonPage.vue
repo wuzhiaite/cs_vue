@@ -18,8 +18,10 @@
       <Buttons :btns="pageParam.btns" :callbackParam.sync="callbackParam"></Buttons> 
      </el-row> 
      <!-- 条件项 -->
-     <div style="height:100%;background-color:#DCDFE6;">
-        <Conditions v-if="pageParam.conditions" 
+     <div >
+        <Conditions
+                class="page-condition"
+                v-if="pageParam.conditions" 
                 :conditions.sync="pageParam.conditions" 
                 @changeCondition="changeCondition" 
                 :show="show"></Conditions> 
@@ -193,6 +195,11 @@
 <style scoped>
 .el-row{
     margin:15px;
+}
+.page-condition{
+    border : 1px solid #eaeaea;
+    border-radius: 20px;
+    margin:10px;
 }
 </style>
 
