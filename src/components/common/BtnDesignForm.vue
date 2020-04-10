@@ -126,6 +126,12 @@ export default {
                             } 
                             if(flag){
                                 form.isEdit = false;
+                                var events = form.events ;  
+                                if(events){
+                                    var funcTest = (new Function('return '+events))() ;
+                                    form.click = funcTest.click ? funcTest.click : null ;
+                                    form.hover = funcTest.hover ? funcTest.hover : null ; 
+                                }  
                                 that.$emit('update:form',form);
                                 that.$emit('callback',form);
                             }else{

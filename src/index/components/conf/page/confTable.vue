@@ -58,6 +58,7 @@
         deep:true,
         immediate:true,
         handler:function(n,o){
+          // this.formateColumns();
           if(!this.form){
               this.formateColumns();
           }
@@ -68,6 +69,7 @@
        this.initTableForm();
        this.initColumnForm();
        this.initBtn();
+      //  this.formateColumns();
     }, 
     methods:{
          initBtn : function(){
@@ -132,6 +134,7 @@
                     }
          },
          formateColumns : function(){//格式化列数据
+            console.log('formateColumns');
             var tempArr = this.tempArr ;
             var length = tempArr.length;
             var avgLen = Math.floor(100 / length) ; 

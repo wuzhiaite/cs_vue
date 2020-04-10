@@ -93,6 +93,7 @@
             handler(n,o){
                 if(n != o){
                     this.addQualitySearch();
+                    this.formatBtns();
                     this.$nextTick();
                 }  
             }
@@ -103,12 +104,15 @@
         this.initData();//初始化数据
     },
     methods:{
+        formatBtns:function(){
+
+        },
         doSearch:function(){
             this.reqParam.search = this.search;
+            // console.log(this.);
             this.getTableData(); 
         },
         addQualitySearch:function(){//增加高级查询,和普通查询
-          console.log("addQualitySearch");
           var that = this;
           var selectBtn = {
               name : '查询',
@@ -161,8 +165,14 @@
                         }else{
                              this.tableData = res.result;     
                         }   
-                        if(this.pageParam.events && this.pageParam.events.initCallback){
-                            this.pageParam.events.initCallback(res);
+                        var events = this.pageParam.events ;
+                        if( events ){
+                            events = (typeof events == 'string')
+                                         ? (new Function('return '+ events ))() : events ;
+                            this.pageParam.events = events;
+                            if(this.pageParam.events.initCallback){
+                                 this.pageParam.events.initCallback(res);   
+                            }
                         }  
                     }else{
                         this.$message({
@@ -182,8 +192,14 @@
              this.getTableData();
         },
         changeCondition:function(index,item){
-            this.reqParam[item.prop] = item.value;
-            this.getTableData();
+            if(item.value){
+                this.reqParam[item.prop] = item.value;
+            }else{
+                delete this.reqParam[item.prop] ;
+            }
+            
+            // console.log(this.reqParam);
+            // this.getTableData();
         }
     },
 

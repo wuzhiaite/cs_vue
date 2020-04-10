@@ -30,13 +30,11 @@
                  <i v-if="item.icon" :class="item.icon"></i>
                  <span v-if="item.prop&&!item.types" style="margin-left: 10px"> {{scope.row[item.prop]}}</span>   
                  <!-- 按钮操作渲染 -->
-                 <Buttons 
-                     :btns="getOpers(item.opers)" ></Buttons> 
-                 <!-- <el-button  v-if="item.opers.length>0"
+                 <el-button  v-if="item.opers.length>0"
                        size="mini" :type="oper.type?oper.type:''"
                        :icon="oper.icon ? oper.icon:''"
                        v-for="(oper,index)  in getOpers(item.opers)" @click="oper.click(scope.row)" >
-                   {{ oper.name }} -->
+                       {{ oper.name }}
                  </el-button>  
                  <!-- 标签过滤 -->
                  <el-tag  v-if="item.types"
@@ -81,27 +79,30 @@ import {mapGetters} from 'vuex';
        filterTag(value, row) {
             return row.tag === value;
        },
-       rowClick:function(row, column, event){
-           if(this.tableParam.events 
-                        && this.tableParam.events.rowClick){
-               this.tableParam.events.rowClick(row,column,event)
+       rowClick:function(row, column, event){//行点击事件
+           if(this.tableParam.events){
+               var events = this.tableParam.events ;
+               if( typeof events == 'string')
+               this.tableParam.events= (new Function( 'return '+events ))();
+               if(this.tableParam.events.rowClick){
+                   this.tableParam.events.rowClick(row,column,event);
+               }
            }
        },
        getOpers:function(op){
+           var tempOpers = op;
            if(typeof op == 'string'){
-               var tempOpers = (new Function( 'return '+op))();
-               for(var i in tempOpers){
-                    var temp = tempOpers[i] ;
-                    console.log(temp);
-                    if(temp.events){
-                        var funcTest = (new Function('return '+temp.events))() ;
-                        tempOpers[i].events.click = funcTest.click ;
-                        tempOpers[i].events.hover = funcTest.hover ; 
-                    }
-               }
-               return tempOpers ; 
+               tempOpers = (new Function( 'return '+op))();   
            } 
-        return op;
+            for(var i in tempOpers){
+                var temp = tempOpers[i] ;
+                if(temp.events && typeof temp.events == 'string'){
+                    var funcTest = (new Function('return '+temp.events))() ;
+                    tempOpers[i].click = funcTest.click ;
+                }
+            }
+        //     console.log(tempOpers);
+            return tempOpers ; 
        }
     }
  }

@@ -123,7 +123,8 @@
     },
     methods:{
         synData:function(index,item){
-            this.$emit("conditions:update",this.conditions);
+            // this.$emit("conditions:update",this.conditions);
+            this.$emit('changeCondition',index,item);
         }
     }
  }

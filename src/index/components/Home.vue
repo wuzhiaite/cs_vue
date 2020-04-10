@@ -75,9 +75,10 @@
          </el-header> 
          <div style="overflow-y:auto;overflow-x:auto;">
             <el-main>
-                <keep-alive>
+                <router-view />
+                <!-- <keep-alive>
                     <router-view />
-                </keep-alive>
+                </keep-alive> -->
             </el-main> 
          </div>
       </el-container> 

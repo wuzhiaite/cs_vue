@@ -43,7 +43,6 @@ import {format} from '../../../../util/base/commonUtil';
     created(){
       this.initTable();
       this.initPageParam();
-      this.initForm();
       this.initDialog();
     },
     methods:{
@@ -89,7 +88,7 @@ import {format} from '../../../../util/base/commonUtil';
           ];
          
           this.formStyle.formDesign = {
-              disabled:true,  
+              disabled : true,  
               formItems : formItems,
               form:{
                 CONDITION_FILEDS:[],   
@@ -134,10 +133,12 @@ import {format} from '../../../../util/base/commonUtil';
                              arr.push(obj);  
                            }
                           that.tempArr = arr ;
+                          // that.$nextTick();
                           that.formStyle.form = format.formatJSON(response.result.list[0]);
                         }else{
                           that.formStyle.form = {};
                         }
+                        that.initForm();
                     }
                 }
            }

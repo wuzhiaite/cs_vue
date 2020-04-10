@@ -173,6 +173,11 @@ import ConfTable from './ConfTable';
               this.pageDesignDataFormat();
           }
         },
+        'bol.savePageList':function(n,o){
+            if(n){
+                this.initBtn();
+            }
+        }
     },
     methods : {
         initBtn : function(){
@@ -199,9 +204,9 @@ import ConfTable from './ConfTable';
                   name : '预览',
                   type : 'success',
                   icon : 'el-icon-view',
-                  disabled : true,
+                  disabled : !that.bol.savePageList,
                   click : function(){
-                      that.isPageList = true ;
+                      that.bol.isPageList = true ;
                   }
               }
             ];
@@ -268,6 +273,7 @@ import ConfTable from './ConfTable';
         },
         confTableConfirm:function(form){//展示列配置
            this.pageDesignForm.form.tableParam = form ;
+           console.log(form);
            var columns = form.columns ; 
            var temp = [];
            for(var i in columns){
@@ -338,7 +344,6 @@ import ConfTable from './ConfTable';
                         return ;
                       }else{
                           that.tempForm = temp ;
-                          console.log(temp);
                           that.bol.isColumnPage = false;
                       }
                   }
@@ -438,6 +443,7 @@ import ConfTable from './ConfTable';
                 SEARCH_CONDITIONS:[],
                 SEARCH_COLUMNS:[],
                 REQUES_URL:"/api/pagelist/commonpage/"+this.id,
+
             }
         },
         getSearchInfo : function(){//获取数据
@@ -524,6 +530,7 @@ import ConfTable from './ConfTable';
                 CONFIG_NAME: this.pageDesignForm.form.CONFIG_NAME,
                 SEARCH_FILEDS : JSON.stringify(this.pageDesignForm.form.SEARCH_COLUMNS),
                 CONDITION_FILEDS : JSON.stringify(this.pageDesignForm.form.SEARCH_CONDITIONS),
+                
             };
             var form = {
                 ID: this.id,
@@ -570,6 +577,7 @@ import ConfTable from './ConfTable';
                     if(res.status == 200 ){
                          var result = res.data.result;  
                          if(result){
+                            this.bol.savePageList = true;
                             this.sqlForm.form = JSON.parse(result.SQL_FORM) ;
                             this.tempForm = JSON.parse(result.COLUMN_FORM);
                             this.columnForm.form = this.tempForm ;
