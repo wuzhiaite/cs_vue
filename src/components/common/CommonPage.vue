@@ -197,9 +197,6 @@
             }else{
                 delete this.reqParam[item.prop] ;
             }
-            
-            // console.log(this.reqParam);
-            // this.getTableData();
         }
     },
 

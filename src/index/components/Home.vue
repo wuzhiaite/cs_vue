@@ -48,7 +48,7 @@
                    <i v-show="!collapse" class="el-icon-d-arrow-left"/>
                 </div>
             </el-col>
-            <el-col :span="3" :offset="16">
+            <el-col :span="2" :offset="16">
                 <div style="font-size:15px;text-align:left;">
                   <span class="el-title" >
                       <el-image 
@@ -134,7 +134,8 @@
     },
    },
     methods:{
-      ...mapMutations(['setScreenHeight','setScreenWidth']),
+      ...mapMutations(['setScreenHeight','setScreenWidth',
+                        'setToken','setUser','setSystemName','setUsername']),
       openSelfInfo(){
       },
       handleOpen(key, keyPath) {
@@ -144,10 +145,10 @@
         console.log(key, keyPath);
       },
       logout(){
-        localStorage.setItem("token","");
-        localStorage.setItem("username","");
-        localStorage.setItem("systemName","");
-        localStorage.setItem("user","");
+        this.setToken("");
+        this.setUser("");
+        this.setSystemName("");
+        this.setUsername("");
         this.$router.push({path:"/"});
       }
     }

@@ -57,7 +57,7 @@
        <ComDialog 
             :dialog="dialog.pageList"
             :visable.sync="bol.isPageList">
-            <CommonPage :pageParam="pageParam" />
+            <ComPageList  :pageParam="pageParam" />
        </ComDialog> 
     </div> 
 
@@ -66,6 +66,7 @@
 
 import QualityConditionForm  from './QualityConditionForm';
 import ConfTable from './ConfTable';
+import ComPageList from './ComPageList';
 
  export default {
     data : function(){
@@ -129,6 +130,7 @@ import ConfTable from './ConfTable';
     components:{
         ConfTable,//列配置信息
         QualityConditionForm,//高级查询项表单
+        ComPageList,//通用展示页面
     },
     created : function(){
         this.id = this.$route.params.id;//台账页面的唯一ID
@@ -234,6 +236,7 @@ import ConfTable from './ConfTable';
                     disabled : true,
                     click : function(){
                         that.getSearchInfo();
+                        that.bol.isColumnPage = true ;
                     }
                  }]
                
@@ -273,7 +276,6 @@ import ConfTable from './ConfTable';
         },
         confTableConfirm:function(form){//展示列配置
            this.pageDesignForm.form.tableParam = form ;
-           console.log(form);
            var columns = form.columns ; 
            var temp = [];
            for(var i in columns){
@@ -349,7 +351,7 @@ import ConfTable from './ConfTable';
                   }
               }]
             this.columnForm.form = tempForm ;
-            this.bol.isColumnPage = true;
+            
         },
         pageDesignDataFormat : function(){
             var temp = [];
@@ -587,6 +589,8 @@ import ConfTable from './ConfTable';
                                  that.confTableConfirm(temp.tableParam);
                             },500);
                             this.pageParam = this.formatJSON(JSON.parse(result.PAGE_PARAM));
+                            // this.$nextTick();
+                            this.getSearchInfo();
                          }
                     }else{
                         this.message({
@@ -594,6 +598,7 @@ import ConfTable from './ConfTable';
                             type : 'error'
                         });
                     }
+                    this.bol.flag = true ;
                 })
         },
     }

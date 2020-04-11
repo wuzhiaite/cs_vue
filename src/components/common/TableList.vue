@@ -33,7 +33,7 @@
                  <el-button  v-if="item.opers.length>0"
                        size="mini" :type="oper.type?oper.type:''"
                        :icon="oper.icon ? oper.icon:''"
-                       v-for="(oper,index)  in getOpers(item.opers)" @click="oper.click(scope.row)" >
+                       v-for="(oper,index)  in item.opers" @click="oper.click(scope.row)" >
                        {{ oper.name }}
                  </el-button>  
                  <!-- 标签过滤 -->
@@ -88,21 +88,6 @@ import {mapGetters} from 'vuex';
                    this.tableParam.events.rowClick(row,column,event);
                }
            }
-       },
-       getOpers:function(op){
-           var tempOpers = op;
-           if(typeof op == 'string'){
-               tempOpers = (new Function( 'return '+op))();   
-           } 
-            for(var i in tempOpers){
-                var temp = tempOpers[i] ;
-                if(temp.events && typeof temp.events == 'string'){
-                    var funcTest = (new Function('return '+temp.events))() ;
-                    tempOpers[i].click = funcTest.click ;
-                }
-            }
-        //     console.log(tempOpers);
-            return tempOpers ; 
        }
     }
  }

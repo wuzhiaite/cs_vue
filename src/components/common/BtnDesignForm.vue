@@ -120,18 +120,13 @@ export default {
                             var form = that.btnForm.form ;
                             var flag = false ;
                             for(var i in form){
-                                if( i == 'script' )continue;
+                                if( i == 'events' )continue;
                                 flag = true;
                                 break;
                             } 
                             if(flag){
                                 form.isEdit = false;
-                                var events = form.events ;  
-                                if(events){
-                                    var funcTest = (new Function('return '+events))() ;
-                                    form.click = funcTest.click ? funcTest.click : null ;
-                                    form.hover = funcTest.hover ? funcTest.hover : null ; 
-                                }  
+                               
                                 that.$emit('update:form',form);
                                 that.$emit('callback',form);
                             }else{

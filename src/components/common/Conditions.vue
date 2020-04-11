@@ -35,6 +35,7 @@
                     </el-date-picker >
                      <el-switch v-if=" item.type == 'bol' " 
                             style="width:150px;"
+                            @change="synData(index,item)"
                             active-color="#13ce66"
                             inactive-color="#ff4949"
                             :active-text="item.activeText"
