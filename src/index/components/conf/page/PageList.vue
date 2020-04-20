@@ -15,13 +15,13 @@
     <ComDialog 
           :dialog="dialog"
           :visable.sync="viewParam.isView" >
-          <CommonPage :pageParam="viewParam.pageParam" />
+          <ComPageList :pageParam="viewParam.pageParam" />
     </ComDialog>
 </div>        
 </template>
 <script>
 import {format} from '../../../../util/base/commonUtil';
-
+import ComPageList from './ComPageList'
  export default {
     data(){
       return {
@@ -44,6 +44,9 @@ import {format} from '../../../../util/base/commonUtil';
       this.initTable();
       this.initPageParam();
       this.initDialog();
+    },
+    components:{
+      ComPageList,
     },
     methods:{
       initDialog : function(){

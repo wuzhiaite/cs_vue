@@ -31,6 +31,7 @@ export default {
                  var events = btns[i].events ;
                 if(events){
                     var funcTest = (new Function('return '+events))() ;
+                    funcTest.__proto__ = that.__proto__ ;//将对象指向vue
                     btns[i].click = funcTest.click ? funcTest.click : null ;
                     btns[i].hover = funcTest.hover ? funcTest.hover : null ; 
                 }  
@@ -49,6 +50,7 @@ export default {
                         var temp = tempOpers[ii] ;
                         if(temp.events && typeof temp.events == 'string'){
                             var funcTest = (new Function('return '+temp.events))() ;
+                            funcTest.__proto__ = that.__proto__ ;
                             tempOpers[ii].click = funcTest.click ;
                         }
                     }

@@ -18,6 +18,15 @@
         </ChildTable> 
       </div>
     </el-collapse-item>
+    <el-collapse-item title="脚本信息" name="scriptinfo">
+      <div class="box-form" style="padding:15px;">
+        <ComForm 
+            :btns="[]"
+            :formDesign="scriptForm"
+            :form.sync="form">
+        </ComForm> 
+      </div>
+    </el-collapse-item>
   </el-collapse>
   <div class="btn-span">
     <Buttons  :btns="btns" ></Buttons>
@@ -34,7 +43,8 @@
          tableForm:{},
          columnForm:{},
          btns:[],
-         activeNames:[]
+         activeNames:[],
+         scriptForm:{},
       }
     },
     props:{
@@ -49,6 +59,7 @@
            multi:true,
            highlightCurrentRow:true,
            columns:[],
+           events:'{\n"init":function(){\n\t var that = this; \n},\n"rowClick":function(){\n}\n}' 
          },
          required:true,
       }
@@ -65,14 +76,33 @@
       }
     },
     created(){
+       console.log(this.tempArr);
        this.initTableForm();
        this.initColumnForm();
        this.initBtn();
-      if(!this.form){
+       this.initScriptForm();
+      if( !this.form
+          || !this.form.columnForm 
+          || this.form.columnForm.length == 0 ){
           this.formateColumns();
       }
     }, 
     methods:{
+         initScriptForm : function(){
+            this.scriptForm = {
+                  disabled :false,
+                  inline :false,
+                  labelWidth:'10%',
+                  formItems :[
+                    {
+                      prop:'events',
+                      label:'执行脚本',
+                      type:'textarea',
+                      numbers:1000,
+                    }
+                ]
+            }
+         },
          initBtn : function(){
            var that = this;
            this.btns = [{
@@ -183,9 +213,6 @@
                 ]};
             },
             handleChange:function(){
-
-
-
 
             }
                  

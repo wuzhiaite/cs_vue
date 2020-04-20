@@ -432,6 +432,11 @@ import ComPageList from './ComPageList';
                 label:'初始化参数',
                 type:'textarea',
                 numbers:500,
+              },{
+                prop:'EVENTS',
+                label:'执行脚本',
+                type:'textarea',
+                numbers:1000,
               }
             ];
             this.pageDesignForm.formDesign = {
@@ -445,6 +450,7 @@ import ComPageList from './ComPageList';
                 SEARCH_CONDITIONS:[],
                 SEARCH_COLUMNS:[],
                 REQUES_URL:"/api/pagelist/commonpage/"+this.id,
+                EVENTS:'{\n"init":function(){\n\t\\*callbackParam:{ multipleSelection:[]}*\\ \n\t var that = this;\n},\n"rowClick":function(row, column, event){\n\n\n}\n}',
 
             }
         },

@@ -70,7 +70,7 @@
                   this.$router
                         .replace({path: path == '/' || path == undefined ? '/index' : path});
               }else{
-                  this.$message.error('登录失败，请检查你的账户密码是否正确！');
+                  this.$message.error(data.message + '');
               }
 
 

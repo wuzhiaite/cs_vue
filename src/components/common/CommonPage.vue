@@ -35,7 +35,7 @@
     </div>    
     <!-- 分页组件 -->
     <el-pagination 
-    style="float:right;"
+        style="float:right;"
         v-if=" pageParam.isPagination != null
                              ? pageParam.isPagination 
                              : true"
@@ -109,7 +109,6 @@
         },
         doSearch:function(){
             this.reqParam.search = this.search;
-            // console.log(this.);
             this.getTableData(); 
         },
         addQualitySearch:function(){//增加高级查询,和普通查询
