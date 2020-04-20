@@ -8,7 +8,7 @@
       </div>
       <div style="height:25px;"/>
       <div class="box-block">
-          <div style="float:left;width:35%;">
+         <div style="width:35%;">
             <label><strong> 台账查询SQL </strong></label>
             <ComForm 
               :formDesign="sqlForm.formDesign"
@@ -17,7 +17,7 @@
             </ComForm>
           </div>
           <span style="width:1px;"></span>
-          <div style="margin-left:20px;float:left;width:60%;">  
+          <div style="float:right;width:60%"> 
             <label><strong> 台账页面样式配置 </strong></label>  
             <ComForm 
               :formDesign="pageDesignForm.formDesign"
@@ -624,7 +624,7 @@ import ComPageList from './ComPageList';
     padding: 5px;
     border-radius: 5px;
     padding-top:15px;
-    border: 1px solid #eaeaea;
+    border: 0px solid #eaeaea;
     background-color:white;
 }
 </style>

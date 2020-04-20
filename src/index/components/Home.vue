@@ -159,6 +159,7 @@
     padding:4px 10px;
     font-size:12px;
     border-radius:3px;
+    line-height: 17px;
 }
 
 .el-baber-title{

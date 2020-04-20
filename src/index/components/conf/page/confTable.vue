@@ -76,14 +76,13 @@
       }
     },
     created(){
-       console.log(this.tempArr);
        this.initTableForm();
        this.initColumnForm();
        this.initBtn();
        this.initScriptForm();
-      if( !this.form
-          || !this.form.columnForm 
-          || this.form.columnForm.length == 0 ){
+       console.log(this.form.columns)
+      if( !!!this.form.columns
+          || this.form.columns.length == 0 ){
           this.formateColumns();
       }
     }, 

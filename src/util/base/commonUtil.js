@@ -27,12 +27,9 @@ export const format ={
             }
            temp[i] = str ;
         }
-        // console.log(temp);
         return temp ;
     },
     isJSON : function (str) {//判断是否为JSON
-        console.log(typeof str);
-        console.log(typeof str == 'string');
         if (typeof str == 'string') {
             try {
                 var obj=JSON.parse(str);

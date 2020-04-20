@@ -33,7 +33,7 @@ new Vue({
 
 //页面跳转处理
 Vue.config.productionTip = false
-window.document.title = '配置管理系统';
+window.document.title = 'cs';
 
 // router.js文件
 // 全局路由守卫，动态改变tille
