@@ -71,7 +71,7 @@
         </el-header>
         <el-header class="el-baber-title" height="50px">
             <el-breadcrumb separator="/" style="padding:15px;">
-              <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+              <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
               <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
             </el-breadcrumb>
          </el-header> 
@@ -105,12 +105,9 @@
     },
     created:function(){
       this.menusInfo();
-        // if(!this.routes || this.routes.length == 0){
-            
-        // }
-        var url = require('../img/logo.jpg');
-        this.url = url;
-        this.srcList.push(url);
+      var url = require('../img/logo.jpg');
+      this.url = url;
+      this.srcList.push(url);
     },
     mounted:function(){
         const that = this
@@ -149,8 +146,8 @@
                 .then(res => {
                     if(res.status == 200 && res.data.code == 1){
                           var csMenus = res.data.result ; 
-                          csMenus = formatRoutes( csMenus );
                           this.$store.dispatch("cs/setMenusAction",csMenus);
+                          csMenus = formatRoutes( csMenus );
                           this.$router.addRoutes(csMenus);
                     }else{
                       this.$message({
