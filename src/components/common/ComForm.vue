@@ -18,8 +18,6 @@
             <SelectForm v-if="item.type=='select-form'" :item="item" :form="form"  />
             <!-- 子表 -->
             <ChildTable v-if="item.type=='child-form'" :item="item" :form="form"/>
-
-
     </el-form-item>  
     <el-form-item> 
       <slot></slot>

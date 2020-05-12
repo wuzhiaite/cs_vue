@@ -5,71 +5,16 @@
 </template>
 
 <script>
-
-import { mapGetters,mapActions,mapMutations } from 'vuex';
-import  {formatRoutes}  from  './menus-util';
+import {mapGetters,mapMutations} from  'vuex';
 
 
 export default {
   name: 'app',
-  created(){
-    this.login();
-    this.menusInfo();
+  computed:{
+    ...mapGetters({ routes:'cs/getMenus'})
   },
-  methods:{  
-    ...mapActions(['setUserAction','setSystemName']),
-    login(){
-      var systemName = '通用配置系统';
-      this.setSystemName(systemName);
-    },
-    menusInfo(){
-      var csMenus = [  
-          {
-            path:'/home',
-            name:'通用配置管理',  
-            iconCls:'el-icon-setting',
-            realPath:'Home',
-            hidden:false, 
-            children : [
-                {
-                    path :'/pagelist',
-                    name:'通用台账配置',
-                    iconCls:'el-icon-picture-outline-round',
-                    realPath:'conf/page/PageList',
-                     hidden:false, 
-                }]
-          } ,
-          {
-            path:'/home',
-            name:'图表样式',  
-            iconCls:'el-icon-s-shop',
-            realPath:'Home',
-            hidden:false, 
-            children : [
-                {
-                    path :'/graphExp01',
-                    name:'统计图标样例01',
-                    iconCls:'el-icon-s-marketing',
-                    realPath:'charts/Exp01',
-                    hidden:false, 
-                },
-                {
-                    path :'/graphExp02',
-                    name:'统计图标样例02',
-                    iconCls:'el-icon-tickets',
-                    realPath:'conf/form/GrantPaper',
-                    hidden:false, 
-                },
-            ]  
-          } 
-        ];
-       csMenus = formatRoutes( csMenus );
-       this.$store.dispatch("cs/setMenusAction",csMenus);
-       this.$router.addRoutes(csMenus);
-    }
-
-
-  }
+  created:function(){
+  },
 }
 </script>
 <style>

@@ -20,7 +20,7 @@
 </div>        
 </template>
 <script>
-import {format} from '../../../../util/base/commonUtil';
+import {format} from '@/util/base/commonUtil';
 import ComPageList from './ComPageList'
  export default {
     data(){

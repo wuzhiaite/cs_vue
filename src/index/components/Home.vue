@@ -1,43 +1,45 @@
 <template>
   <div :style="{height : screenHeight + 'px' }">
     <el-container style="height: 100%; "> 
-      <el-aside :width="( collapse ? 64+'px' : '200px') "  >    
-          <el-menu 
-              :collapse=" collapse"
-              background-color="" 
-              text-color=""
-              active-text-color=""
-              style="border:0px;"
-              :default-active="$route.path"
-              unique-opened router>
-              <div class="el-system" >
-                <i class="el-icon-eleme"/>
-                <span class="el-title" v-show="!collapse">
-                  {{systemName}}
-                </span>
-              </div>
-              <el-submenu 
-                  v-for="(item,index) in routes" v-if="!item.hidden" class="title"
-                  :key="index" :index="index+''" style="text-align:left; ">
-                <template slot="title">
-                  <el-tooltip v-if="item.iconCls" :content=" item.desc ? item.desc : item.name " placement="top">
-                      <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  />
-                  </el-tooltip>    
-                  <span slot="title">
-                    {{item.name}}
+     <el-collapse-transition>
+        <el-aside :width="( collapse ? 64+'px' : '200px') "  >    
+            <el-menu 
+                :collapse=" collapse"
+                background-color="" 
+                text-color=""
+                active-text-color=""
+                style="border:0px;"
+                :default-active="$route.path"
+                unique-opened router>
+                <div class="el-system" >
+                  <img src="@/assets/base/logo.png" style="height:60px;" />
+                  <span class="el-title" v-show="!collapse">
+                    <img src="@/assets/base/system.png" style="height:60px;" />
                   </span>
-                </template>
-                <el-menu-item 
-                      v-if="item.children"
-                      style="padding-left: 30px;text-align: left"
-                      v-for="child in item.children"
-                      :index="child.path"
-                      :key="child.path">      
-                            {{child.name}}
-                </el-menu-item>
-              </el-submenu>
-            </el-menu>
-      </el-aside>
+                </div>
+                <el-submenu 
+                    v-for="(item,index) in routes" v-if="item.hidden" class="title"
+                    :key="index" :index="index+''" style="text-align:left; ">
+                  <template slot="title">
+                    <el-tooltip v-if="item.iconCls" :content=" item.desc ? item.desc : item.name " placement="top">
+                        <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  />
+                    </el-tooltip>    
+                    <span slot="title">
+                      {{item.name}}
+                    </span>
+                  </template>
+                  <el-menu-item 
+                        v-if="item.children"
+                        style="padding-left: 30px;text-align: left"
+                        v-for="child in item.children"
+                        :index="child.path"
+                        :key="child.path">      
+                              {{child.name}}
+                  </el-menu-item>
+                </el-submenu>
+              </el-menu>
+        </el-aside>
+     </el-collapse-transition>
     
       <el-container style="background-color:#f6f6f6;">  
         <el-header class="system-header">
@@ -88,6 +90,7 @@
 
 <script>
   import {mapGetters,mapMutations} from  'vuex';
+  import  {formatRoutes}  from  '../menus-util';
 
   export default {
     name:'home',
@@ -101,6 +104,10 @@
       }
     },
     created:function(){
+      this.menusInfo();
+        // if(!this.routes || this.routes.length == 0){
+            
+        // }
         var url = require('../img/logo.jpg');
         this.url = url;
         this.srcList.push(url);
@@ -115,7 +122,7 @@
         }
     },
     computed:{
-       ...mapGetters({
+        ...mapGetters({
               routes:'cs/getMenus',
               systemName : 'getSystemName',
               username : 'getUsername'}),
@@ -135,8 +142,24 @@
    },
     methods:{
       ...mapMutations(['setScreenHeight','setScreenWidth',
-                        'setToken','setUser','setSystemName','setUsername']),
-      openSelfInfo(){
+                        'setToken','setUser','setSystemName','setUsername']),                        
+       menusInfo(){
+          this.$axios
+           .post("/api/sys/menus/getList")
+                .then(res => {
+                    if(res.status == 200 && res.data.code == 1){
+                          var csMenus = res.data.result ; 
+                          csMenus = formatRoutes( csMenus );
+                          this.$store.dispatch("cs/setMenusAction",csMenus);
+                          this.$router.addRoutes(csMenus);
+                    }else{
+                      this.$message({
+                        type:"error",
+                        message:'查询失败，请稍后重试！！！'
+                      });
+                    }
+                });
+    
       },
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
@@ -145,10 +168,7 @@
         console.log(key, keyPath);
       },
       logout(){
-        this.setToken("");
-        this.setUser("");
-        this.setSystemName("");
-        this.setUsername("");
+        this.$store.dispatch("clearSession");
         this.$router.push({path:"/"});
       }
     }

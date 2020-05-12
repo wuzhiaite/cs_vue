@@ -3,12 +3,12 @@
 export default  {
         namespaced:true,
         state:{
-            menus:[],    
-        
+            menus: localStorage.getItem("menus") ? JSON.parse(localStorage.getItem("menus")) : [],    
         },
         mutations:{
             setMenus(state,menus){
                 state.menus = menus;
+                localStorage.setItem("menus",JSON.stringify(menus))
             },
            
         },

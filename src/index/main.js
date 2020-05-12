@@ -38,6 +38,7 @@ window.document.title = 'cs';
 // router.js文件
 // 全局路由守卫，动态改变tille
 router.beforeEach((to, from, next) => {
+  console.log(to);
   if(store.state.token ){
     if(to.path === '/'){
       //登录状态下 访问login.vue页面 会跳到index.vue
@@ -60,6 +61,7 @@ router.beforeEach((to, from, next) => {
 Vue.use(VueAxiosPlugin, {
   // 请求拦截处理
   reqHandleFunc: config =>{
+    console.log(config);
     let token = store.state.token;
     if (token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
         config.headers.Authorization = "Bearer "+token;

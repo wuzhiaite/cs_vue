@@ -1,3 +1,6 @@
+const path = require('path')
+const resolve = dir => path.join(__dirname, dir)
+
 
 module.exports = {
     publicPath : '/',//部署应用包时的基本 URL
@@ -8,6 +11,10 @@ module.exports = {
     runtimeCompiler : true,//是否使用包含运行时编译器的 Vue 构建版本
     transpileDependencies : [],//通过 Babel 显式转译一个依赖
     productionSourceMap : false,//
+    chainWebpack: config => {
+        config.resolve.alias
+            .set('@', resolve('src'));
+    },
     configureWebpack: config => { // 修改配置数据
         if (process.env.NODE_ENV === 'product') {
             plugins.push(

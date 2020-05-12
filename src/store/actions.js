@@ -14,7 +14,16 @@ export default {
     },
     setScreenHeight({commit},height){
         return commit('setScreenHeight',height);   
-   }
+    },
+    clearSession(context){
+        context.commit('setSystemName',"");
+        context.commit('setUsername',"");
+        context.commit('setUser',"");
+        context.commit('setToken',"");
+        context.commit('setSystemName',"");
+        context.commit('setSystemName',"");
+        context.dispatch("setMenusAction");
+    }
 
 
 }

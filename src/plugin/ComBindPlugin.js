@@ -14,6 +14,7 @@ ComBindPlugin.install = function(Vue,options){
     window.DataSet = DataSet;
     window.lodash = lodash;//注册使用lodash
     Vue.prototype.$lodash = lodash;//注册使用lodash
+    window.axios = axios ;
     Vue.prototype.axios = axios;
     Vue.prototype.$http = axios ;
     axios.defaults.headers.post['Content-Type'] = 'application/json';

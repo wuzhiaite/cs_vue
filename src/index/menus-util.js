@@ -1,7 +1,10 @@
 
+
+
 const basePath = './components/'
 
 export const formatRoutes = (routes)=> {
+  // debugger
     let fmRoutes = [];
     routes.forEach(router=> {
       let {
@@ -37,6 +40,8 @@ export const formatRoutes = (routes)=> {
     return fmRoutes;
   }
   
+
+
 
 
 
