@@ -13,9 +13,11 @@
                 unique-opened router>
                 <div class="el-system" >
                   <img src="@/assets/base/logo.png" style="height:60px;" />
-                  <span class="el-title" v-show="!collapse">
-                    <img src="@/assets/base/system.png" style="height:60px;" />
-                  </span>
+                  <transition name="el-fade-in-linear">
+                    <span class="el-title" v-show="!collapse">
+                      <img src="@/assets/base/system.png" style="height:60px;" />
+                    </span>
+                  </transition> 
                 </div>
                 <el-submenu 
                     v-for="(item,index) in routes" v-if="item.hidden" class="title"
@@ -76,7 +78,7 @@
             </el-breadcrumb>
          </el-header> 
          <div style="overflow-y:auto;overflow-x:auto;">
-            <el-main>
+            <el-main :style="{ height : screenHeight - 110 +'px'}"> 
                 <router-view />
                 <!-- <keep-alive>
                     <router-view />
