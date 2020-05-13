@@ -9,6 +9,9 @@ commonUtil.install = function(Vue,options){
     Vue.prototype.isJSON = function(str){
         return format.isJSON(str);
     }
+    Vue.prototype.uuid = function(){
+        return (((1 + Math.random()) * 0x10000000) | 0).toString(16).substring(1) ;
+    }
 
 }
 Vue.use(commonUtil);

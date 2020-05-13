@@ -21,6 +21,7 @@ import Button from './Button';
     components:{
         Button,
     }
+    
  }
 
 

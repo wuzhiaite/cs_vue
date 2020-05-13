@@ -82,6 +82,7 @@ Vue.use(VueAxiosPlugin, {
         message: '无访问权限，请先登录',
         type: 'error'
       });
+      store.state.token = "" ;
       localStorage.setItem("token","");//本地保存的token设置为空
       router.push({path : "/"});
     } else if (err.response.status == 401) {

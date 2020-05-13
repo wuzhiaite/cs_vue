@@ -1,34 +1,14 @@
 <template>
 <div style="height:100%;">
 <el-row :gutter="24" style="height:100%;">
-<el-col :span="10">
+<el-col :span="8">
     <el-card class="box-card" >
         <div slot="header" class="clearfix">
             <span>菜单列表</span>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="remove()">删除</el-button>
-            <el-button style="float: right; padding: 3px 0;margin-right:5px;" type="text" @click="append()">新增</el-button>
+            <Buttons style="float:right;" :btns="btns" />
         </div>
         <el-tree
-            :data="data"
-            node-key="id"
-            draggable
-            default-expand-all
-            current-node-key
-            :expand-on-click-node="false"
-            @node-click="changeCurrent">
-        </el-tree>
-    </el-card>
-</el-col>
-<!-- 菜单表单 -->
-<el-col :span="13" :offset="1">
-    <el-card class="box-card">
-        <div slot="header" class="clearfix">
-            <span>菜单列表</span>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="remove()">删除</el-button>
-            <el-button style="float: right; padding: 3px 0;margin-right:5px;" type="text" @click="append()">新增</el-button>
-        </div>
-        <el-tree
-            :data="data"
+            :data="menus"
             show-checkbox
             node-key="id"
             draggable
@@ -39,85 +19,151 @@
         </el-tree>
     </el-card>
 </el-col>
+<!-- 菜单表单 -->
+<el-col :span="15" :offset="1">
+    <el-card class="box-card" style="overflow-y:auto;">
+        <Menu :form.sync="form" :disabled="disabled" />
+    </el-card>
+</el-col>
 </el-row>  
 </div>
 </template>
 <script>
+
+import Menu from './Menu';
+
 export default {
     data() {
       return {
-        data: [],
+        menus: [],
         currentData:{},
-        currentNode:{}
+        currentNode:{},
+        form:{},
+        disabled:true,
+        temp:{
+          id:'root',
+          label:'CS系统',
+          name:'CS系统',
+        }
       }
     },
  created(){
-    var data = [{
-        id: 1,
-        label: '一级 1',
-        children: [{
-          id: 4,
-          label: '二级 1-1',
-          children: [{
-            id: 9,
-            label: '三级 1-1-1'
-          },{
-            id: 10,
-            label: '三级 1-1-2'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: '一级 2',
-        children: [{
-          id: 5,
-          label: '二级 2-1'
-        }, {
-          id: 6,
-          label: '二级 2-2'
-        }]
-      }, {
-        id: 3,
-        label: '一级 3',
-        children: [{
-          id: 7,
-          label: '二级 3-1'
-        }, {
-          id: 8,
-          label: '二级 3-2'
-        }]
-      }];
-   var temp = {
-     id:9999,
-     label:'CS系统',
-     children:data,
-   }
-  this.data = [temp] ;
- },
- methods: {
-      append() {
-        var data = this.currentData ;
-        var id = data.id ;
-        const newChild = { id: id++, label: 'testtest', children: [] };
-        if (!data.children) {
-          this.$set(data, 'children', []);
+   this.getMenuList();
+   this.initBtns();
+  },
+  components:{
+     Menu,
+  },
+  watch:{
+      form:{
+        deep:true,
+        immediate:true,
+        handler:function(n,o){
+          var data = this.currentData;
+          if(data.children){
+            var children = data.children ; 
+            var index = lodash.findIndex(children, function(o) { return o.id == n.id ; });
+            if(index != -1){
+                children[index] = n ;
+                this.$set(children[index],n);
+            }
+          }
+          
         }
-        data.children.push(newChild);
-      },
-      remove() {
-        var node = this.currentNode ; 
-        var data = this.currentData ;
-        const parent = node.parent;
-        const children = parent.data.children || parent.data;
-        const index = children.findIndex(d => d.id === data.id);
-        children.splice(index, 1);
-      },
-      changeCurrent(data,node){
-          this.currentData = data ;
-          this.currentNode = node ;
       }
-
+    },
+ methods: {
+   initBtns : function(){
+      var that = this ;
+      this.btns = [
+        {
+          name:'删除',
+          type:'primary',
+          click:function(){
+            that.remove();
+          }
+        },
+        {
+          name:'新增',
+          type:'primary',
+          click:function(){
+            that.append();
+          }
+        }
+      ];  
+    },
+    getMenuList(){
+      this.$axios
+          .post("/api/sys/menus/getList")
+          .then(res => {
+              if(res.status == 200 && res.data.code == 1){
+                    var csMenus = res.data.result ; 
+                    this.temp.children = csMenus;
+                    this.form = this.temp;
+                    this.menus = [this.temp] ;
+              }else{
+                this.$message({
+                  type:"error",
+                  message:'查询失败，请稍后重试！！！'
+                });
+              }
+          });
+    },   
+    append() {
+        var data = this.currentData ;
+        var newChild = { 
+            id: this.uuid(),
+            label: '', 
+            fatherId : data.id, 
+            hidden : false,
+            
+            children: [] } ;
+        if (!data.children) {
+          this.$set(data, 'children', []) ;
+        }
+        data.children.push(newChild) ;
+        this.disabled = false ;
+        this.form = newChild ;
+    },
+    remove() {
+      this.$confirm("是否确定删除此菜单？","提示",{
+         confirmButtonText:"确定删除"
+      }).then(()=>{
+          var node = this.currentNode ; 
+          var data = this.currentData ;
+          var parent = node.parent;
+          var children = parent.data.children || parent.data;
+          var id = data.id ;
+          var index = children.findIndex(d => d.id === id);
+          children.splice(index, 1);
+          this.form = this.temp;
+          this.$axios
+              .post("/api/sys/menus/removeById/"+id )
+              .then(res => {
+                  if(res.status == 200 && res.data.code == 1){
+                       this.$message({
+                      type:"success",
+                      message:'删除成功！'
+                    });
+                  }else{
+                    this.$message({
+                      type:"error",
+                      message:res.message
+                    });
+                  }
+              });
+      })
+    },
+    changeCurrent(data,node){
+        this.currentData = data ;
+        this.currentNode = node ;
+        this.form = data ;
+        this.disabled = true;
     }
+
+
+
+  }
 
 }
 </script>
