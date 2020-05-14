@@ -147,11 +147,12 @@
 .el-condition-span {
     display:inline-block;
     margin-right:15px;
+    width:300px;
     margin-left:0px;
 }
 .label-span {
     display:inline-block;
-    width:60px;
+    width:70px;
     margin-right:5px;
     margin-bottom: 15px;
     word-wrap: break-word;

@@ -22,7 +22,8 @@
 <!-- 菜单表单 -->
 <el-col :span="15" :offset="1">
     <el-card class="box-card" style="overflow-y:auto;">
-        <Menu :form.sync="form" :disabled="disabled" />
+        <Menu :form.sync="form" 
+          :disabled="disabled" />
     </el-card>
 </el-col>
 </el-row>  
@@ -116,7 +117,7 @@ export default {
             label: '', 
             fatherId : data.id, 
             hidden : false,
-            
+
             children: [] } ;
         if (!data.children) {
           this.$set(data, 'children', []) ;

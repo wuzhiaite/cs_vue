@@ -1,5 +1,5 @@
-
-
+import axios from 'axios';
+import {mapGetters,mapMutations} from  'vuex';
 
 const basePath = './components/'
 
@@ -41,8 +41,25 @@ export const formatRoutes = (routes)=> {
   }
   
 
-
-
+/**
+ * 初始化菜单
+ */
+export const initMenus = function(){
+   axios.post("/api/sys/menus/getList")
+        .then(res => {
+            if(res.status == 200 && res.data.code == 1){
+                  var csMenus = res.data.result ; 
+                  this.$store.dispatch("cs/setMenusAction",csMenus);
+                  csMenus = formatRoutes( csMenus );
+                  this.$router.addRoutes(csMenus);
+            }else{
+              this.$message({
+                type:"error",
+                message:'查询失败，请稍后重试！！！'
+              });
+            }
+        });
+}
 
 
 

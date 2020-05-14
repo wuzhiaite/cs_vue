@@ -14,7 +14,7 @@
                 <div class="el-system" >
                   <img src="@/assets/base/logo.png" style="height:60px;" />
                   <transition name="el-fade-in-linear">
-                    <span class="el-title" v-show="!collapse">
+                    <span class="el-title" v-if="!collapse">
                       <img src="@/assets/base/system.png" style="height:60px;" />
                     </span>
                   </transition> 
@@ -31,7 +31,7 @@
                     </span>
                   </template>
                   <el-menu-item 
-                        v-if="item.children"
+                        v-if="item.children && child.hidden"
                         style="padding-left: 30px;text-align: left"
                         v-for="child in item.children"
                         :index="child.path"
