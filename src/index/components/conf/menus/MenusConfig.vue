@@ -110,9 +110,9 @@ export default {
               if(res.status == 200 && res.data.code == 1){
                   var menus = this.menus[0].children ;
                   this.$store.dispatch("cs/setMenusAction",menus);
-                  this.$message({
+                   this.$message({
                     type:"success",
-                    message:'操作成功'
+                    message:"保存成功"
                   });
               }else{
                 this.$message({

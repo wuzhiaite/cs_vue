@@ -123,7 +123,7 @@ export default {
                         },{
                             prop:'iconCls',
                             label:'菜单标识',
-                            type:'input',
+                            type:'ioc-select',
                         },{
                             prop:'realPath',
                             label:'真实路径',

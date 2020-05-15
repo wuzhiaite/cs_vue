@@ -14,10 +14,14 @@
             
             <!-- 通用组件 -->
             <ComFormSpan :item="item" :form="form" ></ComFormSpan>
+            <!-- 通用组件增加项 -->
+            <ComFormSpanAdditional :item="item" :disabled="formStyle.disabled" :form="form" />
+
             <!-- 子表单 -->
             <SelectForm v-if="item.type=='select-form'" :item="item" :form="form"  />
             <!-- 子表 -->
             <ChildTable v-if="item.type=='child-form'" :item="item" :form="form"/>
+
     </el-form-item>  
     <el-form-item> 
       <slot></slot>
