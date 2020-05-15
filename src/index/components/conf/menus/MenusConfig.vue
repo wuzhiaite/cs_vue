@@ -4,7 +4,7 @@
 <el-col :span="8">
     <el-card class="box-card" >
         <div slot="header" class="clearfix">
-            <span>菜单列表</span>
+            <!-- <span>菜单列表</span> -->
             <Buttons style="float:right;" :btns="btns" />
         </div>
         <el-tree
@@ -91,8 +91,49 @@ export default {
           click:function(){
             that.append();
           }
+        },{
+          name:'保存',
+          type:'primary',
+          click:function(){
+            that.save();
+          }
         }
       ];  
+    },
+    save(){
+      var menus = this.menus[0].children ;
+      var tempArr = [] ;
+      this.updateOder(menus,tempArr);  
+      this.$axios
+          .post("/api/sys/menus/batchAddOrUpdate",tempArr)
+          .then(res => {
+              if(res.status == 200 && res.data.code == 1){
+                  var menus = this.menus[0].children ;
+                  this.$store.dispatch("cs/setMenusAction",menus);
+                  this.$message({
+                    type:"success",
+                    message:'操作成功'
+                  });
+              }else{
+                this.$message({
+                  type:"error",
+                  message:res.data.message
+                });
+              }
+          });
+    },
+    updateOder(menus,tempArr){ //对菜单顺序进行排序
+        for(var i in menus){
+          var tempObj = {};
+          var id = menus[i].id ;
+          tempObj.id = id ;
+          tempObj.orderBy = tempArr.length + 1;
+          tempArr.push(tempObj);
+          var children = menus[i].children ;
+          if(children && children.length > 0){
+              this.updateOder(children,tempArr);
+          }
+        }
     },
     getMenuList(){
       this.$axios

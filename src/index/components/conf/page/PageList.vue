@@ -1,17 +1,20 @@
 <template>
 <div>
-  <div class="box-block">
-        <div style="border:0px;">
-          <CommonPage :pageParam="pageParam"></CommonPage>
-        </div>
-        <div style="width:1px;border:0px ;"></div>
-        <div style="float:right;">    
-          <ComForm 
-              :formDesign="formStyle.formDesign"
-              :form="formStyle.form" 
-              :btns="formStyle.btns"></ComForm>
-        </div> 
-    </div>
+  <el-row>
+    <el-col :span="12">
+      <el-card>
+        <CommonPage :pageParam="pageParam"></CommonPage>
+      </el-card>
+    </el-col>
+    <el-col :span="11" :offset="1">  
+      <el-card>  
+      <ComForm 
+          :formDesign="formStyle.formDesign"
+          :form="formStyle.form" 
+          :btns="formStyle.btns"></ComForm>
+      </el-card>
+    </el-col> 
+  </el-row>
     <ComDialog 
           :dialog="dialog"
           :visable.sync="viewParam.isView" >
@@ -136,7 +139,6 @@ import ComPageList from './ComPageList'
                              arr.push(obj);  
                            }
                           that.tempArr = arr ;
-                          // that.$nextTick();
                           that.formStyle.form = format.formatJSON(response.result.list[0]);
                         }else{
                           that.formStyle.form = {};

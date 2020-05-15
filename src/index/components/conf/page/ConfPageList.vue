@@ -133,6 +133,7 @@ import ComPageList from './ComPageList';
         ComPageList,//通用展示页面
     },
     created : function(){
+        console.log("======================   confPageList  =========================");
         this.id = this.$route.params.id;//台账页面的唯一ID
         this.initBtn();//初始化主按钮
         this.initSqlForm();//初始化SQL表单
