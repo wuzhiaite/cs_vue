@@ -1,7 +1,7 @@
 <template>
- <div style="width:100%;">
+ <div style="width:100%;margin:10px;">
      <!-- 搜索框 -->
-     <el-row>      
+    <el-row v-if="!(typeof pageParam.canSearch == 'undefined')? pageParam.canSearch : true">      
         <el-input v-model="search" 
             :placeholder=" pageParam.searchParam && pageParam.searchParam.placeholder 
                                 ? pageParam.searchParam.placeholder 
@@ -14,9 +14,9 @@
             :prefix-icon="pageParam.searchParam && pageParam.searchParam.icon 
                                     ? pageParam.searchParam.icon : 'el-icon-search'"
             style="width:40%;margin-right:15px;"></el-input>  
-            <!-- 搜索框点击事件 -->
-      <Buttons :btns="pageParam.btns" :callbackParam.sync="callbackParam"></Buttons> 
-     </el-row> 
+        <!-- 搜索框点击事件 -->
+        <Buttons  :btns="pageParam.btns" :callbackParam.sync="callbackParam"></Buttons> 
+    </el-row> 
      <!-- 条件项 -->
      <div >
         <Conditions
@@ -26,6 +26,7 @@
                 @changeCondition="changeCondition" 
                 :show="show"></Conditions> 
      </div>  
+     
      <!-- 列表页面 -->
     <div v-loading="flag">
         <TableList 
@@ -93,20 +94,18 @@
             handler(n,o){
                 if(n != o){
                     this.addQualitySearch();
-                    this.formatBtns();
                     this.$nextTick();
                 }  
             }
+        },
+        "pageParam.initData":function(){
+            this.initData();
         }
     },
     created(){
-        // this.addQualitySearch();//判断是否有高级查询需求 
         this.initData();//初始化数据
     },
     methods:{
-        formatBtns:function(){
-
-        },
         doSearch:function(){
             this.reqParam.search = this.search;
             this.getTableData(); 
@@ -143,6 +142,7 @@
         },
         initData:function(){//初始化渲染数据
             var param = this.pageParam.initData.params ;
+            if(! param) param ={};
             var flag = this.isJSON(param);
             if(flag){
                 this.reqParam = JSON.parse(param) ;

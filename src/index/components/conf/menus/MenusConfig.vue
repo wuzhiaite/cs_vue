@@ -45,6 +45,7 @@ export default {
           id:'root',
           label:'CS系统',
           name:'CS系统',
+          fatherId:"",
         }
       }
     },
@@ -101,7 +102,7 @@ export default {
                     var csMenus = res.data.result ; 
                     this.temp.children = csMenus;
                     this.form = this.temp;
-                    this.menus = [this.temp] ;
+                    this.menus.push(this.temp);
               }else{
                 this.$message({
                   type:"error",
@@ -117,7 +118,7 @@ export default {
             label: '', 
             fatherId : data.id, 
             hidden : false,
-
+            isValidate : false,
             children: [] } ;
         if (!data.children) {
           this.$set(data, 'children', []) ;

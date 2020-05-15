@@ -4,9 +4,20 @@
         <CommonPage :pageParam="pageParam"></CommonPage>
     </el-card>
     <ComDialog
-      :dialog="dialog"
-      :visable.sync="visable">
+      :dialog="dialog.columnDialog"
+      :visable.sync="bol.generatorView">
+       <ComForm 
+            :formDesign="generator.formDesign" 
+            :form.sync="generator.form"
+            :btns="generator.btns"></ComForm>
     </ComDialog>
+    <el-drawer
+       title="列明细数据"
+      :visible.sync="bol.visable"
+      direction="ltr"
+      size="60%">
+      <CommonPage :pageParam="columnParam" ></CommonPage>
+    </el-drawer>
 
   </div>
 </template>
@@ -15,48 +26,127 @@
  export default {
     data(){
       return {
-        visable:false,
-        tableParam:{},
-        btns:[],
-        conditions:[],
+        generator:{
+          formDesign:{},
+          form:{},
+          btns:[]
+        },
         pageParam:{},
-        searchParam :{},
-        dialog:{} 
+        columnParam : {},
+        dialog:{
+          columnDialog:{
+            title:"代码生成",
+          }
+        },
+        bol:{
+          visable:false,
+          generatorView:false
+        },
       }
-    },
-    components:{
     },
     created(){
       this.initPageParam();
-      this.initDialog();
+      this.initGeneratorForm();
     },
     methods:{
-      initDialog(){
-          this.dialog={
-              title:'测试列表数据',
-              modal:true,
-              fullscreen:false,
-              appendToBody:true,
-              localScroll:false,
-              closeOnModal:true,
-              closeOnEscape:true,
-              center:true,
-              close:function(){
-                // alert('close');
+      initGeneratorForm(){
+          var that = this ;
+          this.generator = {
+              formDesign:{
+                  disabled : false,  
+                  rules : { },
+                  formItems : [
+                            {
+                                prop:'tablenames',
+                                label:'表名',
+                                type:'input',
+                                disabled:true,
+                            },
+                            {
+                                prop:'author',
+                                label:'作者',
+                                type:'input',
+                            },{
+                                prop:'packageName',
+                                label:'包名',
+                                type:'input',
+                            },{
+                                prop:'module',
+                                label:'模块',
+                                type:'input',
+                            }
+                        ],
               },
-              closed:function(){
-                // alert('closed');
-              },
-              opened:function(){
-                //  alert('opened'); 
-              },
-              open:function(){
-                // alert('open');
+              btns:[{
+                  name:'代码生成',
+                  disabled: false,
+                  type:'primary',
+                  click:function(){
+                    that.doGenerator();
+                  }
+               }],
+              form:{
+
               }
-            } 
+          }
       },
-      onSubmit() {
-          console.log('submit!');
+      doGenerator(){
+         this.$axios.post("/api/codegenerator/generatorCode",this.generator.form)
+            .then(res=>{
+                if(res.status == 200 && res.data.code == 1){
+                    this.$message({
+                          message: '代码生成成功！！！' ,
+                          type : 'success'
+                      });  
+                  }else{
+                      this.$message({
+                        message:res.data.message ,
+                        type : 'error'
+                    });
+                  }
+            });
+      },
+      initColumnParam : function(){
+          var that = this ;
+           this.columnParam = {     
+                isPagination:false,//是否分页
+                canSearch:false,
+                tableParam : {//表单参数
+                      border:false,//是否有边框
+                      script:true,
+                      rate:0.9,
+                      highlightCurrentRow:true,//单行选择
+                      columns:[{
+                          prop : 'TABLE_NAME',
+                          label : '表名',
+                          width :'20',
+                      },{
+                          prop : "COLUMN_NAME",
+                          label : "列名",
+                          fixedDirect : 'left',
+                          width : "20"
+                      },{
+                          prop : "COLUMN_COMMENT",
+                          label : "列别名",
+                          fixed : 'left',
+                          width : "15"
+                      },{
+                          prop:"IS_NULLABLE",
+                          label:"可否为空",
+                          width:"7",
+                      },{
+                          prop : "COLUMN_TYPE",
+                          label : "列类型",
+                          width : "10",
+                      }],
+                    },
+                initData:{
+                    url:'/api/codegenerator/getColumnsInfo',
+                    params:{
+                      tableName:'',
+                    },
+                  },
+           }
       },
       initPageParam : function(){
            var that = this ;
@@ -79,13 +169,13 @@
                           prop : 'TABLE_SCHEMA',
                           label : '数据库',
                           sortable : true,
-                          width :'15',
+                          width :'10',
                           icon : 'el-icon-time',
                       },{
                           prop : "TABLE_NAME",
                           label : "表名",
                           fixedDirect : 'left',
-                          width : "10"
+                          width : "20"
                       },{
                           prop : "TABLE_COMMENT",
                           label : "表别名",
@@ -94,11 +184,11 @@
                       },{
                           prop:"TABLE_ROWS",
                           label:"数据行数",
-                          width:"10",
+                          width:"7",
                       },{
                           prop : "AVG_ROW_LENGTH",
                           label : "平均行长度",
-                          width : "10",
+                          width : "7",
                       },{
                           prop : "DATA_LENGTH",
                           label : "数据长度",
@@ -106,7 +196,7 @@
                       },{
                           prop : "INDEX_LENGTH",
                           label : "索引长度",
-                          width : "10",
+                          width : "7",
                       },{
                           prop : "CREATE_TIME",
                           label : "创建时间",
@@ -114,19 +204,20 @@
                       },{
                           prop : "UPDATE_TIME",
                           label : "更新时间",
-                          width : "17",
+                          width : "10",
                       },{
                           prop : "",
                           label : "操作",
-                          width : "17",
+                          width : "20",
                           sortable:'',
                           fixedDirect:'right',
                           opers:[
                             {
                               name:"查看列",
-                              type:'',
+                              type:'el-icon-view',
+                              icon:'el-icon-edit',
                               click:function(row){
-                                that.handleClick(row);
+                                that.viewColumn(row);
                               }
                             },
                             {
@@ -134,7 +225,7 @@
                               type:'danger',
                               icon:'el-icon-edit',
                               click:function(row){
-                                  that.handleEdit(row);
+                                  that.generatorCode(row);
                               }
                             }   
                           ]
@@ -149,11 +240,14 @@
                       },
            }
       },
-      handleClick:function(row){
-        this.visable = true;
+      viewColumn : function(row){
+        this.initColumnParam();
+        this.columnParam.initData.params.tableName = row.TABLE_NAME ;
+        this.bol.visable = true;
       },
-      handleEdit : function(row){
-         alert(JSON.stringify(row));
+      generatorCode : function(row){
+         this.bol.generatorView = true ;
+         this.generator.form.tablenames = row.TABLE_NAME ;
       }
     }
 

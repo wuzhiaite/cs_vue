@@ -1,5 +1,6 @@
 <template>
     <!-- 全表样式设置 -->
+    
     <el-table 
         :data="tableData"
         :size="tableParam.size ? tableParam.size : 'mini'"
@@ -9,10 +10,11 @@
         :default-sort="tableParam.defaultSort ?tableParam.defaultSort :{} "
         @sort-change="sortChange"
         @selection-change="handleSelectionChange"
-        :height="tableParam.height ? tableParam.height : height*0.6"
-        :max-height="tableParam.maxHeight ? tableParam.maxHeight : 1000 "
+        :height="tableParam.rate ? tableParam.rate * height : ( tableParam.height ? tableParam.height : height*0.6)"
+        :max-height="tableParam.maxHeight ? tableParam.maxHeight : 5000 "
         @row-click="rowClick"
         style="width: 100%;height:100px;">
+        
         <!-- 是否多选 -->
         <el-table-column v-if="tableParam.multi ? tableParam.multi : false" type="selection"  width="55"></el-table-column>  
         <!-- 数据列遍历 -->

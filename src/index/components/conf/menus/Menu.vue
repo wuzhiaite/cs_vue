@@ -101,6 +101,9 @@ export default {
                     realPath : [
                         { required:true,message:'必须填写',trigger:'change' },
                     ],
+                    isvalidate : [
+                        { required:true,message:'必须填写',trigger:'change' },
+                    ],
               },
               formItems : [
                         {
