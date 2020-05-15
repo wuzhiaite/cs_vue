@@ -7,6 +7,7 @@
 <script>
 import {mapGetters,mapMutations} from  'vuex';
  import  {formatRoutes}  from  './menus-util';
+import store from "../store";
 
 export default {
   name: 'app',
@@ -14,6 +15,9 @@ export default {
     ...mapGetters({ routes:'cs/getMenus'})
   },
   created:function(){
+    if(! this.$store.state.token){
+      this.$router.push({path:"/"});
+    }
     var csMenus = formatRoutes( this.routes );
     this.$router.addRoutes(csMenus);
   },

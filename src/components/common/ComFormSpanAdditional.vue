@@ -23,7 +23,7 @@ export default {
         },
         disabled:{
             required:true,
-            type:Object,
+            type:Boolean,
         }
     },
     created(){

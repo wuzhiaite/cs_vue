@@ -1,6 +1,6 @@
 <template>
 <div class="ioc-tab" v-model="form[item.prop]"
-    :style="{'cursor': (item.disabled || disabled) ? 'not-allowed' : 'pointer' }">
+    :style="{'cursor': (item.disabled || disabled) ? 'not-allowed' : 'pointer','background-color': (item.disabled || disabled) ? '#F5F7FA' : 'white'}">
     <span v-for="(ico,idx) in iocList" 
             @click=" (item.disabled || disabled) ? null : current = ico"   
             :class="{'active':current == ico}">
@@ -27,7 +27,7 @@ export default {
         },
         disabled:{
             required:true,
-            type:Object,
+            type:Boolean,
         }
     },
     created(){
@@ -36,6 +36,13 @@ export default {
     watch:{
         current(n,o){
             this.form[this.item.prop] = n ;   
+        },
+        form:{
+            deep:true,
+            immediate:true,
+            handler(n,o){
+                this.current = this.form[this.item.prop]
+            }
         }
     },
     methods:{
@@ -64,6 +71,6 @@ export default {
       margin:0px;
   }
   .active{
-      background-color:red;
+      background-color:#409EFF;
   }
 </style>
