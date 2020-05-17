@@ -35,6 +35,7 @@ export default {
     },
     watch:{
         disabled:function(n,o){
+            // debugger
             this.initForm();
             this.initBtns();
         },
@@ -42,7 +43,6 @@ export default {
           deep:true,
           immediate:true,
           handler(n,o){
-            console.log(n);
             n.label = n.name ;
             this.$emit("update:form",n);
           }

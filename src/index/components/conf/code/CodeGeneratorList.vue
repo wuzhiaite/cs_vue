@@ -85,9 +85,7 @@
                     that.doGenerator();
                   }
                }],
-              form:{
-
-              }
+              form:{}
           }
       },
       doGenerator(){
@@ -97,7 +95,8 @@
                     this.$message({
                           message: '代码生成成功！！！' ,
                           type : 'success'
-                      });  
+                      });
+                    this.bol.generatorView = false ;
                   }else{
                       this.$message({
                         message:res.data.message ,
