@@ -86,12 +86,7 @@ export default {
                                         label:'备注',
                                         type:'input',
                                     }],
-                            events:{
-                                addRow:function(index){
-
-
-                                }
-                            }
+                            events:{}
                         },{
                             prop: 'bz',
                             label: '备注',
@@ -115,8 +110,19 @@ export default {
         },
         doSave : function(){
             var temp = this.form ;
-            delete temp.label ;
-            this.$axios.post("/api/sys/menus/addOrUpdatePage",temp)
+            if(temp.child.length < 1){
+                this.$message({
+                    type:"warning",
+                    message:"必须要又键值对"
+                })
+                return ;
+            }
+            var child = temp.child ;
+            for (var i in child){
+                child[i].id = child[i].id ? child[i].id : this.uuid();
+                child[i].dictId = child[i].dictId ? child[i].dictId : this.form.id ;
+            }
+            this.$axios.post("/api/dict/addOrUpdatePage",temp)
                 .then(res=>{
                     if(res.status == 200 && res.data.code == 1){
                         this.$message({

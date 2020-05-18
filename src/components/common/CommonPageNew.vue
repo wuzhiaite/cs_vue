@@ -107,7 +107,7 @@
     },
     methods:{
         doSearch:function(){
-            this.reqParam.search = this.search;
+            this.reqParam.entity.search = this.search;
             this.getTableData(); 
         },
         addQualitySearch:function(){//增加高级查询,和普通查询

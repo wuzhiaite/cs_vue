@@ -104,8 +104,11 @@ export default {
                 initData:{
                     url:'/api/dict/getPageList',
                     params:{
-                        "pageNum":1,
-                        "pageSize":10,
+                        "page":{
+                            "current":1,
+                            "size":10,
+                        },
+                        "entity":{}
                     },
                 },
             }
