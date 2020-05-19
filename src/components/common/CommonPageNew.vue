@@ -32,6 +32,7 @@
         <TableList 
             :tableParam="pageParam.tableParam" 
             :tableData="tableData"
+            :callbackParam.sync="callbackParam"
             ></TableList>
     </div>    
     <!-- 分页组件 -->
@@ -61,9 +62,6 @@
           show : false,
           search:'',
           reqParam:{},
-          callbackParam:{
-              multipleSelection:[],
-          } ,
           flag:false ,
           pagination:{},    
           tableData:[],
@@ -79,6 +77,12 @@
                 url:'',
                 result:{},
                 tableParam:{},
+            }
+        },
+        callbackParam:{
+            type:Object,
+            default:{
+                multipleSelection:[],
             }
         }
     },
@@ -100,6 +104,13 @@
         },
         "pageParam.initData":function(){
             this.initData();
+        },
+        callbackParam:{
+            deep:true,
+            immediate:true,
+            handler(n,o){
+                this.$emit("update:callbackParam",n);
+            }
         }
     },
     created(){

@@ -11,7 +11,8 @@
             :circle="btn.style && JSON.stringify(btn.style).indexOf('circle') != -1 ? true : false"
             :plain="btn.style && JSON.stringify(btn.style).indexOf('plain') != -1  ? true : false"
             :round="btn.style && JSON.stringify(btn.style).indexOf('round') != -1  ? true : false"
-            >{{btn.name}}
+            >
+            {{btn.name}}
         </el-button>
     </span>             
 </template>

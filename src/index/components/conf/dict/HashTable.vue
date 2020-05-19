@@ -69,15 +69,15 @@ export default {
                             label: '字典描述',
                             type: 'input',
                         },{
-                            prop:'child',
+                            prop:'dictMapping',
                             label:'字段映射',
                             type:'child-form',
                             form:[{
-                                        prop:'key',
+                                        prop:'dictKey',
                                         label:'标识',
                                         type:'input',
                                     },{
-                                        prop:'value',
+                                        prop:'dictValue',
                                         label:'映射值',
                                         type:'input',
                                     },
@@ -110,14 +110,14 @@ export default {
         },
         doSave : function(){
             var temp = this.form ;
-            if(temp.child.length < 1){
+            if(temp.dictMapping.length < 1){
                 this.$message({
                     type:"warning",
-                    message:"必须要又键值对"
+                    message:"必须要有键值对"
                 })
                 return ;
             }
-            var child = temp.child ;
+            var child = temp.dictMapping ;
             for (var i in child){
                 child[i].id = child[i].id ? child[i].id : this.uuid();
                 child[i].dictId = child[i].dictId ? child[i].dictId : this.form.id ;
@@ -129,6 +129,7 @@ export default {
                             message: '保存成功' ,
                             type : 'success'
                         });
+                        this.$emit("callback");
                     }else{
                         this.$message({
                             message:res.data.message ,

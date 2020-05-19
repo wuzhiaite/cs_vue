@@ -1,14 +1,16 @@
 <template>
     <div>
         <el-card class="box-card" >
-            <CommonPageNew :pageParam="pageParam" />
+            <CommonPageNew
+                    :pageParam="pageParam"
+                    :callbackParam.sync="callbackParam"/>
         </el-card>
         <el-drawer
                 title="字典配置"
                 :visible.sync="bol.visable"
                 direction="ltr"
                 size="60%">
-            <HashTable :form="form" ></HashTable>
+            <HashTable :form="form" @callback="bol.visable=false"></HashTable>
         </el-drawer>
 
     </div>
@@ -23,7 +25,8 @@ export default {
             bol:{
                 visable:false,
             },
-            form:{}
+            form:{},
+            callbackParam:{}
         }
     },
     components:{
@@ -33,6 +36,64 @@ export default {
         this.initPageParam();
     },
     methods:{
+        delete : function(row){
+            this.$confirm("是否确定删除？","提示",{
+                confirmButtonText:"确定删除"
+            }).then(()=>{
+                var id = row.id ;
+                this.$axios
+                    .post("/api/dict/removeById/"+id )
+                    .then(res => {
+                        if(res.status == 200 && res.data.code == 1){
+                            this.$message({
+                                type:"success",
+                                message:'删除成功！'
+                            });
+                        }else{
+                            this.$message({
+                                type:"error",
+                                message:res.message
+                            });
+                        }
+                    });
+            })
+        },
+        deleteAll : function(){
+            var arr = this.callbackParam.multipleSelection ;
+            if(!arr ||  arr.length < 1){
+                this.$message({
+                    type:"warning",
+                    message:"最少选中一条数据"
+                });
+                return ;
+            }
+            var temp = [];
+            for(var i in arr){
+                temp.push(arr[i].id);
+            }
+
+            this.$confirm("是否确定删除？","提示",{
+                confirmButtonText:"确定删除"
+            }).then(()=>{
+                var id = row.id ;
+                this.$axios
+                    .post("/api/dict/removeByIds",temp )
+                    .then(res => {
+                        if(res.status == 200 && res.data.code == 1){
+                            this.$message({
+                                type:"success",
+                                message:'删除成功！'
+                            });
+                        }else{
+                            this.$message({
+                                type:"error",
+                                message:res.message
+                            });
+                        }
+                    });
+            })
+
+        },
         initPageParam : function(){
             var that = this ;
             this.pageParam = {
@@ -51,15 +112,21 @@ export default {
                         click:function(){
                             that.viewDict(null);
                         }
-
-                    },
+                    },{
+                        name:'批量删除',
+                        type:'danger',
+                        icon:'el-icon-delete',
+                        click:function(){
+                            that.deleteAll();
+                        }
+                    }
                 ],
                 tableParam : {//表单参数
                     border:true,//是否有边框
                     script:true,
                     highlightCurrentRow:true,//单行选择
                     maxHeight:"1500",//最大高度
-                    multi:false,//是否为多选
+                    multi:true,//是否为多选
                     columns:[{
                         prop : "dictName",
                         label : "字典标识",
@@ -91,13 +158,20 @@ export default {
                         fixedDirect:'right',
                         opers:[
                             {
-                                name:"查看&编辑",
-                                type:'el-icon-view',
+                                name:"编辑",
+                                type:'',
                                 icon:'el-icon-edit',
                                 click:function(row){
                                     that.viewDict(row);
                                 }
-                            },
+                            }, {
+                                name:'删除',
+                                type:'danger',
+                                icon:'el-icon-delete',
+                                click:function(row){
+                                    that.delete(row);
+                                }
+                            }
                         ]
                     }],
                 },
@@ -117,10 +191,10 @@ export default {
             if(!row){
                 this.form = {
                     id: this.uuid(),
-                    child:[],
+                    dictMapping:[],
                 };
             }else{
-
+                this.form = row ;
             }
             this.bol.visable = true ;
         },

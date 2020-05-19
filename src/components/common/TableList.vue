@@ -76,7 +76,7 @@ import {mapGetters} from 'vuex';
         },
         handleSelectionChange(val) {
             this.callbackParam.multipleSelection = val ;
-            this.$emti('callbackParam:update',this.callbackParam)
+            this.$emit('callbackParam:update',this.callbackParam)
        },
        filterTag(value, row) {
             return row.tag === value;
