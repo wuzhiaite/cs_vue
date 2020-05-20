@@ -5,7 +5,7 @@
         :data="tableData"
         :size="tableParam.size ? tableParam.size : 'mini'"
         :border="tableParam.border ? true:false"
-        :script="tableParam.script ? true:false"
+        :script="tableParam.script ? tableParam.script : true"
         :highlight-current-row="tableParam.highlightCurrentRow ? true:false"
         :default-sort="tableParam.defaultSort ?tableParam.defaultSort :{} "
         @sort-change="sortChange"
@@ -19,6 +19,7 @@
         <el-table-column v-if="tableParam.multi ? tableParam.multi : false" type="selection"  width="55"></el-table-column>  
         <!-- 数据列遍历 -->
         <el-table-column v-for="(item,index) in tableParam.columns"
+            :type="item.expand ? item.expand : null "
             :fixed="item.fixedDirect?item.fixedDirect:false"
             :prop="item.prop?item.prop:''"
             :label="item.label?item.label:''"
@@ -26,11 +27,13 @@
             :sortable="item.sortable ? item.sortable : false"
             :filters="item.filters ? item.filters : null"
             :filter-method="item.filters ? item.filterTag : null "
-            :formatter="item.formatter ? item.formatter : null"> 
-            <template slot-scope="scope" v-if="item.isShow ? item.isShow : true ">   
+            :formatter="item.formatter ? item.formatter : null">
+            <template slot-scope="scope" v-if="(item.isShow ? item.isShow : true )">
                 <!-- 普通数据渲染 -->
                  <i v-if="item.icon" :class="item.icon"></i>
-                 <span v-if="item.prop&&!item.types" style="margin-left: 10px"> {{scope.row[item.prop]}}</span>   
+                 <span v-if="item.prop&&!item.types" style="margin-left: 10px">
+                    {{ item.formatter ? item.formatter(scope.row) : scope.row[item.prop] }}
+                 </span>
                  <!-- 按钮操作渲染 -->
                  <el-button  v-if="item.opers.length>0"
                        size="mini" :type="oper.type?oper.type:''"
@@ -44,7 +47,9 @@
                    :type="item.types[scope.row[item.prop]]"
                     close-transition>
                     {{scope.row[item.prop]}}
-                 </el-tag>   
+                 </el-tag>
+                <ComForm v-if="item.type== 'expand'"
+                        :form="props" ></ComForm>
             </template>
         </el-table-column>
     </el-table> 
@@ -52,9 +57,11 @@
 </template>
 <script>
 import {mapGetters} from 'vuex';
+import ComForm from "./ComForm";
 
  export default {
-    props:{
+     components: {ComForm},
+     props:{
          tableParam:{
              type:Object,
              default:{}

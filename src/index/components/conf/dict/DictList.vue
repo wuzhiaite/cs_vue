@@ -143,13 +143,16 @@ export default {
                         label:"备注",
                         width:"15",
                     },{
-                        prop : "CREATE_TIME",
+                        prop : "createTime",
                         label : "创建时间",
                         width : "10",
                     },{
-                        prop : "UPDATE_TIME",
+                        prop : "updateTime",
                         label : "更新时间",
                         width : "10",
+                        formatter:function(row){
+                            return that.normalFormat(row.updateTime,"yyyy-MM-dd");
+                        }
                     },{
                         prop : "",
                         label : "操作",

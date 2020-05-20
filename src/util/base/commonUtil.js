@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import {dateFormat} from './dateUtil'
+
 /**定义全局通用方法 */
 let commonUtil = {};
 
@@ -11,6 +13,12 @@ commonUtil.install = function(Vue,options){
     }
     Vue.prototype.uuid = function(){
         return (((1 + Math.random()) * 0x10000000) | 0).toString(16).substring(1) ;
+    }
+    Vue.prototype.normalFormat = function(date,fmt){
+        return dateFormat.normalFormat(date,fmt);
+    },
+    Vue.prototype.textDateFormat = function(text,fmt){
+        return dateFormat.textDateFormat(text,fmt);
     }
 
 }
