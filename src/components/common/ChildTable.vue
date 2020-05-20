@@ -79,7 +79,8 @@ export default {
             } 
         },
         deleteRow : function(index){
-            if(index == 0){
+            console.log(index);
+            if(index == 0 && this.form[this.item.prop].length == 1){
                 this.form[this.item.prop] = [];
                 var obj = this.getFormInfo();
                 this.form[this.item.prop].push(obj);

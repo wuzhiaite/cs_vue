@@ -6,18 +6,9 @@
           :disabled="item.disabled ? item.disabled : false"
           v-model="form[item.prop]">
       </el-input>
-      <el-select v-if="item.type == 'select' "
-                v-model="form[item.prop]" 
-                size="mini"
-                filterable
-                :allow-create=" item.allowCreate ? item.allowCreate : false "
-                :disabled="item.disabled ? item.disabled : false"
-                :multiple = " item.multiple ? item.multiple : false "
-                @change=" item.events && item.events.changeSelect ? item.events.changeSelect() : null "
-                :placeholder="item.placeholder ? item.placeholder : '请选择' ">
-          <el-option  v-for="opt in  item.options"
-                :label="opt.label" :value="opt.value"/>
-      </el-select>
+      <span v-if="item.type == 'select' ">
+          <ComSelect :item="item" :form="form"/>
+      </span>
       <span v-if="item.type=='dateInterval'">
         <el-col :span="11">
             <el-date-picker type="date" 

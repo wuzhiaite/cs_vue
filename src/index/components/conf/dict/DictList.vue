@@ -49,6 +49,7 @@ export default {
                                 type:"success",
                                 message:'删除成功！'
                             });
+                            this.initPageParam();
                         }else{
                             this.$message({
                                 type:"error",
@@ -71,11 +72,9 @@ export default {
             for(var i in arr){
                 temp.push(arr[i].id);
             }
-
             this.$confirm("是否确定删除？","提示",{
                 confirmButtonText:"确定删除"
             }).then(()=>{
-                var id = row.id ;
                 this.$axios
                     .post("/api/dict/removeByIds",temp )
                     .then(res => {
@@ -84,6 +83,7 @@ export default {
                                 type:"success",
                                 message:'删除成功！'
                             });
+                            this.initPageParam();
                         }else{
                             this.$message({
                                 type:"error",
