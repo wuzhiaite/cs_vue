@@ -10,7 +10,7 @@
                 :visible.sync="bol.visable"
                 direction="ltr"
                 size="60%">
-            <HashTable :form="form" @callback="bol.visable=false"></HashTable>
+            <HashTable :form="form" @callback="bol.visable=false,renderPage()"></HashTable>
         </el-drawer>
 
     </div>
@@ -36,6 +36,9 @@ export default {
         this.initPageParam();
     },
     methods:{
+        renderPage:function(){
+           this.initPageParam();
+        },
         delete : function(row){
             this.$confirm("是否确定删除？","提示",{
                 confirmButtonText:"确定删除"
@@ -146,6 +149,9 @@ export default {
                         prop : "createTime",
                         label : "创建时间",
                         width : "10",
+                        formatter:function(row){
+                            return that.normalFormat(row.updateTime,"yyyy-MM-dd");
+                        }
                     },{
                         prop : "updateTime",
                         label : "更新时间",

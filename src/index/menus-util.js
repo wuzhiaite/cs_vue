@@ -13,6 +13,7 @@ export const formatRoutes = (routes)=> {
         meta,
         iconCls,
         realPath,
+        openType,
         desc,
         hidden,
         children
@@ -30,6 +31,7 @@ export const formatRoutes = (routes)=> {
         },
         name: name,
         iconCls: iconCls,
+        openType:openType ? openType : "router",
         meta: meta,
         desc:desc,
         hidden:hidden,

@@ -190,15 +190,18 @@ import ComPageList from './ComPageList'
               placeholder:'请输入台账名称',
             },
             columns:[{
+              prop : "ID",
+              label : "台账ID",
+              width : "10",
+              fixed : 'left' ,
+            },{
                 prop : "CONFIG_NAME",
                 label : "台账名称",
                 width : "10",
-                fixed : 'left' ,
              },{
                 prop : "",
                 label : "台账预览",
                 width : "10",
-                fixed : 'right' ,
                 opers:[
                   {
                     name:"台账预览",

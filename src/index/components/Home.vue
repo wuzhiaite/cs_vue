@@ -167,8 +167,23 @@
         console.log(key, keyPath);
       },
       logout(){
-        this.$store.dispatch("clearSession");
-        this.$router.push({path:"/"});
+          this.$axios
+              .post("/api/user/logout")
+              .then(res => {
+                  if(res.status == 200 && res.data.code == 1){
+                      this.$store.dispatch("clearSession");
+                      this.$router.push({path:"/"});
+                      this.$message({
+                          type:"success",
+                          message:'退出成功！'
+                      });
+                  }else{
+                      this.$message({
+                          type:"error",
+                          message:'退出失败，请刷新重试！'
+                      });
+                  }
+              });
       }
     }
   }

@@ -41,12 +41,7 @@ export default {
         currentNode:{},
         form:{},
         disabled:true,
-        temp:{
-          id:'root',
-          label:'CS系统',
-          name:'CS系统',
-          fatherId:"",
-        }
+
       }
     },
  created(){
@@ -140,10 +135,18 @@ export default {
           .post("/api/sys/menus/getList")
           .then(res => {
               if(res.status == 200 && res.data.code == 1){
-                    var csMenus = res.data.result ; 
-                    this.temp.children = csMenus;
-                    this.form = this.temp;
-                    this.menus.push(this.temp);
+                    console.log("getList");
+                    var csMenus = res.data.result ;
+                    var temp ={
+                          id:'root',
+                          label:'CS系统',
+                          name:'CS系统',
+                          fatherId:"",
+                          children:[]
+                     }
+                    temp.children = csMenus;
+                    this.form = temp;
+                    this.menus.push(temp);
               }else{
                 this.$message({
                   type:"error",
@@ -158,9 +161,14 @@ export default {
             id: this.uuid(),
             label: '', 
             fatherId : data.id, 
-            hidden : false,
-            isValidate : false,
+            hidden : 1,
+            isvalidate : 1,
+            iskeepalive: 1,
             children: [] } ;
+        if(data.id == 'root' ){
+            newChild.path = '/home';
+            newChild.realPath = 'Home';
+        }
         if (!data.children) {
           this.$set(data, 'children', []) ;
         }
