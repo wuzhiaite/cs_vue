@@ -122,21 +122,8 @@
             this.getTableData(); 
         },
         addQualitySearch:function(){//增加高级查询,和普通查询
-          var that = this;
-          var selectBtn = {
-              name : '查询',
-              type : 'primary',
-              icon : 'el-icon-search',
-              size: 'mini',
-              disabled : false,
-              click : function(){
-                 that.doSearch();   
-              }
-            };
-            if(lodash.findIndex(this.pageParam.btns,{ name : '查询'}) == -1){
-                 this.pageParam.btns = lodash.concat(selectBtn,this.pageParam.btns );
-            }  
-            if(this.pageParam.isQualitySearch){  
+            var that = this;
+            if(this.pageParam.isQualitySearch){
                  var quailtyBtn = {
                         name : '高级查询',
                         type : 'primary',
@@ -149,6 +136,19 @@
                 if(lodash.findIndex(this.pageParam.btns,{ name : '高级查询'}) == -1){
                     this.pageParam.btns = lodash.concat(quailtyBtn,this.pageParam.btns );
                 }     
+            }
+            var selectBtn = {
+                name : '查询',
+                type : 'primary',
+                icon : 'el-icon-search',
+                size: 'mini',
+                disabled : false,
+                click : function(){
+                    that.doSearch();
+                }
+            };
+            if(lodash.findIndex(this.pageParam.btns,{ name : '查询'}) == -1){
+                this.pageParam.btns = lodash.concat(selectBtn,this.pageParam.btns );
             }
         },
         initData:function(){//初始化渲染数据
