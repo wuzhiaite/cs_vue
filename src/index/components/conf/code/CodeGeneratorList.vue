@@ -99,7 +99,7 @@
                     this.bol.generatorView = false ;
                   }else{
                       this.$message({
-                        message:res.data.message ,
+                        message:res.data.message ? res.data.message : "生成失败，请稍后再试！" ,
                         type : 'error'
                     });
                   }

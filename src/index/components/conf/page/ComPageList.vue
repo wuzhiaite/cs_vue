@@ -16,6 +16,7 @@ export default {
         return {
             param:{},
             id: '',
+            isShow:false,
         }
     },
     watch:{

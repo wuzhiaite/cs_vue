@@ -147,7 +147,8 @@
            .post("/api/sys/menus/getList")
                 .then(res => {
                     if(res.status == 200 && res.data.code == 1){
-                          var csMenus = res.data.result ; 
+                          var data = res.data.result ;
+                          var csMenus = data[0].children ;
                           this.$store.dispatch("cs/setMenusAction",csMenus);
                           csMenus = formatRoutes( csMenus );
                           this.$router.addRoutes(csMenus);

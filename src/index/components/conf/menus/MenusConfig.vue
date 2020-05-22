@@ -4,7 +4,6 @@
 <el-col :span="8">
     <el-card class="box-card" >
         <div slot="header" class="clearfix">
-            <!-- <span>菜单列表</span> -->
             <Buttons style="float:right;" :btns="btns" />
         </div>
         <el-tree
@@ -15,6 +14,7 @@
             default-expand-all
             current-node-key
             :expand-on-click-node="false"
+            @node-drag-end="handleDragEnd"
             @node-click="changeCurrent">
         </el-tree>
     </el-card>
@@ -70,6 +70,13 @@ export default {
       }
     },
  methods: {
+     handleDragEnd(draggingNode, dropNode, dropType, ev) {
+         if(dropType == 'before' || dropType == 'after'){
+             draggingNode.data.fatherId = dropNode.data.fatherId ;
+         }else if (dropType == 'inner'){
+             draggingNode.data.fatherId = dropNode.data.id ;
+         }
+     },
    initBtns : function(){
       var that = this ;
       this.btns = [
@@ -135,18 +142,8 @@ export default {
           .post("/api/sys/menus/getList")
           .then(res => {
               if(res.status == 200 && res.data.code == 1){
-                    console.log("getList");
                     var csMenus = res.data.result ;
-                    var temp ={
-                          id:'root',
-                          label:'CS系统',
-                          name:'CS系统',
-                          fatherId:"",
-                          children:[]
-                     }
-                    temp.children = csMenus;
-                    this.form = temp;
-                    this.menus.push(temp);
+                    this.menus = csMenus;
               }else{
                 this.$message({
                   type:"error",

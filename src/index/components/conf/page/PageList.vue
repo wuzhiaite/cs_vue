@@ -193,7 +193,7 @@ import ComPageList from './ComPageList'
               prop : "ID",
               label : "台账ID",
               width : "10",
-              fixed : 'left' ,
+              fixedDirect : 'left' ,
             },{
                 prop : "CONFIG_NAME",
                 label : "台账名称",
@@ -218,7 +218,7 @@ import ComPageList from './ComPageList'
                 prop : "cz",
                 label : "操作",
                 width : "20",
-                fixed:'right',
+                fixedDirect:'right',
                 opers:[
                   {
                     name:"删除",
