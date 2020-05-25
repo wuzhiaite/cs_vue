@@ -144,6 +144,7 @@ export default {
               if(res.status == 200 && res.data.code == 1){
                     var csMenus = res.data.result ;
                     this.menus = csMenus;
+                    this.form = csMenus[0] ;
               }else{
                 this.$message({
                   type:"error",
