@@ -2,8 +2,9 @@
   <div :style="{height : screenHeight + 'px' }">
     <el-container style="height: 100%; "> 
      <el-collapse-transition>
-        <el-aside :width="( collapse ? 64+'px' : '200px') "  >    
-            <el-menu 
+        <el-aside :width="( collapse ? 64+'px' : '200px') "  >
+            <el-menu
+                @close="handleClose"
                 :collapse=" collapse"
                 background-color="" 
                 text-color=""
@@ -12,12 +13,10 @@
                 :default-active="$route.path"
                 unique-opened router>
                 <div class="el-system" >
-                  <img src="@/assets/base/logo.png" style="height:60px;" />
-                  <transition name="el-fade-in-linear">
-                    <span class="el-title" v-if="!collapse">
+                    <img src="@/assets/base/logo.png" style="height:60px;" />
+                    <span class="el-title" v-show="!collapse">
                       <img src="@/assets/base/system.png" style="height:60px;" />
                     </span>
-                  </transition> 
                 </div>
                 <el-submenu 
                     v-for="(item,index) in routes" v-if="item.hidden" class="title"
@@ -165,7 +164,8 @@
         console.log(key, keyPath);
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
+        // console.log(key, keyPath);
+         setTimeout(function(){},1500);
       },
       logout(){
           this.$axios
