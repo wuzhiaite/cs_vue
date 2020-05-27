@@ -13,9 +13,10 @@ import VueAxiosPlugin from 'vue-axios-plugin';
 import filters from '../util/com-filter';//通用filter
 import '../util/base/commonUtil';
 
-
 Vue.use(VueDraggable);//可拖动动画
 Vue.use(ElementUI);
+
+
 
 
 //全局filter注册
