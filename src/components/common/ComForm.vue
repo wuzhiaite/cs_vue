@@ -42,17 +42,17 @@ import ComFormSpan from './ComFormSpan';
     props:{
       formDesign:{
         type:Object,
-        default:{},
+        default:()=>{},
         required:true
       },
       btns:{
         type:Array,
-        default:[],
+        default:()=>[],
         required:false,
       },
       form:{
         type : Object,
-        default:{},
+        default:()=>{},
         required:false,  
       },
     },

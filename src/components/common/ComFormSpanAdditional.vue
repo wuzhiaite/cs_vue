@@ -24,6 +24,7 @@ export default {
         disabled:{
             required:true,
             type:Boolean,
+            default:false,
         }
     },
     created(){

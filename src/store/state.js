@@ -9,7 +9,8 @@ export default {
                 ? localStorage.getItem("systemName") : 'DEMO',
     //用户信息
     user : localStorage.getItem("user") 
-                ? JSON.parse(localStorage.getItem("user"))
+                // ? JSON.parse(localStorage.getItem("user"))
+                ? localStorage.getItem("user")
                 : {
                     userId : '',
                     username : '',
