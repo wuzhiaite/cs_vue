@@ -1,8 +1,8 @@
 <template>
 <div>
-    <el-row>
-      <Buttons style="float:left;" :btns="btns" />
-    </el-row>
+<!--    <el-row>-->
+<!--      <Buttons style="float:left;" :btns="btns" />-->
+<!--    </el-row>-->
     <ComForm :formDesign="formDesign" 
             :form.sync="form"
             :btns="[]"></ComForm>
@@ -31,7 +31,7 @@ export default {
     },
     created:function(){
         this.initForm();
-        this.initBtns();
+        // this.initBtns();
     },
     watch:{
         disabled:function(n,o){
@@ -89,7 +89,7 @@ export default {
        },
        initForm : function(){
           this.formDesign = {
-              disabled : this.disabled,  
+              // disabled : this.disabled,
               rules : {
                     name : [
                         { required:true , message:'必须填写' , trigger:'blur' },
