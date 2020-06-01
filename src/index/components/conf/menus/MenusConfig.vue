@@ -1,5 +1,5 @@
 <template>
-<div style="height:100%;">
+<div>
 <el-row :gutter="24" style="height:100%;">
 <el-col :span="8">
     <el-card class="box-card" >
@@ -114,11 +114,11 @@ export default {
               if(res.status == 200 && res.data.code == 1){
                   var menus = this.menus[0].children ;
                   this.$store.dispatch("cs/setMenusAction",menus);
-                  this.$refs.form.doSave();//调用表单中的保存按钮
-                  //  this.$message({
-                  //   type:"success",
-                  //   message:"保存成功"
-                  // });
+                  // this.$refs.form.doSave();//调用表单中的保存按钮
+                   this.$message({
+                    type:"success",
+                    message:"保存成功"
+                  });
               }else{
                 this.$message({
                   type:"error",
@@ -130,10 +130,11 @@ export default {
     updateMenus(menus,tempArr){ //对菜单顺序进行排序
         for(var i in menus){
           var tempObj = {};
-          var id = menus[i].id ;
-          var fatherId = menus[i].fatherId ;
-          tempObj.id = id ;
-          tempObj.fatherId = fatherId ;
+          var m = menus[i];
+          for(var ii in m){
+              if(ii == 'label'){continue;}
+              tempObj[ii] = m[ii];
+          }
           tempObj.orderBy = tempArr.length + 1;
           tempArr.push(tempObj);
           var children = menus[i].children ;
@@ -183,31 +184,34 @@ export default {
       this.$confirm("是否确定删除此菜单？","提示",{
          confirmButtonText:"确定删除"
       }).then(()=>{
-          var node = this.currentNode ; 
-          var data = this.currentData ;
-          var parent = node.parent;
-          var children = parent.data.children || parent.data;
-          var id = data.id ;
-          var index = children.findIndex(d => d.id === id);
-          children.splice(index, 1);
-          this.form = this.temp;
-          this.$axios
-              .post("/api/sys/menus/removeById/"+id )
-              .then(res => {
-                  if(res.status == 200 && res.data.code == 1){
-                       this.$message({
-                      type:"success",
-                      message:'删除成功！'
-                    });
-                  }else{
-                    this.$message({
-                      type:"error",
-                      message:res.message
-                    });
-                  }
-              });
+          this.removeById();
       })
     },
+     removeById(){
+         const node = this.currentNode;
+         const data = this.currentData;
+         const parent = node.parent;
+         const children = parent.data.children || parent.data;
+         const id = data.id;
+         const index = children.findIndex(d => d.id === id);
+         children.splice(index, 1);
+         this.form = this.temp;
+         this.$axios
+             .post("/api/sys/menus/removeById/"+id )
+             .then(res => {
+                 if(res.status == 200 && res.data.code == 1){
+                     this.$message({
+                         type:"success",
+                         message:'删除成功！'
+                     });
+                 }else{
+                     this.$message({
+                         type:"error",
+                         message:res.message
+                     });
+                 }
+             });
+     },
     changeCurrent(data,node){
         this.currentData = data ;
         this.currentNode = node ;
