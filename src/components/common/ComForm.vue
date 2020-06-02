@@ -17,9 +17,9 @@
             <!-- 通用组件增加项 -->
             <ComFormSpanAdditional :item="item" :disabled="formStyle.disabled" :form="form" />
 
-            <!-- 子表单 -->
+            <!-- 横向子表-->
             <SelectForm v-if="item.type=='select-form'" :item="item" :form="form"  />
-            <!-- 子表 -->
+            <!-- 列展示子表 -->
             <ChildTable v-if="item.type=='child-form'" :item="item" :form="form"/>
 
     </el-form-item>  

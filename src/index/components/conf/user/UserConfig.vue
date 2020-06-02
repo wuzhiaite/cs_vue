@@ -1,11 +1,23 @@
 <template>
-    <ComForm :formDesign="formDesign"
-             :form.sync="form"
-             :btns="[]"></ComForm>
+<el-card class="box-card" >
+    <el-row>
+        <el-col :span="2">
+            <Buttons
+                style="position:absolute;float:left;"
+                :btns="btns"/>
+        </el-col>
+    </el-row>
+    <el-row  :gutter="20">
+        <el-col :span="12" :offset="6">
+            <ComForm :formDesign="formDesign"
+                     :form.sync="form"
+                     :btns="[]"></ComForm>
+        </el-col>
+    </el-row>
+</el-card>
 </template>
 <script>
 export default {
-   name:"userConfig",
    data(){
        return {
            formDesign:{},
@@ -14,27 +26,35 @@ export default {
    },
     props:{
         form:{
-            type:Object,
             default:{},
-            required:false,
         },
     },
     created(){
+       console.log(111111111)
        this.initForm();
     },
     methods:{
         initForm(){
+            var that = this ;
             this.btns = [
                 {
                     name:'保存',
-                    disabled: that.disabled,
                     type:'primary',
+                    icon: 'el-icon-edit',
                     click:function(){
                         that.doSave();
+                    }
+                },{
+                    name:'返回',
+                    type:'primary',
+                    icon: 'el-icon-edit',
+                    click:function(){
+                        that.$router.back();
                     }
                 }
             ];
             this.formDesign = {
+                labelWidth:'15%',
                 rules : {
                     name : [
                         { required:true , message:'必须填写' , trigger:'blur' },
@@ -67,23 +87,9 @@ export default {
                         label:'用户名称',
                         type:'input',
                     },{
-                        prop:'role',
-                        label:'角色',
-                        type:'input',
-                    },{
-                        prop:'departmentId',
-                        label:'部门',
-                        type:'ioc-select',
-                    },{
                         prop:'realPath',
                         label:'真实路径',
                         type:'input',
-                    },{
-                        prop:'hidden',
-                        label:'是否展示',
-                        type:'switch',
-                        active:'yes',
-                        inactive:'no',
                     },{
                         prop:'isvalidate',
                         label:'是否有效',
@@ -91,25 +97,30 @@ export default {
                         active:'yes',
                         inactive:'no',
                     },{
-                        prop:'iskeepalive',
-                        label:'是否缓存页面',
-                        type:'switch',
-                        active:'yes',
-                        inactive:'no',
+                        prop:'department',
+                        label:'部门',
+                        multiple:false,
+                        type:'com-tree-select',
+                        url:'/api/department/getList'
+                    },{
+                        prop:'role',
+                        label:'员工角色',
+                        type:'radio-button',
+                        url:'/api/role/getList'
                     }
                 ],
             }
+        },
+        doSave(){
+
         }
-
-
-
-
-
    }
 
 }
 </script>
-<style>
-
+<style scoped>
+.el-row{
+    margin:20px;
+}
 
 </style>

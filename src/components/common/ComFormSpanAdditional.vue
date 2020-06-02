@@ -2,11 +2,16 @@
   <span>
       <span v-if="item.type == 'ioc-select' " >
         <IocSelect :item="item" :form="form" :disabled="disabled"/>
-     </span> 
+     </span>
+      <span v-if="item.type == 'com-tree-select'">
+          <ComTreeSelect :item="item" :form="form" ></ComTreeSelect>
+      </span>
    
   </span>    
 </template>
 <script>
+
+
 export default {
    data(){
      return{

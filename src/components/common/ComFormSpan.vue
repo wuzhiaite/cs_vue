@@ -93,6 +93,7 @@
        
       </span>
       <span v-if="item.type=='radio'|| item.type == 'radio-button'">
+          {{  getOptions(item) }}
         <el-radio-group  
               size="mini" 
               v-model="form[item.prop]" >
@@ -100,13 +101,13 @@
                 :border="item.border ? item.border : false"
                 size="mini"
                 :disabled="item.disabled ? item.disabled : false"
-                v-for="opt in item.options"         
+                v-for="opt in getOptions(item)"
                 :label="opt.value">{{opt.label}}</el-radio>
 
             <el-radio-button v-if=" item.type == 'radio-button' "
                 size="mini"
                 :disabled="item.disabled ? item.disabled : false"
-                v-for="opt in item.options" 
+                v-for="opt in getOptions(item)"
                 :label="opt.value" >{{ opt.label }}</el-radio-button>
         </el-radio-group>
       </span> 
@@ -144,7 +145,7 @@
       </span>
        <!-- 按钮配置 -->
       <ButtonsAdd v-if="item.type == 'btns'" :item="item" :form="form" />
-    
+
  </span>        
 
 </template>
@@ -194,6 +195,39 @@ import ButtonsAdd from './ButtonsAdd';
         this.formStyle = this.formDesign;
     },
     methods:{
+        getOptions(item){
+            if(item && item.options && item.options.length > 0){
+                return item.options;
+            }
+            var url ;
+            var param = {};
+            if(item.url){
+                url = this.item.url;
+                param = this.item.params ;
+                if(!url){return null; }
+
+            }
+            if(item.dictName){
+                url = "/api/dict/getPageById/"+item.dictName;
+            }
+            if(url){
+                this.$axios
+                    .post(url,param)
+                    .then(res => {
+                        if(res.status == 200 && res.data.code == 1){
+                            var options = res.data.result;
+                            return options ;
+                        }else{
+                            this.$message({
+                                type:"error",
+                                message:'数据查询失败，请稍后重试！！！'
+                            });
+                        }
+                    });
+            }
+
+
+        },
         formatForm : function(){
             var items = this.formDesign.formItems;
             for(var i in items){
