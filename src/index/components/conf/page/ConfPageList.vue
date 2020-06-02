@@ -459,6 +459,7 @@ import ComPageList from './ComPageList';
             this.bol.isBtnsPage = false;
             if(!this.sqlForm.form.SEARCH_SQL)return;
             var sql =  this.sqlForm.form.SEARCH_SQL.toUpperCase();
+            this.sqlForm.form.SEARCH_SQL = sql ;
             if(this.tempSQL == ''){
                 this.tempSQL = sql ;
             }else if( this.tempSQL == sql ){
