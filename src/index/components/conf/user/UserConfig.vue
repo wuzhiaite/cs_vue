@@ -24,14 +24,11 @@ export default {
        return {
            formDesign:{},
            btns:[],
+           form:{},
        }
    },
-    props:{
-        form:{
-            default:{},
-        },
-    },
     created(){
+       this.form = this.$route.params.form ;
        this.initForm();
     },
     methods:{
@@ -73,11 +70,6 @@ export default {
                 },
                 formItems : [
                     {
-                        prop:'id',
-                        label:'id',
-                        type:'input',
-                        disabled:true,
-                    },{
                         prop:'userId',
                         label:'用户ID',
                         type:'input',
