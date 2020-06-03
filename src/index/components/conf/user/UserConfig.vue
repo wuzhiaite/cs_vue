@@ -79,6 +79,7 @@ export default {
                         prop:'username',
                         label:'用户名称',
                         type:'input',
+                        disabled:true,
                     },{
                         prop:'isValidate',
                         label:'是否有效',

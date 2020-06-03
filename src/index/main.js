@@ -92,6 +92,7 @@ Vue.use(VueAxiosPlugin, {
         message = err.response.data.msg;
       }else{
          message = '未知错误!' ;
+        // router.push({path : "/"});
       }
     }
     ElementUI.Message({
