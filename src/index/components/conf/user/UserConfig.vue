@@ -9,9 +9,11 @@
     </el-row>
     <el-row  :gutter="20">
         <el-col :span="12" :offset="6">
-            <ComForm :formDesign="formDesign"
-                     :form.sync="form"
-                     :btns="[]"></ComForm>
+            <el-card>
+                <ComForm :formDesign="formDesign"
+                         :form.sync="form"
+                         :btns="[]"></ComForm>
+            </el-card>
         </el-col>
     </el-row>
 </el-card>
@@ -30,7 +32,6 @@ export default {
         },
     },
     created(){
-       console.log(111111111)
        this.initForm();
     },
     methods:{
@@ -87,23 +88,19 @@ export default {
                         label:'用户名称',
                         type:'input',
                     },{
-                        prop:'realPath',
-                        label:'真实路径',
-                        type:'input',
-                    },{
-                        prop:'isvalidate',
+                        prop:'isValidate',
                         label:'是否有效',
                         type:'switch',
                         active:'yes',
                         inactive:'no',
                     },{
-                        prop:'department',
+                        prop:'departmentId',
                         label:'部门',
                         multiple:false,
                         type:'com-tree-select',
                         url:'/api/department/getList'
                     },{
-                        prop:'role',
+                        prop:'roleId',
                         label:'员工角色',
                         type:'radio-button',
                         url:'/api/role/getList'
@@ -112,7 +109,22 @@ export default {
             }
         },
         doSave(){
-
+            var temp = this.form ;
+            delete temp.label ;
+            this.$axios.post("/api/user/setUserPermission",temp)
+                .then(res=>{
+                    if(res.status == 200 && res.data.code == 1){
+                        this.$message({
+                            message: '保存成功' ,
+                            type : 'success'
+                        });
+                    }else{
+                        this.$message({
+                            message:res.data.message ,
+                            type : 'error'
+                        });
+                    }
+                });
         }
    }
 

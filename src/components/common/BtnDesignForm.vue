@@ -4,10 +4,10 @@
         :formDesign="btnForm.formDesign"
         :form.sync="btnForm.form" 
         :btns="btnForm.btns">
-        <span style="padding:15px;border:1px solid #DCDFE6;margin:15px;">
-            <label><strong>按钮样例:</strong></label>
-            <Button :btn="btnForm.form" />
-        </span>
+<!--        <span style="padding:15px;border:1px solid #DCDFE6;margin:15px;">-->
+<!--            <label><strong>按钮样例:</strong></label>-->
+<!--            <Button :btn="btnForm.form" />-->
+<!--        </span>-->
     </ComForm>    
 </template>
 <script>
@@ -66,17 +66,6 @@ export default {
                             prop:'icon',
                             label:'按钮icon',
                             type:'ioc-select',
-                            // options:[
-                            // {label:'编辑',value:'el-icon-edit'},
-                            // {label:'分享',value:'el-icon-share'},
-                            // {label:'删除',value:'el-icon-delete'},
-                            // {label:'查找',value:'el-icon-search'},
-                            // {label:'设置',value:'el-icon-setting'},
-                            // {label:'省略号',value:'el-icon-more-outline'},
-                            // {label:'图片',value:'el-icon-picture-outline-round'},
-                            // {label:'播放',value:'el-icon-video-play'},
-                            // {label:'查看',value:'el-icon-view'},
-                            // ],
                         },{
                             prop:'type',
                             label:'按钮类型:',

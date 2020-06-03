@@ -14,6 +14,7 @@
             :default-expand-level="item.defaultExpandLevel ? item.defaultExpandLevel : 1"
             :append-to-body="item.events && item.events.appendToBody ? item.events.appendToBody : null  "
             :options="item.options ? item.options : options"
+            :placeholder="item.placeholder ? item.placeholder : ''"
             :limit="item.limit ? item.limit : 3"
             :max-height="item.maxHeight ? item.maxHeight : 200"
             v-model="form[item.prop]"

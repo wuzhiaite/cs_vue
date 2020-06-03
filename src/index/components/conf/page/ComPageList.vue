@@ -95,7 +95,7 @@ export default {
                     for(var ii in tempOpers){
                         var temp = tempOpers[ii] ;
                         if(temp.events && typeof temp.events == 'string'){
-                            var funcTest = (new Function('return '+temp.events))() ;
+                            var funcTest = (new Function('return  '+temp.events))() ;
                             tempOpers[ii].click = funcTest.click ;
                         }
                     }

@@ -50,12 +50,12 @@ export default {
                     formItems : [
                         {
                             prop:'roleLabel',
-                            label:'角色标识',
+                            label:'角色名',
                             type:'input',
                         },
                         {
                             prop:'roleValue',
-                            label:'角色名称',
+                            label:'角色值',
                             type:'input',
                         },{
                             prop:'isValidate',
@@ -194,7 +194,7 @@ export default {
                     multi:true,//是否为多选
                     columns:[{
                         prop : "roleLabel",
-                        label : "角色标识",
+                        label : "角色名",
                         fixed : 'left',
                         sortable : true,
                         fixedDirect : 'left',

@@ -60,56 +60,10 @@
         </el-switch>  
       </span>
       <span v-if="item.type=='checkbox' || item.type=='checkbox-button'" style="float:left;">
-          
-        <el-checkbox-group 
-                  style="float:left;"
-                  v-model="form[item.prop]" 
-                  size="mini">
-              <span v-if="item.events&&item.events.addClick" style="margin:0px;">
-                  <el-button type="primary" 
-                      size="mini"
-                      style="float:left;margin:0px;"
-                      icon="el-icon-plus" 
-                      @click="item.events.addClick()" plain ></el-button>
-              </span>    
-              <el-checkbox 
-                  v-if="item.type=='checkbox'"
-                  size="mini"
-                  style="margin:0px; "
-                  :disabled="item.disabled ? item.disabled : false"
-                  v-for="opt in item.options" 
-                  :label="opt.value" :key="opt.value">{{opt.label}}</el-checkbox>
-              <el-checkbox-button
-                  v-if="item.type=='checkbox-button'"
-                  size="mini"
-                  style="margin:0px; "
-                  v-for="opt in item.options"  
-                  :label="opt.value" :key="opt.value">
-                    <span  @click="item.events && item.events.click ? item.events.click(opt) : null">
-                      {{opt.label}}
-                    </span>
-                  </el-checkbox-button>
-          </el-checkbox-group> 
-       
+          <ComCheckbox :item="item" :form="form" />
       </span>
       <span v-if="item.type=='radio'|| item.type == 'radio-button'">
-          {{  getOptions(item) }}
-        <el-radio-group  
-              size="mini" 
-              v-model="form[item.prop]" >
-            <el-radio v-if="item.type=='radio'"
-                :border="item.border ? item.border : false"
-                size="mini"
-                :disabled="item.disabled ? item.disabled : false"
-                v-for="opt in getOptions(item)"
-                :label="opt.value">{{opt.label}}</el-radio>
-
-            <el-radio-button v-if=" item.type == 'radio-button' "
-                size="mini"
-                :disabled="item.disabled ? item.disabled : false"
-                v-for="opt in getOptions(item)"
-                :label="opt.value" >{{ opt.label }}</el-radio-button>
-        </el-radio-group>
+            <ComRadio :item="item" :form="form" />
       </span> 
       <span v-if="item.type=='rate'">
         <el-rate
@@ -152,6 +106,7 @@
 <script>
 import Buttons from './Buttons'; 
 import ButtonsAdd from './ButtonsAdd';
+import ComCheckbox from "./ComCheckbox";
 
 
  export default {
@@ -171,6 +126,7 @@ import ButtonsAdd from './ButtonsAdd';
       }
     },
     components:{
+        ComCheckbox,
       Buttons,
       ButtonsAdd,
     },
@@ -195,39 +151,6 @@ import ButtonsAdd from './ButtonsAdd';
         this.formStyle = this.formDesign;
     },
     methods:{
-        getOptions(item){
-            if(item && item.options && item.options.length > 0){
-                return item.options;
-            }
-            var url ;
-            var param = {};
-            if(item.url){
-                url = this.item.url;
-                param = this.item.params ;
-                if(!url){return null; }
-
-            }
-            if(item.dictName){
-                url = "/api/dict/getPageById/"+item.dictName;
-            }
-            if(url){
-                this.$axios
-                    .post(url,param)
-                    .then(res => {
-                        if(res.status == 200 && res.data.code == 1){
-                            var options = res.data.result;
-                            return options ;
-                        }else{
-                            this.$message({
-                                type:"error",
-                                message:'数据查询失败，请稍后重试！！！'
-                            });
-                        }
-                    });
-            }
-
-
-        },
         formatForm : function(){
             var items = this.formDesign.formItems;
             for(var i in items){

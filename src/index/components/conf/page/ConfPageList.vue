@@ -458,8 +458,8 @@ import ComPageList from './ComPageList';
         getSearchInfo : function(){//获取数据
             this.bol.isBtnsPage = false;
             if(!this.sqlForm.form.SEARCH_SQL)return;
-            var sql =  this.sqlForm.form.SEARCH_SQL.toUpperCase();
-            this.sqlForm.form.SEARCH_SQL = sql ;
+            var sql =  this.sqlForm.form.SEARCH_SQL;
+
             if(this.tempSQL == ''){
                 this.tempSQL = sql ;
             }else if( this.tempSQL == sql ){
@@ -469,7 +469,8 @@ import ComPageList from './ComPageList';
                 return ;
             }
             this.filedArr = [];
-            var index = sql.indexOf('FROM');
+            console.log(sql);
+            var index = sql.indexOf('FROM') != -1 ? sql.indexOf('FROM') : sql.indexOf('from');
             if(index == -1)return;
             var tempStr = sql.substring(0,index);
             var tempArr = tempStr.replace("，",",").split(",");
@@ -477,14 +478,14 @@ import ComPageList from './ComPageList';
             for(var i in tempArr){
                 var temp = tempArr[i].trim();
                 if( temp.length == 0 ) continue;
-                if( temp.indexOf('AS') != -1 && temp.indexOf(' ') != -1 ){
-                    temp = temp.substring(temp.lastIndexOf('AS') + 2);
+                if( ((index = temp.lastIndexOf('AS')) != -1 && temp.lastIndexOf(' ') != -1) ||
+                    ((index = temp.lastIndexOf('as')) != -1 && temp.lastIndexOf(' ') != -1) ){
+                    temp = temp.substring(index + 2);
                     filedArr.push(temp.trim());
-                }else if(temp.indexOf('.') != -1 ){
-                    index = temp.indexOf('.');
+                }else if((index = temp.lastIndexOf('.')) != -1 ){
                     filedArr.push(temp.substring(index+1).trim());
-                }else if(temp.indexOf(' ') != -1){
-                    temp = temp.substring(temp.lastIndexOf(' ') + 1);
+                }else if((index = temp.lastIndexOf(' ')) != -1){
+                    temp = temp.substring(index + 1);
                     filedArr.push(temp.trim());
                 }else{
                   filedArr.push(temp.trim());
