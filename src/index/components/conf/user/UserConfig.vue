@@ -1,5 +1,5 @@
 <template>
-<el-card class="box-card" >
+<el-card style="height:100%;" class="box-card" >
     <el-row>
         <el-col :span="2">
             <Buttons
@@ -28,7 +28,11 @@ export default {
        }
    },
     created(){
+
        this.form = this.$route.params.form ;
+        if(!this.form){
+            this.$router.push({path:"/userinfo/886a"});
+        }
        this.initForm();
     },
     methods:{
