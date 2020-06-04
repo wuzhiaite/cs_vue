@@ -4,6 +4,7 @@
           size="mini"
           :placeholder="item.placeholder ? item.placeholder : '' "
           :disabled="item.disabled ? item.disabled : false"
+          :show-password="item.password ? item.password : false"
           v-model="form[item.prop]">
       </el-input>
       <span v-if="item.type == 'select' ">

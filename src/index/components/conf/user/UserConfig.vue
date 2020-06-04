@@ -25,17 +25,29 @@ export default {
            formDesign:{},
            btns:[],
            form:{},
+           id:'',
        }
    },
     created(){
-
-       this.form = this.$route.params.form ;
-        if(!this.form){
-            this.$router.push({path:"/userinfo/886a"});
-        }
+       this.id = this.$route.query.id ;
+       this.initData();
        this.initForm();
     },
     methods:{
+       initData(){
+           this.$axios.post("/api/user/getPermission/"+this.id)
+               .then(res=>{
+                   if(res.status == 200 && res.data.code == 1){
+                      var result = res.data.result ;
+
+                   }else{
+                       this.$message({
+                           message:res.data.message ,
+                           type : 'error'
+                       });
+                   }
+               });
+       },
         initForm(){
             var that = this ;
             this.btns = [
@@ -83,6 +95,12 @@ export default {
                         prop:'username',
                         label:'用户名称',
                         type:'input',
+                        disabled:true,
+                    },{
+                        prop:'password',
+                        label:'用户密码',
+                        type:'input',
+                        password:true,
                         disabled:true,
                     },{
                         prop:'isValidate',
