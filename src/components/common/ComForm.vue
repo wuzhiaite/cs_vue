@@ -1,32 +1,31 @@
 <template>
 <span>
-  <el-form  ref="form" 
+  <el-form  ref="dynamicform"
             :model="form" 
             size="mini"
             :hide-required-asterisk="formStyle.asterisk ? formStyle.asterisk  : true"
+            status-icon
             :rules=" formStyle.rules ? formStyle.rules : {} "
             :inline="formStyle.inline ? formStyle.inline : false"
             :disabled="formStyle.disabled ? formStyle.disabled : false "
             :label-width="formStyle.labelWidth ? formStyle.labelWidth : '20%' ">
     <el-form-item v-for="(item,index)  in  formStyle.formItems"  
             style="font-size:10px;"
+             :prop="item.prop"
+             :rules="item.rules ? item.rules : []"
             :label="( item.events && item.events.isShow ? item.events.isShow() : true) ? item.label : '' ">
-            
             <!-- 通用组件 -->
             <ComFormSpan :item="item" :form="form" ></ComFormSpan>
             <!-- 通用组件增加项 -->
             <ComFormSpanAdditional :item="item" :disabled="formStyle.disabled" :form="form" />
-
             <!-- 横向子表-->
             <SelectForm v-if="item.type=='select-form'" :item="item" :form="form"  />
             <!-- 列展示子表 -->
             <ChildTable v-if="item.type=='child-form'" :item="item" :form="form"/>
-
-    </el-form-item>  
+    </el-form-item>
     <el-form-item> 
       <slot></slot>
-    </el-form-item>  
-      <br/>
+    </el-form-item>
      <el-form-item v-if="btns.length > 0">
          <Buttons  :btns="btns" ></Buttons>
     </el-form-item>
@@ -91,6 +90,16 @@ import ComFormSpan from './ComFormSpan';
                 }
             }
         },
+        validateForm : function(){
+            var result ;
+           this.$refs.dynamicform.validate((validate)=>{
+               result = validate;
+           });
+           return result ;
+        },
+        resetForm() {
+            this.$refs['dynamciform'].resetFields();
+        }
     }
 
  }

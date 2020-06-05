@@ -1,5 +1,5 @@
 <template>
-<el-card style="height:100%;" class="box-card" >
+<div>
     <el-row>
         <el-col :span="2">
             <Buttons
@@ -8,17 +8,25 @@
         </el-col>
     </el-row>
     <el-row  :gutter="20">
-        <el-col :span="12" :offset="6">
+        <el-col :span="14" :offset="6">
             <el-card>
                 <ComForm :formDesign="formDesign"
+                         ref="form"
                          :form.sync="form"
-                         :btns="[]"></ComForm>
+                         :btns="[]">
+                    <ComForm :formDesign="formDesign"
+                             ref="form"
+                             :form.sync="form"
+                             :btns="[]"></ComForm>
+                </ComForm>
+
             </el-card>
         </el-col>
     </el-row>
-</el-card>
+</div>
 </template>
 <script>
+
 export default {
    data(){
        return {
@@ -29,7 +37,7 @@ export default {
        }
    },
     created(){
-       this.id = this.$route.query.id ;
+       this.id = this.$route.params.id;
        this.initData();
        this.initForm();
     },
@@ -39,6 +47,18 @@ export default {
                .then(res=>{
                    if(res.status == 200 && res.data.code == 1){
                       var result = res.data.result ;
+                      var roleTemp = [];
+                      if(result.roleInfo && result.roleInfo.length > 0){
+                          for(var i in result.roleInfo){
+                              var roleId = result.roleInfo[i].roleId;
+                              roleTemp.push(roleId);
+                          }
+                      }
+                      result.roleIds = roleTemp ;
+                      if(result.departmentInfo){
+                          result.departmentId = result.departmentInfo.departmentId;
+                      }
+                      this.form = result ;
 
                    }else{
                        this.$message({
@@ -68,21 +88,10 @@ export default {
                 }
             ];
             this.formDesign = {
+                ref:'userConfig',
                 labelWidth:'15%',
                 rules : {
-                    name : [
-                        { required:true , message:'必须填写' , trigger:'blur' },
-                        { min:3 , max:10 , message:'长度再3-10个字以内' , trigger:'blur' },
-                    ],
-                    path : [
-                        { required:true,message:'必须填写',trigger:'change' },
-                    ],
-                    realPath : [
-                        { required:true,message:'必须填写',trigger:'change' },
-                    ],
-                    isvalidate : [
-                        { required:true,message:'必须填写',trigger:'change' },
-                    ],
+
                 },
                 formItems : [
                     {
@@ -97,12 +106,6 @@ export default {
                         type:'input',
                         disabled:true,
                     },{
-                        prop:'password',
-                        label:'用户密码',
-                        type:'input',
-                        password:true,
-                        disabled:true,
-                    },{
                         prop:'isValidate',
                         label:'是否有效',
                         type:'switch',
@@ -113,33 +116,45 @@ export default {
                         label:'部门',
                         multiple:false,
                         type:'com-tree-select',
-                        url:'/api/department/getList'
+                        url:'/api/department/getList',
+                        rules: { required: true, message: '请选择部门名称', trigger: 'blur' }
                     },{
-                        prop:'roleId',
+                        prop:'roleIds',
                         label:'员工角色',
-                        type:'radio-button',
+                        type:'checkbox-button',
                         url:'/api/role/getList'
                     }
                 ],
             }
         },
+        formateForm(){
+
+
+
+
+
+
+
+        },
         doSave(){
-            var temp = this.form ;
-            delete temp.label ;
-            this.$axios.post("/api/user/setUserPermission",temp)
-                .then(res=>{
-                    if(res.status == 200 && res.data.code == 1){
-                        this.$message({
-                            message: '保存成功' ,
-                            type : 'success'
-                        });
-                    }else{
-                        this.$message({
-                            message:res.data.message ,
-                            type : 'error'
-                        });
-                    }
-                });
+            var flag = this.$refs.form.validateForm();
+            if(!flag)return;
+            var temp = this.formateForm();
+
+            // this.$axios.post("/api/user/setUserPermission",temp)
+            //     .then(res=>{
+            //         if(res.status == 200 && res.data.code == 1){
+            //             this.$message({
+            //                 message: '保存成功' ,
+            //                 type : 'success'
+            //             });
+            //         }else{
+            //             this.$message({
+            //                 message:res.data.message ,
+            //                 type : 'error'
+            //             });
+            //         }
+            //     });
         }
    }
 
