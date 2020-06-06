@@ -1,6 +1,6 @@
 <template>
 <div>
-    <el-row>
+    <el-row style="height:30px;">
         <el-col :span="2">
             <Buttons
                 style="position:absolute;float:left;"
@@ -8,7 +8,7 @@
         </el-col>
     </el-row>
     <el-row  :gutter="20">
-        <el-col :span="14" :offset="6">
+        <el-col :span="17" :offset="3">
             <el-card>
                 <ComForm :formDesign="formDesign"
                          ref="form"
