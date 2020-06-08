@@ -1,39 +1,51 @@
 <template>
 <div>
-    <el-row style="height:30px;">
-        <el-col :span="2">
+    <el-row style="height:30px;position:absolute;top:100px;z-index:999;">
+        <el-col :span="24">
             <Buttons
-                style="position:absolute;float:left;"
+                style="float:left;"
                 :btns="btns"/>
         </el-col>
     </el-row>
-    <el-row  :gutter="20">
-        <el-col :span="17" :offset="3">
+    <el-row  :gutter="20" style="margin-top:40px;">
+        <el-col :span="20" :offset="2">
             <el-card>
                 <ComForm :formDesign="formDesign"
                          ref="form"
                          :form.sync="form"
                          :btns="[]">
                     <template #permissions>
-                        <div style="border: 1px solid #ddd;padding:10px;border-radius:7px;">
-                            <el-tree
+                        <div class="permission-table" id="child-table">
+                            <el-table
                                     :data="treeData"
-                                    node-key="id"
+                                    style="width: 100%;margin-bottom: 20px;"
+                                    row-key="id"
+                                    border
+                                    size="mini"
                                     default-expand-all
-                                    :expand-on-click-node="false">
-                                <span class="custom-tree-node" slot-scope="{ node, data }">
-                                <span>{{ node.label }}</span>
-                                <span>
-                                        <el-checkbox v-model="form[node.id]" >增加</el-checkbox>
-                                        <el-checkbox v-model="form[node.id]" @click="test(node,data)">编辑</el-checkbox>
-                                        <el-checkbox v-model="form[node.id]" @click="test(node,data)">删除</el-checkbox>
-                                </span>
-                              </span>
-                            </el-tree>
+                                    :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+                                <el-table-column
+                                        v-for="v in columns"
+                                        :prop="v.prop"
+                                        :label="v.label"
+                                        :width="v.width / 100 * childTableWidth">
+                                    <template  slot-scope="scope">
+                                          <span style="margin-left: 10px" v-if=" v.type === 'normal' " >
+                                                  {{scope.row[v.prop]}}
+                                          </span>
+                                          <span v-if="v.type==='switch' ">
+                                              <el-switch
+                                                    v-model="scope.row[v.prop]"
+                                                    active-color="#13ce66"
+                                                    inactive-color="#ff4949">
+                                              </el-switch>
+                                        </span>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
                         </div>
                     </template>
                 </ComForm>
-
             </el-card>
         </el-col>
     </el-row>
@@ -48,29 +60,64 @@ export default {
            btns:[],
            form:{},
            id:'',
+           tableParam:[],
            treeData:[],
            perSelect:[],
+           childTableWidth:500,
        }
    },
+    computed:{
+
+    },
     created(){
        this.id = this.$route.params.id;
+       //
        this.initData();
        this.initForm();
-       this.getTreeData();
+       this.initTable();
+    },
+    mounted(){
+        this.childTableWidth = document.getElementById("child-table").offsetWidth;
     },
     methods:{
+       initTable(){
+         this.columns = [
+             {
+                 prop:"label",
+                 label:"菜单",
+                 width:"25",
+                 type:"normal"
+             },{
+                 prop:"add",
+                 label:"可新增",
+                 width:"25",
+                 type:"switch"
+             },{
+                 prop:"delete",
+                 label:"可删除",
+                 width:"25",
+                 type:"switch"
+             },{
+                 prop:"edit",
+                 label:"可编辑",
+                 width:"25",
+                 type:"switch"
+             }
+         ];
+       },
        getTreeData(){
            this.perSelect = [
                {label:"删除",value:"delete"},
                {label:"新增",value:"add"},
                {label:"编辑",value:"edit"}
            ];
+           var temp = {"userId":this.form.userId};
            this.$axios
-               .post("/api/sys/menus/getList")
+               .post("/api/sys/menus/getPermissionList",temp)
                .then(res => {
                    if(res.status == 200 && res.data.code == 1){
-                       var csMenus = res.data.result ;
-                       this.treeData = csMenus;
+                       var result = res.data.result ;
+                       this.treeData = result;
                    }else{
                        this.$message({
                            type:"error",
@@ -96,6 +143,7 @@ export default {
                           result.departmentId = result.departmentInfo.departmentId;
                       }
                       this.form = result ;
+                      this.getTreeData();
                    }else{
                        this.$message({
                            message:res.data.message ,
@@ -169,23 +217,6 @@ export default {
                 ],
             }
         },
-        renderContent(h, { node, data, store }) {
-            return (
-                <span class="custom-tree-node">
-                    <span>{node.label}</span>
-                    <span>{node.value}</span>
-                    <span style="text-align:right;float:right;">
-                      <el-checkbox label="edit" key="edit" checked="" on-click={ () => this.append(data) }>编辑</el-checkbox>
-                      <el-checkbox label="add" key="city">新增</el-checkbox>
-                      <el-checkbox label="delete" key="city">删除</el-checkbox>
-                    </span>
-                  </span>);
-        },
-        test(node,data){
-           console.log(data);
-           console.log(node);
-           console.log("test");
-        },
         formateForm(){
             var temp = this.form ;
             var roleInfoList = [];
@@ -242,5 +273,11 @@ export default {
     justify-content: space-between;
     font-size: 14px;
     padding-right: 8px;
+}
+.permission-table{
+    border: 1px solid #ddd;
+    padding:10px;
+    border-radius:7px;
+    overflow-x:auto;
 }
 </style>

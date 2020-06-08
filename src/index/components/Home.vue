@@ -51,22 +51,21 @@
                    <i v-show="!collapse" class="el-icon-d-arrow-left"/>
                 </div>
             </el-col>
-            <el-col :span="2" :offset="16">
+            <el-col :span="4" :offset="16">
                 <div style="font-size:15px;text-align:left;">
                   <span class="el-title" >
-                      <el-image 
-                          class="el-img"
-                          :src="url" >
+                      <el-image
+                              class="el-img"
+                              :src="url" >
                       </el-image>
                   </span>
-                  <span style="font-size:14px;">{{username}}</span>
+                   <span style="font-size:14px;margin-right:10px;">{{username}}</span>
+                   <span class="grid-content bg-purple" @click="logout">
+                         <i class="el-icon-switch-button"/>
+                        退出登录
+                    </span>
                 </div>
-            </el-col>
-            <el-col :span="2">
-              <div class="grid-content bg-purple" @click="logout">
-                 <i class="el-icon-switch-button"/>
-                退出登录
-              </div>
+
             </el-col>
           </el-row>
         </el-header>
@@ -77,12 +76,11 @@
             </el-breadcrumb>
          </el-header> 
          <div style="overflow-y:auto;overflow-x:auto;">
-            <el-main :style="{ height : screenHeight - 110 +'px'}"> 
-                <router-view />
-                <!-- <keep-alive>
-                    <router-view />
-                </keep-alive> -->
-            </el-main> 
+            <el-main :style="{ height : screenHeight - 110 +'px'}">
+                <transition name="el-zoom-in-center">
+                     <router-view />
+                </transition>
+            </el-main>
          </div>
       </el-container> 
     </el-container>

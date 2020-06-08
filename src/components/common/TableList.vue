@@ -1,6 +1,5 @@
 <template>
     <!-- 全表样式设置 -->
-    
     <el-table 
         :data="tableData"
         :size="tableParam.size ? tableParam.size : 'mini'"
@@ -48,7 +47,14 @@
                     close-transition>
                     {{scope.row[item.prop]}}
                  </el-tag>
-                <ComForm v-if="item.type== 'expand'"
+                <span v-if="v.type==='switch' ">
+                      <el-switch
+                              v-model="scope.row[v.prop]"
+                              active-color="#13ce66"
+                              inactive-color="#ff4949">
+                      </el-switch>
+                </span>
+                <ComForm v-if="item.types== 'expand'"
                         :form="props" ></ComForm>
             </template>
         </el-table-column>
