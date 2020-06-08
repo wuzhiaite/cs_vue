@@ -6,6 +6,9 @@
       <span v-if="item.type == 'com-tree-select'">
           <ComTreeSelect :item="item" :form="form" ></ComTreeSelect>
       </span>
+      <span v-if="item.type== 'common-tree'">
+        <ComTree :item="item" :form="form" ></ComTree>
+      </span>
    
   </span>    
 </template>

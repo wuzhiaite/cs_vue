@@ -22,9 +22,9 @@
             <SelectForm v-if="item.type=='select-form'" :item="item" :form="form"  />
             <!-- 列展示子表 -->
             <ChildTable v-if="item.type=='child-form'" :item="item" :form="form"/>
-    </el-form-item>
-    <el-form-item> 
-      <slot></slot>
+            <span v-if="item.type=='slot-form'">
+                <slot :name="item.prop" :item="item" :form="form" ></slot>
+            </span>
     </el-form-item>
      <el-form-item v-if="btns.length > 0">
          <Buttons  :btns="btns" ></Buttons>
