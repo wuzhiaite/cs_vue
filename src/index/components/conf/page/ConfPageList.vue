@@ -291,6 +291,7 @@ import ComPageList from './ComPageList';
                 var prop = items[i].prop ;
                 if( prop == 'SHOW_COLUMNS' ){
                     items[i].options = temp ;
+                    this.$forceUpdate();//强制更新
                 }
             }
            this.bol.isConfTablePage = false ;
@@ -469,7 +470,6 @@ import ComPageList from './ComPageList';
                 return ;
             }
             this.filedArr = [];
-            console.log(sql);
             var index = sql.indexOf('FROM') != -1 ? sql.indexOf('FROM') : sql.indexOf('from');
             if(index == -1)return;
             var tempStr = sql.substring(0,index);
@@ -594,11 +594,10 @@ import ComPageList from './ComPageList';
                             this.columnForm.form = this.tempForm ;
                             var temp = JSON.parse(result.PAGE_DESIGN_FORM);
                             setTimeout(function(){
-                                 that.pageDesignForm.form = temp ;   
+                                 that.pageDesignForm.form = temp ;
                                  that.confTableConfirm(temp.tableParam);
                             },500);
                             this.pageParam = this.formatJSON(JSON.parse(result.PAGE_PARAM));
-                            // this.$nextTick();
                             this.getSearchInfo();
                          }
                     }else{

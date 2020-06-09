@@ -80,22 +80,22 @@ export default {
              {
                  prop:"name",
                  label:"菜单",
-                 width:"25",
+                 width:"40",
                  type:"normal"
              },{
                  prop:"canAdd",
                  label:"可新增",
-                 width:"25",
+                 width:"20",
                  type:"switch"
              },{
                  prop:"canDelete",
                  label:"可删除",
-                 width:"25",
+                 width:"20",
                  type:"switch"
              },{
                  prop:"canEdit",
                  label:"可编辑",
-                 width:"25",
+                 width:"20",
                  type:"switch"
              }
          ];

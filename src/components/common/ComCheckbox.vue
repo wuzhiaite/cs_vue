@@ -49,12 +49,19 @@
                 options:[]
             }
         },
-        created(){
-            if( this.item.url ){
-                this.getOptions();
-            }else{
-                this.options = this.item.options ;
-            }
+        watch:{
+           item:{
+               deep:true,
+               immediate:true,
+               handler(n,o){
+                   console.log(this.item);
+                   if( this.item.url ){
+                       this.getOptions();
+                   }else{
+                       this.options = this.item.options ;
+                   }
+               }
+           }
         },
         methods:{
             getOptions(){
