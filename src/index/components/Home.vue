@@ -12,32 +12,45 @@
                 style="border:0px;"
                 :default-active="$route.path"
                 unique-opened router>
-                <div class="el-system" >
+                <el-menu-item  class="el-system" >
                     <img src="@/assets/base/logo.png" style="height:60px;" />
-                    <span class="el-title" v-show="!collapse">
+                    <span  >
                       <img src="@/assets/base/system.png" style="height:60px;" />
                     </span>
-                </div>
-                <el-submenu 
-                    v-for="(item,index) in routes" v-if="item.hidden" class="title"
-                    :key="index" :index="index+''" style="text-align:left; ">
-                  <template slot="title">
-                    <el-tooltip v-if="item.iconCls" :content=" item.desc ? item.desc : item.name " placement="top">
-                        <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  />
-                    </el-tooltip>    
-                    <span slot="title">
-                      {{item.name}}
-                    </span>
-                  </template>
-                  <el-menu-item 
-                        v-if="item.children && child.hidden"
-                        style="padding-left: 30px;text-align: left"
-                        v-for="child in item.children"
-                        :index="child.path"
-                        :key="child.path">      
-                              {{child.name}}
-                  </el-menu-item>
-                </el-submenu>
+                </el-menu-item >
+                <template v-for="(item,index) in routes" >
+                    <template v-if="!item.children">
+                        <el-menu-item :index="item.path"
+                                      :key="item.path" v-if="item.hidden">
+                            <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  />
+                            <span slot="title">{{item.name}}</span>
+                        </el-menu-item>
+                    </template>
+                    <template v-else>
+                        <el-submenu
+                                v-if="item.hidden" class="title"
+                                :key="index" :index="index+''" style="text-align:left; ">
+                            <template slot="title">
+                                <el-tooltip v-if="item.iconCls" :content=" item.desc ? item.desc : item.name " placement="top">
+                                    <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  />
+                                </el-tooltip>
+                                <span slot="title">
+                                  {{item.name}}
+                                </span>
+                            </template>
+                            <el-menu-item
+                                    v-if="item.children && child.hidden"
+                                    style=""
+                                    v-for="child in item.children"
+                                    :index="child.path"
+                                    :key="child.path">
+                                <i :class="child.iconCls ? child.iconCls : '' " v-if="child.iconCls"  />
+                                <span slot="title">{{child.name}}</span>
+                            </el-menu-item>
+                        </el-submenu>
+                    </template>
+                </template>
+
               </el-menu>
         </el-aside>
      </el-collapse-transition>
@@ -188,6 +201,13 @@
   }
 </script>
 <style>
+.el-menu-item{
+    padding-left: 30px;
+    text-align: left;
+
+
+}
+
 .el-button--mini{
     padding:4px 10px;
     font-size:12px;
@@ -255,18 +275,21 @@ i{
   }
   .el-aside {
     color: #333;
-  };
+  }
   .el-tooltip{
     margin-right:10px;
     padding-right:10px;
   }
   .el-system{
-    background-color: #409EFF;
+    background-color: #409EFF !important;
     line-height:60px;
     font-size:20px;
     color:white;
     height:60px;
     border:0px !important;
+  }
+  .el-system:hover{
+      background-color:#409EFF !important;
   }
   el-header el-row el-col{
     line-height:60px;

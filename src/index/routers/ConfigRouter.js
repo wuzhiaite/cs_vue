@@ -28,16 +28,7 @@ export default new VueRouter({
                     component : () => import('../components/Index'),
                     hidden:true,
                 },
-                // {
-                //     path : '/confPageList/:id',
-                //     name : '通用台账增加',
-                //     component : () => import('../components/conf/page/ConfPageList'),
-                //     hidden:true, 
-                //     meta:{
-                //         title:''
-                //     },
-                //     hidden:true,
-                // },
+
             ]
         },
     ]
