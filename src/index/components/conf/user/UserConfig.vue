@@ -60,21 +60,16 @@ export default {
            btns:[],
            form:{},
            id:'',
-           tableParam:[],
            treeData:[],
            perSelect:[],
            childTableWidth:500,
        }
    },
-    computed:{
-
-    },
     created(){
        this.id = this.$route.params.id;
-       //
        this.initData();
-       this.initForm();
        this.initTable();
+       this.initForm();
     },
     mounted(){
         this.childTableWidth = document.getElementById("child-table").offsetWidth;
@@ -83,22 +78,22 @@ export default {
        initTable(){
          this.columns = [
              {
-                 prop:"label",
+                 prop:"name",
                  label:"菜单",
                  width:"25",
                  type:"normal"
              },{
-                 prop:"add",
+                 prop:"canAdd",
                  label:"可新增",
                  width:"25",
                  type:"switch"
              },{
-                 prop:"delete",
+                 prop:"canDelete",
                  label:"可删除",
                  width:"25",
                  type:"switch"
              },{
-                 prop:"edit",
+                 prop:"canEdit",
                  label:"可编辑",
                  width:"25",
                  type:"switch"
@@ -106,12 +101,7 @@ export default {
          ];
        },
        getTreeData(){
-           this.perSelect = [
-               {label:"删除",value:"delete"},
-               {label:"新增",value:"add"},
-               {label:"编辑",value:"edit"}
-           ];
-           var temp = {"userId":this.form.userId};
+           var temp = {"userId":this.form.id};
            this.$axios
                .post("/api/sys/menus/getPermissionList",temp)
                .then(res => {
@@ -174,9 +164,6 @@ export default {
             this.formDesign = {
                 ref:'userConfig',
                 labelWidth:'15%',
-                rules : {
-
-                },
                 formItems : [
                     {
                         prop:'userId',
@@ -207,7 +194,8 @@ export default {
                         prop:'roleIds',
                         label:'员工角色',
                         type:'checkbox-button',
-                        url:'/api/role/getList'
+                        url:'/api/role/getList',
+                        rules: { required: true, message: '请选择员工角色', trigger: 'blur' }
                     },
                     {
                         prop:'permissions',
@@ -234,15 +222,28 @@ export default {
                 departmentId:temp.departmentId,
                 userId:temp.id
             }
-
             this.form.roleInfo = roleInfoList ;
             this.form.departmentInfo = department ;
-
+        },
+        updatePermission(per,tempArr){ //对菜单顺序进行排序
+            for(var i in per){
+                var tempObj = {};
+                tempObj = per[i];
+                tempObj.userId = this.form.id ;
+                tempArr.push(tempObj);
+                var children = per[i].children ;
+                if(children && children.length > 0){
+                    this.updatePermission(children,tempArr);
+                }
+            }
         },
         doSave(){
             var flag = this.$refs.form.validateForm();
             if(!flag)return;
             this.formateForm();
+            var tempArr = [];
+            this.updatePermission( this.treeData , tempArr );
+            this.form.permissionInfo = tempArr ;
             this.$axios.post("/api/user/setUserPermission",this.form)
                 .then(res=>{
                     if(res.status == 200 && res.data.code == 1){

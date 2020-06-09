@@ -41,13 +41,13 @@
                        {{ oper.name }}
                  </el-button>  
                  <!-- 标签过滤 -->
-                 <el-tag  v-if="item.types"
+                 <el-tag  v-if="item.types === 'tag'"
                     size="mini"
                    :type="item.types[scope.row[item.prop]]"
                     close-transition>
                     {{scope.row[item.prop]}}
                  </el-tag>
-                <span v-if="v.type==='switch' ">
+                <span v-if="item.types==='switch' ">
                       <el-switch
                               v-model="scope.row[v.prop]"
                               active-color="#13ce66"
