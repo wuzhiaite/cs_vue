@@ -24,7 +24,8 @@
                 <el-card class="box-card" style="overflow-y:auto;">
                     <ComForm :formDesign="formDesign"
                              :form.sync="form"
-                             :btns="[]"></ComForm>
+                             :btns="[]">
+                    </ComForm>
                 </el-card>
             </el-col>
         </el-row>
@@ -40,7 +41,12 @@ export default {
             form:{},
             disabled:true,
             moveTempt:{},
-            formDesign:{}
+            formDesign:{},
+            treeData:[],
+            defaultProps: {
+                children: 'children',
+                label: 'label'
+            }
         }
     },
     created(){
@@ -102,6 +108,12 @@ export default {
                         type:'switch',
                         active:'yes',
                         inactive:'no',
+                    },{
+                        prop:'menus',
+                        label:'可访问菜单',
+                        type:'common-tree',
+                        showCheckBox:true,
+                        url:"/api/sys/menus/getList",
                     },{
                         prop:'bz',
                         label:'备注',

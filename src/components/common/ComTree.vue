@@ -2,23 +2,27 @@
 <div class="tree-area">
     <el-tree
             :data="treeData"
+            ref="tree"
             :show-checkbox="item.showCheckBox ? item.showCheckBox  : false"
             :node-key="item.key ? item.key : 'id' "
             :default-expand-all="item.expandAll ? item.expandAll : true "
             :expand-on-click-node="item.expandOnClickNode ? item.expandOnClickNode : false"
-            :render-content="item.renderContent ? item.renderContent : null ">
-         <span class="custom-tree-node" slot-scope="{ node, data }">
-             <slot :node="node" :data="data" ></slot>
-         </span>
-
-    </el-tree>
+            :render-content="item.renderContent ? item.renderContent : null "
+            :default-expanded-keys="item.defaultExpandedKeys ? item.defaultExpandedKeys : [] "
+            :default-checked-keys="item.defaultCheckedKeys ? item.defaultCheckedKeys : [] "
+            @check="threeCheck"
+    ></el-tree>
 </div>
 </template>
 <script>
 export default{
       data(){
           return {
-                treeData:[]
+              treeData:[],
+              defaultProps: {
+                  children: 'children',
+                  label: 'label'
+              }
           }
       },
      props:{
@@ -39,6 +43,9 @@ export default{
           }
       },
      methods:{
+         threeCheck(checkedNodes,checkedKeys,halfCheckedNodes,halfCheckedKeys ) {
+             console.log(this.$refs.tree.getCheckedKeys());
+         },
         getData(){
             var url = this.item.url;
             var param = this.item.params ? this.item.params : {} ;
@@ -67,6 +74,7 @@ export default{
 .tree-area{
     border:1px solid #DCDFE6;
     padding:10px;
+    border-radius:7px;
 
 }
 .custom-tree-node {

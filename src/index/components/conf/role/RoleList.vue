@@ -24,6 +24,7 @@ export default {
             dialog:{
                 title:'角色配置',
                 visable:false,
+                width:'40%'
             },
             formDesign:{},
             form:{},
@@ -45,7 +46,6 @@ export default {
     methods:{
         initForm:function(){
             var that = this ;
-
             this.formDesign = {
                     formItems : [
                         {
@@ -63,10 +63,6 @@ export default {
                             type:'switch',
                             active:'yes',
                             inactive:'no',
-                        },{
-                            prop:'permissions',
-                            label:'权限配置',
-                            type:'textarea',
                         }
                     ],
                 };
@@ -198,30 +194,26 @@ export default {
                         fixed : 'left',
                         sortable : true,
                         fixedDirect : 'left',
-                        width : "20"
+                        width : "15"
                     },{
                         prop : "roleValue",
                         label : "角色值",
-                        width : "20"
+                        width : "15"
                     },{
                         prop:"isValidate",
                         label:"是否有效",
-                        width:"10",
-                    },{
-                        prop : "permissions",
-                        label : "权限",
-                        width : "10",
+                        width:"15",
                     },{
                         prop : "createTime",
                         label : "创建时间",
-                        width : "10",
+                        width : "15",
                         formatter:function(row){
                             return that.normalFormat(row.updateTime,"yyyy-MM-dd");
                         }
                     },{
                         prop : "updateTime",
                         label : "更新时间",
-                        width : "10",
+                        width : "15",
                         formatter:function(row){
                             return that.normalFormat(row.updateTime,"yyyy-MM-dd");
                         }

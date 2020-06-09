@@ -1,59 +1,57 @@
 <template>
   <div :style="{height : screenHeight + 'px' }">
-    <el-container style="height: 100%; "> 
-     <el-collapse-transition>
-        <el-aside :width="( collapse ? 64+'px' : '200px') "  >
-            <el-menu
-                @close="handleClose"
-                :collapse=" collapse"
-                background-color="" 
-                text-color=""
-                active-text-color=""
-                style="border:0px;"
-                :default-active="$route.path"
-                unique-opened router>
-                <el-menu-item  class="el-system" >
-                    <img src="@/assets/base/logo.png" style="height:60px;" />
-                    <span  >
-                      <img src="@/assets/base/system.png" style="height:60px;" />
-                    </span>
-                </el-menu-item >
-                <template v-for="(item,index) in routes" >
-                    <template v-if="!item.children">
-                        <el-menu-item :index="item.path"
-                                      :key="item.path" v-if="item.hidden">
-                            <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  />
-                            <span slot="title">{{item.name}}</span>
-                        </el-menu-item>
-                    </template>
-                    <template v-else>
-                        <el-submenu
-                                v-if="item.hidden" class="title"
-                                :key="index" :index="index+''" style="text-align:left; ">
-                            <template slot="title">
-                                <el-tooltip v-if="item.iconCls" :content=" item.desc ? item.desc : item.name " placement="top">
-                                    <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  />
-                                </el-tooltip>
-                                <span slot="title">
-                                  {{item.name}}
-                                </span>
-                            </template>
-                            <el-menu-item
-                                    v-if="item.children && child.hidden"
-                                    style=""
-                                    v-for="child in item.children"
-                                    :index="child.path"
-                                    :key="child.path">
-                                <i :class="child.iconCls ? child.iconCls : '' " v-if="child.iconCls"  />
-                                <span slot="title">{{child.name}}</span>
-                            </el-menu-item>
-                        </el-submenu>
-                    </template>
+    <el-container style="height: 100%; ">
+    <el-aside :width="( collapse ? 64+'px' : '200px') "  >
+        <el-menu
+            @close="handleClose"
+            :collapse=" collapse"
+            background-color=""
+            text-color=""
+            active-text-color=""
+            style="border:0px;"
+            :default-active="$route.path"
+            unique-opened router>
+            <el-menu-item  class="el-system" >
+                <img src="@/assets/base/logo.png" style="height:60px;" />
+                <span  >
+                  <img src="@/assets/base/system.png" style="height:60px;" />
+                </span>
+            </el-menu-item >
+            <template v-for="(item,index) in routes" >
+                <template v-if="!item.children">
+                    <el-menu-item :index="item.path"
+                                  :key="item.path" v-if="item.hidden">
+                        <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  />
+                        <span slot="title">{{item.name}}</span>
+                    </el-menu-item>
                 </template>
+                <template v-else>
+                    <el-submenu
+                            v-if="item.hidden" class="title"
+                            :key="index" :index="index+''" style="text-align:left; ">
+                        <template slot="title">
+                            <el-tooltip v-if="item.iconCls" :content=" item.desc ? item.desc : item.name " placement="top">
+                                <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  />
+                            </el-tooltip>
+                            <span slot="title">
+                              {{item.name}}
+                            </span>
+                        </template>
+                        <el-menu-item
+                                v-if="item.children && child.hidden"
+                                style=""
+                                v-for="child in item.children"
+                                :index="child.path"
+                                :key="child.path">
+                            <i :class="child.iconCls ? child.iconCls : '' " v-if="child.iconCls"  />
+                            <span slot="title">{{child.name}}</span>
+                        </el-menu-item>
+                    </el-submenu>
+                </template>
+            </template>
 
-              </el-menu>
-        </el-aside>
-     </el-collapse-transition>
+          </el-menu>
+    </el-aside>
     
       <el-container style="background-color:#f6f6f6;">  
         <el-header class="system-header">
