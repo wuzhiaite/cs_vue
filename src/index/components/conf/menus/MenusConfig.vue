@@ -129,13 +129,9 @@ export default {
     },
     updateMenus(menus,tempArr){ //对菜单顺序进行排序
         for(var i in menus){
-          var tempObj = {};
-          var m = menus[i];
-          for(var ii in m){
-              if(ii == 'label'){continue;}
-              tempObj[ii] = m[ii];
-          }
-          tempObj.orderBy = tempArr.length + 1;
+          var tempObj = menus[i];
+          var len = tempArr.length ? tempArr.length + 1 : 1 ;
+          tempObj.orderBy = len ;
           tempArr.push(tempObj);
           var children = menus[i].children ;
           if(children && children.length > 0){

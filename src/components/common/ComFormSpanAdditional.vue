@@ -1,13 +1,13 @@
 <template>
   <span>
       <span v-if="item.type == 'ioc-select' " >
-        <IocSelect :item="item" :form="form" :disabled="disabled"/>
+        <IocSelect :item="item" :form.sync="form" :disabled="disabled"/>
      </span>
       <span v-if="item.type == 'com-tree-select'">
-          <ComTreeSelect :item="item" :form="form" ></ComTreeSelect>
+          <ComTreeSelect :item="item" :form.sync="form" ></ComTreeSelect>
       </span>
       <span v-if="item.type== 'common-tree'">
-        <ComTree :item="item" :form="form" ></ComTree>
+        <ComTree :item="item" :form.sync="form" ></ComTree>
       </span>
    
   </span>    

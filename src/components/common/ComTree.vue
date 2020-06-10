@@ -9,7 +9,7 @@
             :expand-on-click-node="item.expandOnClickNode ? item.expandOnClickNode : false"
             :render-content="item.renderContent ? item.renderContent : null "
             :default-expanded-keys="item.defaultExpandedKeys ? item.defaultExpandedKeys : [] "
-            :default-checked-keys="item.defaultCheckedKeys ? item.defaultCheckedKeys : [] "
+            :default-checked-keys="form[item.prop] && form[item.prop].length > 0 ? form[item.prop] : [] "
             @check="threeCheck"
     ></el-tree>
 </div>
@@ -35,16 +35,30 @@ export default{
             type:Object,
         }
       },
-      created(){
-          if(this.item.url) {
-              this.getData();
-          }else{
-              this.treeData = this.item.treeData ;
-          }
-      },
+    watch:{
+       item:{
+           deep:true,
+           immediate:true,
+           handler(n,o){
+               if(this.item.url) {
+                   this.getData();
+               }else{
+                   this.treeData = this.item.treeData ;
+               }
+           }
+       },
+        form:{
+            deep:true,
+            immediate:true,
+            handler(n,o){
+               console.log(n);
+            }
+        }
+    },
      methods:{
-         threeCheck(checkedNodes,checkedKeys,halfCheckedNodes,halfCheckedKeys ) {
-             console.log(this.$refs.tree.getCheckedKeys());
+         threeCheck() {
+             this.form[this.item.prop]=this.$refs.tree.getCheckedKeys();
+             this.$emit("update:form",this.form);
          },
         getData(){
             var url = this.item.url;

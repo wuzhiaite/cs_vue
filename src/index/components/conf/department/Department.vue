@@ -51,6 +51,8 @@ export default {
     },
     created(){
         this.getDepartmentList();
+    },
+    beforeMount(){
         this.initBtns();
         this.formInit();
     },
@@ -100,7 +102,7 @@ export default {
                     },
                     {
                         prop:'departmentName',
-                        label:'姓名',
+                        label:'部门名称',
                         type:'input',
                     },{
                         prop:'isValidate',
@@ -109,7 +111,7 @@ export default {
                         active:'yes',
                         inactive:'no',
                     },{
-                        prop:'menus',
+                        prop:'menuList',
                         label:'可访问菜单',
                         type:'common-tree',
                         showCheckBox:true,
@@ -155,7 +157,7 @@ export default {
             ];
         },
         save(){
-            var dep = this.department[0].children ;
+            var dep = this.department;
             var tempArr = [] ;
             this.updateDepartment(dep,tempArr);
             this.$axios
@@ -176,13 +178,13 @@ export default {
         },
         updateDepartment(department,tempArr){ //对菜单顺序进行排序
             for(var i in department){
-                var tempObj = {};
-                var dept = department[i];
-                for(var ii in dept){
-                    if(ii == 'label'){continue;}
-                    tempObj[ii] = dept[ii];
+                var tempObj = department[i];
+                var len = tempArr.length ? tempArr.length + 1 : 1 ;
+                tempObj.orderBy = len ;
+                var list = tempObj.menuList;
+                if(list && list.length > 0){
+                    tempObj.menus = JSON.stringify(list);
                 }
-                tempObj.orderBy = tempArr.length + 1;
                 tempArr.push(tempObj);
                 var children = department[i].children ;
                 if(children && children.length > 0){
@@ -261,7 +263,8 @@ export default {
         changeCurrent(data,node){
             this.currentData = data ;
             this.currentNode = node ;
-            this.form = data ;
+            this.form= data;
+            this.formInit();
             this.disabled = true;
         }
 
