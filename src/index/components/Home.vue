@@ -69,7 +69,7 @@
                               class="el-img"
                               :src="url" >
                       </el-image>
-                  </span>
+                   </span>
                    <span style="font-size:14px;margin-right:10px;">{{username}}</span>
                    <span class="grid-content bg-purple" @click="logout">
                          <i class="el-icon-switch-button"/>
