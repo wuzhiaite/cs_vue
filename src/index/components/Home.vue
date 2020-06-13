@@ -152,7 +152,7 @@
                         'setToken','setUser','setSystemName','setUsername']),                        
        menusInfo(){
           this.$axios
-           .post("/api/sys/menus/getList")
+           .post("/api/sys/menus/getUserMenu")
                 .then(res => {
                     if(res.status == 200 && res.data.code == 1){
                           var data = res.data.result ;
