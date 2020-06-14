@@ -182,6 +182,10 @@ export default {
                 var len = tempArr.length ? tempArr.length + 1 : 1 ;
                 tempObj.orderBy = len ;
                 var list = tempObj.menuList;
+                var index = lodash.findIndex(list,"root");
+                if( index == -1 ){//如果不是全选要额外增加  update 2020-06-14
+                    list.push('root');
+                }
                 if(list && list.length > 0){
                     tempObj.menus = JSON.stringify(list);
                 }
