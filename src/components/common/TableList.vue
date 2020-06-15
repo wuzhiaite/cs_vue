@@ -37,7 +37,11 @@
                  <el-button  v-if="item.opers.length>0"
                        size="mini" :type="oper.type?oper.type:''"
                        :icon="oper.icon ? oper.icon:''"
-                       v-for="(oper,index)  in item.opers" @click="oper.click(scope.row)" >
+                       v-for="(oper,index)  in item.opers"
+                       v-hasPermission="oper.hasPermission && oper.hasPermission.length ? oper.hasPermission : [] "
+                       v-hasNoPermission="oper.hasNoPermission ? oper.hasNoPermission : [] "
+                       v-hasAnyPermission="oper.hasAnyPermission ? oper.hasNoPermission : [] "
+                             @click="oper.click(scope.row)" >
                        {{ oper.name }}
                  </el-button>  
                  <!-- 标签过滤 -->

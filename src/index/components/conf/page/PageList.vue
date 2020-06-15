@@ -111,6 +111,7 @@ import ComPageList from './ComPageList'
                 btns : [{
                   name : '新增',
                   type : 'primary',
+                  hasPermission:['can_add'],
                   icon : 'el-icon-circle-plus-outline',
                   disabled : false,
                   click : function(){
@@ -223,6 +224,7 @@ import ComPageList from './ComPageList'
                   {
                     name:"删除",
                     type:'danger',
+                    hasPermission:['can_delete'],
                     icon : 'el-icon-delete',
                     click:function(row){
                       that.handleDelete(row);
@@ -232,6 +234,7 @@ import ComPageList from './ComPageList'
                     name:"编辑",
                     type:'',
                     icon:'el-icon-edit',
+                    hasPermission:['can_edit'],
                     click:function(row, column, event){
                         that.handleEdit(row);
                     }

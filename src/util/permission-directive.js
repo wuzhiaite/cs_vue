@@ -4,16 +4,11 @@ export const hasPermission = {
     install (Vue) {
         Vue.directive('hasPermission', {
             bind (el, binding, vnode) {
-                const meta = vnode.context.$route.meta ;
-                const permissions = vnode.context.$store.state.user.permissions
-                const per = []
-                for (const v of permissions) {
-                    per.push(v.authority)
-                }
-                const value = binding.value
+                const permissions = vnode.context.$route.meta.permissions ;
+                const value = binding.value;
                 let flag = true
                 for (const v of value) {
-                    if (!per.includes(v)) {
+                    if (!permissions.includes(v)) {
                         flag = false
                     }
                 }
@@ -33,15 +28,11 @@ export const hasNoPermission = {
     install (Vue) {
         Vue.directive('hasNoPermission', {
             bind (el, binding, vnode) {
-                const permissions = vnode.context.$store.state.user.permissions
-                const per = []
-                for (const v of permissions) {
-                    per.push(v.authority)
-                }
-                const value = binding.value
+                const permissions = vnode.context.$route.meta.permissions ;
+                const value = binding.value;
                 let flag = true
                 for (const v of value) {
-                    if (per.includes(v)) {
+                    if (permissions.includes(v)) {
                         flag = false
                     }
                 }

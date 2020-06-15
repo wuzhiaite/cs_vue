@@ -144,6 +144,7 @@ export default {
                 {
                     name:'新增',
                     type:'primary',
+
                     click:function(){
                         that.append();
                     }

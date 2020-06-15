@@ -71,7 +71,7 @@
                       </el-image>
                    </span>
                    <span style="font-size:14px;margin-right:10px;">{{username}}</span>
-                   <span class="grid-content bg-purple" @click="logout">
+                   <span class="grid-content bg-purple" @click="logout" style="font-size:14px;">
                          <i class="el-icon-switch-button"/>
                         退出登录
                     </span>
