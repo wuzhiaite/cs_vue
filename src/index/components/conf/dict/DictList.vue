@@ -136,11 +136,11 @@ export default {
                         fixed : 'left',
                         sortable : true,
                         fixedDirect : 'left',
-                        width : "10"
+                        width : "15"
                     },{
                         prop : "dictNameText",
                         label : "字典描述",
-                        width : "20"
+                        width : "15"
                     },{
                         prop:"bz",
                         label:"备注",

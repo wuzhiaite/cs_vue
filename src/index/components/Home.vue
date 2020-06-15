@@ -62,21 +62,35 @@
                    <i v-show="!collapse" class="el-icon-d-arrow-left"/>
                 </div>
             </el-col>
-            <el-col :span="4" :offset="16">
-                <div style="font-size:15px;text-align:left;">
+            <el-col :span="2" :offset="16">
+                <div style="font-size:15px;text-align:left;float:right;">
                   <span class="el-title" >
                       <el-image
                               class="el-img"
                               :src="url" >
                       </el-image>
                    </span>
-                   <span style="font-size:14px;margin-right:10px;">{{username}}</span>
-                   <span class="grid-content bg-purple" @click="logout" style="font-size:14px;">
-                         <i class="el-icon-switch-button"/>
-                        退出登录
-                    </span>
+                    <el-dropdown>
+                       <span style="font-size:14px;margin-right:10px;color:white;">
+                           {{username}}
+                       </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item
+                                    :icon="v.icon"
+                                    v-for="v in dropDownList"
+                                    @click="v.click"
+                                >{{v.label}}</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+
                 </div>
 
+            </el-col>
+            <el-col :span="2">
+                <span class="grid-content bg-purple" @click="logout" style="font-size:14px;">
+                     <i class="el-icon-switch-button"/>
+                        退出登录
+                </span>
             </el-col>
           </el-row>
         </el-header>
@@ -111,6 +125,7 @@
         srcList: [],
         screenHeight : document.body.clientHeight,
         screenWidth : document.body.clientWidth,
+        dropDownList : []
       }
     },
     created:function(){
@@ -118,6 +133,7 @@
       var url = require('../img/logo.jpg');
       this.url = url;
       this.srcList.push(url);
+      this.initDropDownList();
     },
     mounted:function(){
         const that = this
@@ -150,7 +166,7 @@
     methods:{
       ...mapMutations(['setScreenHeight','setScreenWidth',
                         'setToken','setUser','setSystemName','setUsername']),                        
-       menusInfo(){
+      menusInfo(){
           this.$axios
            .post("/api/sys/menus/getUserMenu")
                 .then(res => {
@@ -168,6 +184,33 @@
                     }
                 });
     
+      },
+      initDropDownList(){
+          var that = this;
+           this.dropDownList = [
+               {
+                   icon:'',
+                   label:'个人账户设置',
+                   click:function(){
+                      that.$router.push({path:`/`});
+                   }
+               },{
+                   icon:'',
+                   label:'密码修改',
+                   click:function(){
+                       that.$router.push({path:`/`});
+                   }
+               },{
+                   icon:'',
+                   label:'个人履历',
+                   click:function(){
+                       that.$router.push({path:`/`});
+                   }
+               }
+           ];
+
+
+
       },
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
