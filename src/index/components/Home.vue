@@ -1,7 +1,7 @@
 <template>
   <div :style="{height : screenHeight + 'px' }">
     <el-container style="height: 100%; ">
-    <el-aside :width="( collapse ? 64+'px' : '200px') "  >
+    <el-aside :width="( collapse ? 64 +'px' : '200px') "  >
         <el-menu
             @close="handleClose"
             :collapse=" collapse"
@@ -11,8 +11,8 @@
             style="border:0px;"
             :default-active="$route.path"
             unique-opened router>
-            <el-menu-item  class="el-system" >
-                <img src="@/assets/base/logo.png" style="height:60px;" />
+            <el-menu-item  class="el-system" style="padding-left:10px;">
+                <img src="@/assets/base/logo.png" height="50px" width="50px"/>
                 <span  >
                   <img src="@/assets/base/system.png" style="height:60px;" />
                 </span>
@@ -21,8 +21,8 @@
                 <template v-if="!item.children">
                     <el-menu-item :index="item.path"
                                   :key="item.path" v-if="item.hidden">
-                        <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  />
-                        <span slot="title">{{item.name}}</span>
+                        <i :class="item.iconCls ? item.iconCls : '' "  class="el-icon"  style="margin-right: 10px;padding-right: 10px"/>
+                        <span slot="title" style="padding:5px;">{{item.name}}</span>
                     </el-menu-item>
                 </template>
                 <template v-else>
