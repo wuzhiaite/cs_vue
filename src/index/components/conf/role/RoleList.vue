@@ -76,6 +76,8 @@ export default {
                 }]
         },
         saveForm:function(){
+            var flag = this.$refs.form.validateForm();
+            if(!flag)return;
             var temp = this.form;
             this.$axios.post("/api/role/addOrUpdatePage",temp)
                 .then(res=>{

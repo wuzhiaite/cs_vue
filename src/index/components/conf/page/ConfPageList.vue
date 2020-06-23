@@ -19,7 +19,8 @@
           <span style="width:1px;"></span>
           <div style="float:right;width:60%"> 
             <label><strong> 台账页面样式配置 </strong></label>  
-            <ComForm 
+            <ComForm
+               ref="form"
               :formDesign="pageDesignForm.formDesign"
               :form="pageDesignForm.form" 
               :btns="pageDesignForm.btns"></ComForm>
@@ -497,6 +498,8 @@ import ComPageList from './ComPageList';
           
         },  
         doSave : function(){//保存数据
+            var flag = this.$refs.form.validateForm();
+            if(!flag)return;
             var that = this ;
             if(!this.sqlForm.form){
                 this.$message({
