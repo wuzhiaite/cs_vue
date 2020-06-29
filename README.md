@@ -10,7 +10,7 @@ npm run serve
 npm run build
 
 ```
-### 基础配置文件
+### 基础配置文件(20200629)
 ```
 vue.config.js 配置转发路径和端口，基础路径配置等；
 .env文件配置环境的相关映射
