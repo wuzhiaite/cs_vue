@@ -250,10 +250,10 @@
 }
 
 .el-button--mini{
-    padding:4px 10px;
+    padding:3px 10px;
     font-size:12px;
     border-radius:3px;
-    line-height: 17px;
+    line-height: 27px;
 }
 
 .el-baber-title{
