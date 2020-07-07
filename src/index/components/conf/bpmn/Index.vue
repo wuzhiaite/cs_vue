@@ -22,11 +22,20 @@
                     <div ref="canvas" :style="{'height':height + 'px' }" class="canvas"></div>
                 </el-col>
                 <el-col :span="6">
-<!--                    <div id="js-properties-panel" class="panel"/>-->
-                    <NodeProperties v-if="bpmnModeler" :modeler="bpmnModeler" ></NodeProperties>
+                    <NodeProperties v-if="bpmnModeler" :modeler="bpmnModeler"/>
                 </el-col>
             </el-row>
         </div>
+        <el-dialog :visible.sync="xmlVisible" title="XML" :fullscreen="false" top="10vh">
+            <vue-ace-editor v-model="workflow.form.xml"
+                            @init="editorInit"
+                            lang="xml"
+                            theme="chrome"
+                            width="100%"
+                            height="400"
+                            :options="{wrap: true, readOnly: true}">
+            </vue-ace-editor>
+        </el-dialog>
     </el-card>
 </template>
 
@@ -41,6 +50,9 @@ import customTranslate from './customTranslate/customTranslate';
 import {mapGetters} from 'vuex';
 import canvg from 'canvg'// 图片转换
 import NodeProperties from './NodeProperties';
+import BpmData from "./BpmData";
+import VueAceEditor from 'vue2-ace-editor'
+
 
 export default {
     data() {
@@ -51,10 +63,12 @@ export default {
                 },
                 rules:[],
             },
+            xmlVisible:false,
             btns:[],
             bpmnModeler: null,
             container: null,
             canvas: null,
+            bpmData: new BpmData(),
         }
     },
     computed:{
@@ -62,6 +76,7 @@ export default {
     },
     components:{
         NodeProperties,
+        VueAceEditor,
     },
     created(){
         this.initFormAndBtns();
@@ -85,10 +100,6 @@ export default {
                     propertiesProviderModule, // 左边工具栏以及节点
                     // propertiesPanelModule, // 右边的工具栏
                 ],
-                // 如果您想在属性面板中维护camunda:XXX属性，则需要该属性
-                moddleExtensions: {
-                    // camunda: camundaModdleDescriptor
-                }
             })
 
             if (this.modelId) {
@@ -98,6 +109,11 @@ export default {
             }
         },
     methods: {
+        editorInit(){
+            require('brace/ext/language_tools') //language extension prerequsite...
+            require('brace/mode/xml')    //language
+            require('brace/theme/chrome')
+        },
         initFormAndBtns(){
             var that = this ;
             this.btns = [
@@ -136,6 +152,14 @@ export default {
                     click:function(){
                         that.createNewDiagram('');
                     }
+                },{
+                    name:'预览xml',
+                    type:'primary',
+                    icon: '',
+                    click:function(){
+                        console.log(that.workflow.form.modelXml);
+                        that.xmlVisible = !that.xmlVisible
+                    }
                 }
             ];
             this.workflow.rules = {
@@ -166,9 +190,69 @@ export default {
                     that.success();//绑定监听事件
                 }
             })
+            this.adjustPalette();
             // 让图能自适应屏幕
             var canvas = this.bpmnModeler.get('canvas');
             canvas.zoom('fit-viewport')
+        },
+        // 调整左侧工具栏排版
+        adjustPalette() {
+            console.log("adjust");
+            try {
+                // 获取 bpmn 设计器实例
+                const canvas = this.$refs.canvas;
+                const djsPalette = canvas.children[0].children[1].children[4];
+                const djsPalStyle = {
+                    width: "120px",
+                    padding: "5px",
+                    background: "white",
+                    left: "20px",
+                    borderRadius: 0,
+                    'border-radius':'10px'
+                };
+                for (var key in djsPalStyle) {
+                    djsPalette.style[key] = djsPalStyle[key];
+                }
+                const palette = djsPalette.children[0];
+                const allGroups = palette.children;
+                allGroups[0].style["display"] = "none";
+                // 修改控件样式
+                for (var gKey in allGroups) {
+                    const group = allGroups[gKey];
+                    for (var cKey in group.children) {
+                        const control = group.children[cKey];
+                        const controlStyle = {
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            width: "100%",
+                            padding: "5px",
+                            height:'40px',
+                            'line-height':'40px',
+                        };
+                        if (
+                            control.className &&
+                            control.dataset &&
+                            control.className.indexOf("entry") !== -1
+                        ) {
+                            const controlProps = this.bpmData.getControl(
+                                control.dataset.action
+                            );
+                            control.innerHTML = `<div style='font-size: 12px;font-weight:500;margin-left:15px;'>${
+                                controlProps["title"]
+                            }</div>`;
+                            if (controlProps['tooltip']) {
+                                control.title = controlProps['tooltip'];
+                            }
+                            for (var csKey in controlStyle) {
+                                control.style[csKey] = controlStyle[csKey];
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                console.log(e);
+            }
         },
         setEncoded(type, data) {// 当图发生改变的时候会调用这个函数，这个data就是图的xml
             const encodedData = encodeURIComponent(data);// 把xml转换为URI，下载要用到的
@@ -194,22 +278,19 @@ export default {
         },
         success() {
             console.log('创建成功!')
-            // this.addBpmnListener();
+            this.addBpmnListener();
             this.addModelerListener()
             this.addEventBusListener()
         },
         addBpmnListener() {// 添加绑定事件
-            const that = this
-            // 获取a标签dom节点
-            const downloadLink = this.$refs.saveDiagram
-            const downloadSvgLink = this.$refs.saveSvg
+            const that = this;
             // 给图绑定事件，当图有发生改变就会触发这个事件
             this.bpmnModeler.on('commandStack.changed', function() {
-                that.saveSVG(function(err, svg) {
-                    that.setEncoded(downloadSvgLink, 'diagram.svg', err ? null : svg)
+                that.bpmnModeler.saveSVG(function(err, svg) {
+                    that.setEncoded('SVG', err ? null : svg)
                 })
-                that.saveDiagram(function(err, xml) {
-                    that.setEncoded(downloadLink, 'diagram.bpmn', err ? null : xml)
+                that.bpmnModeler.saveXML(function(err, xml) {
+                    that.setEncoded('XML', err ? null : xml)
                 })
             })
         },

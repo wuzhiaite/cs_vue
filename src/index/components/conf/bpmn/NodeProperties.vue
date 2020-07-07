@@ -2,16 +2,77 @@
     <el-card>
         <div v-if="selectedElements.length<=0">请选择一个元素</div>
         <div v-else>
+            {{element}}
             <el-form :model="element" status-icon :rules="rules" ref="ruleForm" size="mini" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="id" prop="id">
-                    <el-input type="" v-model="element.id" ></el-input>
+                    <el-input disabled type="" v-model="element.id" />
                 </el-form-item>
-                <el-form-item label="name" prop="name">
-                    <el-input type="" v-model="element.name"  @change="(event) => changeField(event, 'name')"  ></el-input>
+                <el-form-item label="名称" prop="name">
+                    <el-input  v-model="element.name"  @change="changeField(value, 'name')"  />
                 </el-form-item>
-                <el-form-item label="customProps" prop="customProps">
-                    <el-input v-model="element.customProps" @change="(event) => changeField(event, 'customProps')"/>
-                </el-form-item>
+               <!--    用户任务     -->
+                <template v-if="element && element.type== 'bpmn:UserTask' ">
+                    <el-form-item label="表单类型">
+                        <el-input v-model="form.formCategory"></el-input>
+                    </el-form-item>
+                    <el-form-item label="表单KEY">
+                        <el-input v-model="form.formKey"></el-input>
+                    </el-form-item>
+                    <!-- 任务节点允许选择人员 -->
+                    <el-form-item label="节点人员">
+                        <el-select v-model="form.userType" placeholder="请选择" @change="typeChange">
+                            <el-option value="assignee" label="指定人员"></el-option>
+                            <el-option value="candidateUsers" label="候选人员"></el-option>
+                            <el-option value="candidateGroups" label="角色/岗位"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <!-- 指定人员 -->
+                    <el-form-item label="指定人员" v-if="userTask && form.userType === 'assignee'">
+                        <el-select
+                                v-model="form.assignee"
+                                placeholder="请选择"
+                                key="1"
+                                @change="(value) => addUser({assignee: value})">
+                            <el-option
+                                    v-for="item in users"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <!-- 候选人员 -->
+                    <el-form-item label="候选人员" v-else-if="userTask && form.userType === 'candidateUsers'">
+                        <el-select
+                                v-model="form.candidateUsers"
+                                placeholder="请选择"
+                                key="2"
+                                multiple
+                                @change="(value) => addUser({candidateUsers: value.join(',') || value})"
+                        >
+                            <el-option
+                                    v-for="item in users"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <!-- 角色/岗位 -->
+                    <el-form-item label="角色/岗位" v-else-if="userTask && form.userType === 'candidateGroups'">
+                        <el-select
+                                v-model="form.candidateGroups"
+                                placeholder="请选择"
+                                @change="(value) => addUser({candidateGroups: value})">
+                            <el-option
+                                    v-for="item in roles"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                </template>
             </el-form>
         </div>
     </el-card>
@@ -27,6 +88,8 @@ export default {
     },
     data () {
         return {
+            rules:{},
+            form:{},
             selectedElements: [], // 当前选择的元素集合
             element: null // 当前点击的元素
         }
@@ -67,17 +130,17 @@ export default {
             const modeling = modeler.get('modeling')
             modeling.updateProperties(element, properties)
         },
-        changeField (event, type) {// 改变控件触发的事件
-            const value = event.target.value
+        changeField (v, type) {// 改变控件触发的事件
+            const value = v;
             let properties = {}
-            properties[type] = value
+            properties[type] = value;
             this.element[type] = value
             this.updateProperties(properties) // 调用属性更新方法
-        }
+        },
     }
 }
 </script>
-<style>
+<style scoped>
 .el-card div{
     font-size:12px;
 }

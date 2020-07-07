@@ -1,5 +1,5 @@
 <template>
-  <div id="login"  :style="{'height': screenHeight - 90 + 'px'}">
+  <div id="login" >
 
       <div class="login-form">
           <el-form :rules="rules" class="login-container" label-position="left" :model="loginForm"
@@ -84,14 +84,13 @@
   }
 </script>
 <style scoped>
+
   #login{
-    display:block;
     background-image: url("../../../static/img/login.jpg");
     background-repeat: no-repeat;  
-    background-size: 100% 100%;    
+    background-size: 100% 100%;
   } 
   .login-form{
-    background:transparent;
     position: absolute;
     left:50%;
     top:50%;

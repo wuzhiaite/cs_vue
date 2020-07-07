@@ -4,6 +4,7 @@ export const hasPermission = {
     install (Vue) {
         Vue.directive('hasPermission', {
             bind (el, binding, vnode) {
+
                 const permissions = vnode.context.$route.meta.permissions ;
                 const value = binding.value;
                 let flag = true
@@ -80,8 +81,8 @@ export const hasRole = {
     install (Vue) {
         Vue.directive('hasRole', {
             bind (el, binding, vnode) {
-                console.log(vnode);
-                const permissions = vnode.context.$store.state.user.roles
+
+                const permissions = vnode.context.$store.state.user.roles;
                 const per = []
                 for (const v of permissions) {
                     per.push(v.authority)
