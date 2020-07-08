@@ -2,17 +2,17 @@
 <template>
     <el-card :style="{'min-height':height + 'px' }">
         <el-row :gutter="24" style="width:100%;">
-            <el-col :span="15">
-                <el-form size="mini" :inline="true" :model="workflow.form" class="demo-form-inline">
-                    <el-form-item label="流程名称">
-                        <el-input v-model="workflow.form.modelName" placeholder="请输入流程名称"/>
-                    </el-form-item>
-                    <el-form-item label="版本号">
-                        <el-input v-model="workflow.form.modelKey" placeholder="请输入版本号"/>
-                    </el-form-item>
-                </el-form>
-            </el-col>
-            <el-col :span="9">
+<!--            <el-col :span="15">-->
+<!--                <el-form size="mini" :inline="true" :model="workflow.form" class="demo-form-inline">-->
+<!--                    <el-form-item label="流程名称">-->
+<!--                        <el-input v-model="workflow.form.modelName" placeholder="请输入流程名称"/>-->
+<!--                    </el-form-item>-->
+<!--                    <el-form-item label="版本号">-->
+<!--                        <el-input disabled v-model="workflow.form.modelKey" placeholder="请输入版本号"/>-->
+<!--                    </el-form-item>-->
+<!--                </el-form>-->
+<!--            </el-col>-->
+            <el-col :offset="1">
                 <Buttons style="float:left;" :btns="btns"/>
             </el-col>
         </el-row>
@@ -21,13 +21,14 @@
                 <el-col :span="18" style="overflow:auto;">
                     <div ref="canvas" :style="{'height':height + 'px' }" class="canvas"></div>
                 </el-col>
-                <el-col :span="6">
-                    <NodeProperties v-if="bpmnModeler" :modeler="bpmnModeler"/>
+                <el-col :span="6" style="border-radius:10px !important;border:1px solid #CCC !important;">
+<!--                    <NodeProperties v-if="bpmnModeler" :modeler="bpmnModeler"/>-->
+                    <div  id="js-properties-panel"   />
                 </el-col>
             </el-row>
         </div>
         <el-dialog :visible.sync="xmlVisible" title="XML" :fullscreen="false" top="10vh">
-            <vue-ace-editor v-model="workflow.form.xml"
+            <vue-ace-editor v-model="workflow.form.modelXml"
                             @init="editorInit"
                             lang="xml"
                             theme="chrome"
@@ -41,6 +42,8 @@
 
 <script>
 
+
+
 import BpmnViewer from 'bpmn-js';// 引入相关的依赖
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 import propertiesPanelModule from 'bpmn-js-properties-panel';
@@ -52,15 +55,19 @@ import canvg from 'canvg'// 图片转换
 import NodeProperties from './NodeProperties';
 import BpmData from "./BpmData";
 import VueAceEditor from 'vue2-ace-editor'
+import camundaModdleDescriptor from 'camunda-bpmn-moddle/resources/camunda'
+import './style/bpmn-properties-theme.css';
 
+
+const customTranslateModule = {
+    translate: [ 'value', customTranslate ]
+};
 
 export default {
     data() {
         return {
             workflow:{
-                form:{
-                    modelName:"测试流程",
-                },
+                form:{},
                 rules:[],
             },
             xmlVisible:false,
@@ -86,9 +93,7 @@ export default {
             // 获取到属性ref为“content”的dom节点
             this.container = this.$refs.content
             const canvas = this.$refs.canvas; // 获取到属性ref为“canvas”的dom节点
-            const customTranslateModule = {
-                translate: [ 'value', customTranslate ]
-            };
+
             this.bpmnModeler = new BpmnModeler({ // 建模，官方文档这里讲的很详细
                 container: canvas,
                 // 添加控制板
@@ -98,16 +103,26 @@ export default {
                 additionalModules: [
                     customTranslateModule,
                     propertiesProviderModule, // 左边工具栏以及节点
-                    // propertiesPanelModule, // 右边的工具栏
+                    propertiesPanelModule, // 右边的工具栏
                 ],
+                moddleExtensions: {
+                    camunda: camundaModdleDescriptor,
+                }
             })
-
+            this.adjustPalette();
             if (this.modelId) {
                 this.params.modelId = this.modelId
             } else {
                 this.createNewDiagram('')
             }
         },
+    watch:{
+       'workflow.form.modelName'(n,o){
+           if(n && n.length>0){
+               this.createNewDiagram('');
+           }
+       }
+    },
     methods: {
         editorInit(){
             require('brace/ext/language_tools') //language extension prerequsite...
@@ -120,7 +135,7 @@ export default {
                 {
                     name:'保存',
                     type:'primary',
-                    icon: 'el-icon-edit',
+                    icon: '',
                     click:function(){
                         that.saveBpmn();
                     }
@@ -168,14 +183,14 @@ export default {
             }
             this.workflow.form = {
                 modelName: '', //   模型名称
-                modelKey: '', //    模型key(版本)
+                modelKey: 'workflow_'+ this.uuid(), //    模型key(版本)
             }
         },
         createNewDiagram(bpmnXML) {
             if (bpmnXML === '' || bpmnXML === null) {
                 bpmnXML = '<?xml version="1.0" encoding="UTF-8"?>\n' +
                     '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:tns="http://www.activiti.org/testm1568796216967" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="m1568796216967" name="" targetNamespace="http://www.activiti.org/testm1568796216967">\n' +
-                    '  <process id="myProcess_1" processType="None" isClosed="false" isExecutable="true" />\n' +
+                    '  <process id="workflow_'+this.uuid()+'" name="" processType="None" isClosed="false" isExecutable="true" />\n' +
                     '  <bpmndi:BPMNDiagram id="Diagram-_1" name="New Diagram" documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0">\n' +
                     '    <bpmndi:BPMNPlane bpmnElement="myProcess_1" />\n' +
                     '  </bpmndi:BPMNDiagram>\n' +
@@ -190,7 +205,7 @@ export default {
                     that.success();//绑定监听事件
                 }
             })
-            this.adjustPalette();
+
             // 让图能自适应屏幕
             var canvas = this.bpmnModeler.get('canvas');
             canvas.zoom('fit-viewport')
@@ -259,6 +274,7 @@ export default {
             if (data) {
                 if (type === 'XML') {
                     // 获取到图的xml，保存就是把这个xml提交给后台
+                    data = data.replace("camunda:","activiti:");
                     this.workflow.form.modelXml = data;
                     return {
                         filename: this.workflow.form.modelName+'.bpmn.xml',
@@ -277,7 +293,6 @@ export default {
             }
         },
         success() {
-            console.log('创建成功!')
             this.addBpmnListener();
             this.addModelerListener()
             this.addEventBusListener()
@@ -298,13 +313,21 @@ export default {
             // 监听 modeler
             const bpmnjs = this.bpmnModeler
             const that = this
+
             // 'shape.removed', 'connect.end', 'connect.move'
             const events = ['shape.added', 'shape.move.end', 'shape.removed']
             events.forEach(function(event) {
                 that.bpmnModeler.on(event, e => {
                     var elementRegistry = bpmnjs.get('elementRegistry')
                     var shape = e.element ? elementRegistry.get(e.element.id) : e.shape
-                    // console.log(shape)
+                    // if(!that.workflow.form.modelName){
+                    //     that.$message({
+                    //         type:"error",
+                    //         message:"请先填写流程名称"
+                    //     })
+                    //     // that.createNewDiagram('');
+                    //     return;
+                    // }
                     if (event === 'shape.added') {
                         console.log('新增了shape')
                     } else if (event === 'shape.move.end') {
@@ -368,7 +391,7 @@ export default {
             })
         },
         Import() {// 导入
-            document.getElementById('btn_file').click()
+
         },
         exportBpmn() {// 导出bpmn文件
             const _this = this;
@@ -406,12 +429,6 @@ export default {
                 }
             });
         },
-        advance() { // 前进
-            this.bpmnModeler.get('commandStack').redo()
-        },
-        retreat() {// 后退
-            this.bpmnModeler.get('commandStack').undo()
-        },
     }
 }
 </script>
@@ -423,7 +440,7 @@ export default {
     @import '~bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
     @import '~bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
     /*!*右边工具栏样式*!*/
-    @import '~bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css';
+    /*@import '~bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css';*/
 
     .containers{
         width: 100%;
@@ -432,10 +449,5 @@ export default {
     .canvas{
         width: 100%;
         height: 100%;
-    }
-    .panel{
-        right: 20px;
-        top: 200px;
-        width: 300px;
     }
 </style>

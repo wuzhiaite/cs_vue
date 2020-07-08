@@ -17,6 +17,7 @@
     "bpmn-js": "^6.5.1",
     "bpmn-js-embedded-comments": "^0.6.0",
     "bpmn-js-properties-panel": "^0.33.2",
+    "camunda-bpmn-moddle": "^4.4.0",
     "canvg": "^3.0.6",
     "core-js": "^2.6.5",
     "element-ui": "^2.13.2",

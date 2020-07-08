@@ -12,8 +12,8 @@
             :plain="btn.style && JSON.stringify(btn.style).indexOf('plain') != -1  ? true : false"
             :round="btn.style && JSON.stringify(btn.style).indexOf('round') != -1  ? true : false"
             v-hasPermission="btn.hasPermission && btn.hasPermission.length ? btn.hasPermission : [] "
-            v-hasNoPermission="btn.hasNoPermission ? btn.hasNoPermission : [] "
-            v-hasAnyPermission="btn.hasAnyPermission ? btn.hasNoPermission : [] "
+            v-hasNoPermission="btn.hasNoPermission  && btn.hasNoPermission.length ? btn.hasNoPermission : [] "
+            v-hasAnyPermission="btn.hasAnyPermission && btn.hasAnyPermission.length ? btn.hasNoPermission : [] "
             >
 
             {{btn.name}}
