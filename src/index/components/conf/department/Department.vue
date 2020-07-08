@@ -63,10 +63,12 @@ export default {
             handler:function(n,o){
                 n.label = n.departmentName ;
                 var data = this.currentData;
+                console.log(n);
                 if(data.children){
                     var children = data.children ;
                     var index = lodash.findIndex(children, function(o) { return o.id == n.id ; });
                     if(index != -1){
+                        console.log(n);
                         children[index] = n ;
                         this.$set(children[index],n);
                     }
@@ -183,7 +185,7 @@ export default {
                 var len = tempArr.length ? tempArr.length + 1 : 1 ;
                 tempObj.orderBy = len ;
                 var list = tempObj.menuList;
-                var index = lodash.findIndex(list,"root");
+                var index = lodash.findIndex(list,function(o){return o == "root"});
                 if( index == -1 ){//如果不是全选要额外增加  update 2020-06-14
                     list.push('root');
                 }
@@ -221,10 +223,10 @@ export default {
                 fatherId : data.id,
                 isValidate : 1,
                 children: [] } ;
-            if(data.id == 'root' ){
-                newChild.path = '/home';
-                newChild.realPath = 'Home';
-            }
+            // if(data.id == 'root' ){
+            //     newChild.path = '/home';
+            //     newChild.realPath = 'Home';
+            // }
             if (!data.children) {
                 this.$set(data, 'children', []) ;
             }
@@ -268,6 +270,9 @@ export default {
         changeCurrent(data,node){
             this.currentData = data ;
             this.currentNode = node ;
+            if(data && data.menuList && data.menuList.length > 0){
+                lodash.remove(data.menuList,function(n){return n=='root'})
+            }
             this.form= data;
             this.formInit();
             this.disabled = true;

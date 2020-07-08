@@ -70,6 +70,7 @@ export default {
                 form:{},
                 rules:[],
             },
+            element:{},
             xmlVisible:false,
             btns:[],
             bpmnModeler: null,
@@ -121,7 +122,14 @@ export default {
            if(n && n.length>0){
                this.createNewDiagram('');
            }
-       }
+       },
+        element:{
+           deep:true,
+           immediate:true,
+           handler(){
+
+           }
+        }
     },
     methods: {
         editorInit(){
@@ -274,12 +282,13 @@ export default {
             if (data) {
                 if (type === 'XML') {
                     // 获取到图的xml，保存就是把这个xml提交给后台
-                    data = data.replace("camunda:","activiti:");
-                    this.workflow.form.modelXml = data;
+                    const temp = data.replace("/camunda:/g","activiti:");
+                    this.workflow.form.modelXml = temp;
+                    console.log(this.workflow.form.modelXml);
                     return {
                         filename: this.workflow.form.modelName+'.bpmn.xml',
                         href: "data:application/bpmn20-xml;charset=UTF-8," + encodedData,
-                        data: data
+                        data: temp
                     }
                 }
                 if (type === 'SVG') {
@@ -370,25 +379,25 @@ export default {
             })
         },
         saveBpmn() {
-            var than = this
-            // 获取XML数据
-            than.bpmnModeler.saveXML({ format: true }, function(err, xml) {
-                if (!err) {
-                    than.workflow.form.modelXml = xml
-                    // 获取SVG数据（图片）
-                    than.bpmnModeler.saveSVG({ format: true }, (err, data) => {
-                        if (!err) {
-                            var svgXml = data
-                            var canvas = document.createElement('canvas') // 准备空画布
-                            canvas.width = '1000px'
-                            canvas.height = screen.availHeight
-                            canvg(canvas, svgXml)
-                            var imagedata = canvas.toDataURL('image/png')
-                            than.workflow.form.modelImage = imagedata
-                        }
-                    })
-                }
-            })
+            // var than = this
+            // // 获取XML数据
+            // than.bpmnModeler.saveXML({ format: true }, function(err, xml) {
+            //     if (!err) {
+            //         than.workflow.form.modelXml = xml
+            //         // 获取SVG数据（图片）
+            //         than.bpmnModeler.saveSVG({ format: true }, (err, data) => {
+            //             if (!err) {
+            //                 var svgXml = data
+            //                 var canvas = document.createElement('canvas') // 准备空画布
+            //                 canvas.width = '1000px'
+            //                 canvas.height = screen.availHeight
+            //                 canvg(canvas, svgXml)
+            //                 var imagedata = canvas.toDataURL('image/png')
+            //                 than.workflow.form.modelImage = imagedata
+            //             }
+            //         })
+            //     }
+            // })
         },
         Import() {// 导入
 
