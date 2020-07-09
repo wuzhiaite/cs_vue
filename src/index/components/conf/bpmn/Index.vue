@@ -79,6 +79,7 @@ export default {
             bpmData: new BpmData(),
         }
     },
+    props:['id'],
     computed:{
         ...mapGetters({height:'getScreenHeight',width:'getScreenWidth'}),
     },

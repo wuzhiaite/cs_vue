@@ -81,9 +81,7 @@
         },
         callbackParam:{
             type:Object,
-            default:{
-                multipleSelection:[],
-            }
+            default:()=>{}
         }
     },
     components:{
@@ -109,7 +107,9 @@
             deep:true,
             immediate:true,
             handler(n,o){
-                this.$emit("update:callbackParam",n);
+                if(n){
+                    this.$emit("update:callbackParam",n);
+                }
             }
         }
     },

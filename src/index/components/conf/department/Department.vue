@@ -25,6 +25,30 @@
                     <ComForm :formDesign="formDesign"
                              :form.sync="form"
                              :btns="[]">
+                        <template #menuList>
+                            <div class="permission-table" id="child-table">
+                                <el-table
+                                        :data="treeData"
+                                        style="width: 100%;margin-bottom: 20px;"
+                                        row-key="id"
+                                        size="mini"
+                                        default-expand-all
+                                        ref="multipleTable"
+                                        @selection-change="handleSelectionChange"
+                                        :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+                                    <el-table-column
+                                        type="selection"
+                                        width="55">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="label"
+                                        label="菜单名称"
+                                        width="">
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                        </template>
+
                     </ComForm>
                 </el-card>
             </el-col>
@@ -38,6 +62,7 @@ export default {
             department: [],
             currentData:{},
             currentNode:{},
+            multipleSelection:[],
             form:{},
             disabled:true,
             moveTempt:{},
@@ -50,34 +75,30 @@ export default {
         }
     },
     created(){
-        this.getDepartmentList();
+        this.getTreeData();
     },
     beforeMount(){
         this.initBtns();
         this.formInit();
-    },
-    watch:{
-        form:{
-            deep:true,
-            immediate:true,
-            handler:function(n,o){
-                n.label = n.departmentName ;
-                var data = this.currentData;
-                console.log(n);
-                if(data.children){
-                    var children = data.children ;
-                    var index = lodash.findIndex(children, function(o) { return o.id == n.id ; });
-                    if(index != -1){
-                        console.log(n);
-                        children[index] = n ;
-                        this.$set(children[index],n);
-                    }
-                }
 
-            }
-        }
     },
     methods: {
+        getTreeData(){
+            this.$axios
+                .post("/api/sys/menus/getList")
+                .then(res => {
+                    if(res.status == 200 && res.data.code == 1){
+                        var result = res.data.result ;
+                        this.treeData = result;
+                        this.getDepartmentList();
+                    }else{
+                        this.$message({
+                            type:"error",
+                            message:'查询失败，请稍后重试！！！'
+                        });
+                    }
+                });
+        },
         formInit(){
             this.formDesign = {
                 rules : {
@@ -112,12 +133,18 @@ export default {
                         type:'switch',
                         active:'yes',
                         inactive:'no',
-                    },{
+                    },
+                    // {
+                    //     prop:'menuList',
+                    //     label:'可访问菜单',
+                    //     type:'common-tree',
+                    //     showCheckBox:true,
+                    //     url:"/api/sys/menus/getList",
+                    // },
+                    {
                         prop:'menuList',
                         label:'可访问菜单',
-                        type:'common-tree',
-                        showCheckBox:true,
-                        url:"/api/sys/menus/getList",
+                        type:'slot-form',
                     },{
                         prop:'bz',
                         label:'备注',
@@ -160,6 +187,7 @@ export default {
             ];
         },
         save(){
+            this.changeDepartmentMenuControl();
             var dep = this.department;
             var tempArr = [] ;
             this.updateDepartment(dep,tempArr);
@@ -207,6 +235,7 @@ export default {
                         var department = res.data.result ;
                         this.department = department;
                         this.form = department[0] ;
+                        this.toggleSelection(department[0]);
                     }else{
                         this.$message({
                             type:"error",
@@ -267,15 +296,58 @@ export default {
                     }
                 });
         },
-        changeCurrent(data,node){
+        changeCurrent(data,node){//改变部门选中节点
+            this.changeDepartmentMenuControl();
             this.currentData = data ;
             this.currentNode = node ;
-            if(data && data.menuList && data.menuList.length > 0){
-                lodash.remove(data.menuList,function(n){return n=='root'})
-            }
             this.form= data;
-            this.formInit();
+            this.toggleSelection(data);
             this.disabled = true;
+        },
+        toggleSelection(data) {//加载department节点后，渲染菜单选中数据
+            this.$refs.multipleTable.clearSelection();
+            if (data) {
+                var list = data.menuList ;
+                this.renderSelection(this.treeData,list) ;
+            }
+        },
+        renderSelection(rows,list){//递归遍历departments数据，选中
+            rows.forEach(row => {
+                var index = lodash.indexOf(list,row.id);
+                if(index != -1){
+                    this.$refs.multipleTable.toggleRowSelection(row);
+                }
+                if(row.children){
+                    this.renderSelection(row.children,list);
+                }
+            });
+        },
+        handleSelectionChange(val){//选中项记录进表单中
+            this.multipleSelection = val;
+        },
+        changeDepartmentMenuControl(){//更改当前选中department对象的菜单权限
+            var that = this;
+            if(!that.multipleSelection || that.multipleSelection.length == 0){
+                return ;
+            }
+            this.recursionDepartmentData(this.department);
+            this.multipleSelection = [];
+        },
+        recursionDepartmentData(department){//递归遍历判断当前表单是否departments的子部门
+            var that = this;
+            department.forEach(d =>{
+                if(d.id == that.form.id){
+                    var arr = [];
+                    that.multipleSelection.forEach(v => {
+                        arr.push(v.id);
+                    })
+                    d.menuList = arr ;
+                    return;
+                }
+                if(d.children && d.children.length > 0){
+                    this.recursionDepartmentData(d.children);
+                }
+            })
         }
 
 
@@ -307,5 +379,11 @@ export default {
 
     .box-card {
         height:100%;
+    }
+    .permission-table{
+        border: 1px solid #ddd;
+        padding:10px;
+        border-radius:7px;
+        overflow-x:auto;
     }
 </style>

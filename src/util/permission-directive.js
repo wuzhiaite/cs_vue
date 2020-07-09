@@ -4,8 +4,8 @@ export const hasPermission = {
     install (Vue) {
         Vue.directive('hasPermission', {
             bind (el, binding, vnode) {
-
                 const permissions = vnode.context.$route.meta.permissions ;
+                console.log(permissions);
                 const value = binding.value;
                 let flag = true
                 for (const v of value) {

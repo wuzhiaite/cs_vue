@@ -81,9 +81,7 @@
         },
         callbackParam:{
             type:Object,
-            default:{
-                multipleSelection:[],
-            }
+            default:()=>{}
         }
     },
     components:{

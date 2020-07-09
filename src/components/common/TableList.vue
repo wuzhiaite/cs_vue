@@ -38,10 +38,9 @@
                        size="mini" :type="oper.type?oper.type:''"
                        :icon="oper.icon ? oper.icon:''"
                        v-for="(oper,index)  in item.opers"
-                       v-hasPermission="oper.hasPermission && oper.hasPermission.length ? oper.hasPermission : [] "
-                       v-hasNoPermission="oper.hasNoPermission ? oper.hasNoPermission : [] "
-                       v-hasAnyPermission="oper.hasAnyPermission ? oper.hasNoPermission : [] "
-                             @click="oper.click(scope.row)" >
+                       v-hasPermission="oper.hasPermission && oper.hasPermission.length > 0 ? oper.hasPermission : [] "
+                       @click="oper.click(scope.row)" >
+
                        {{ oper.name }}
                  </el-button>  
                  <!-- 标签过滤 -->
@@ -81,7 +80,7 @@ import ComForm from "./ComForm";
              default:[],
          },
          callbackParam:{
-             multipleSelection:[],
+             required:false
          }   
     },
     computed:{

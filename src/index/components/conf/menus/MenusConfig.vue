@@ -200,6 +200,7 @@ export default {
                          type:"success",
                          message:'删除成功！'
                      });
+                     this.form = this.menus[0] ;
                  }else{
                      this.$message({
                          type:"error",
