@@ -56,6 +56,9 @@ import NodeProperties from './NodeProperties';
 import BpmData from "./BpmData";
 import VueAceEditor from 'vue2-ace-editor'
 import camundaModdleDescriptor from 'camunda-bpmn-moddle/resources/camunda'
+import activitiDescriptor from './activiti.json'
+
+
 import './style/bpmn-properties-theme.css';
 
 
@@ -66,6 +69,7 @@ const customTranslateModule = {
 export default {
     data() {
         return {
+            id:"",
             workflow:{
                 form:{},
                 rules:[],
@@ -79,7 +83,6 @@ export default {
             bpmData: new BpmData(),
         }
     },
-    props:['id'],
     computed:{
         ...mapGetters({height:'getScreenHeight',width:'getScreenWidth'}),
     },
@@ -88,6 +91,9 @@ export default {
         VueAceEditor,
     },
     created(){
+        if(!this.id){
+            this.id = this.$route.params.id ;
+        }
         this.initFormAndBtns();
     },
     mounted() {
@@ -109,30 +115,32 @@ export default {
                 ],
                 moddleExtensions: {
                     camunda: camundaModdleDescriptor,
+                    // activiti:activitiDescriptor
                 }
             })
             this.adjustPalette();
-            if (this.modelId) {
-                this.params.modelId = this.modelId
-            } else {
-                this.createNewDiagram('')
-            }
+            this.getBpmnXml();
         },
-    watch:{
-       'workflow.form.modelName'(n,o){
-           if(n && n.length>0){
-               this.createNewDiagram('');
-           }
-       },
-        element:{
-           deep:true,
-           immediate:true,
-           handler(){
-
-           }
-        }
-    },
+    // watch:{
+    //    'workflow.form.modelName'(n,o){
+    //        if(n && n.length>0){
+    //            this.createNewDiagram('');
+    //        }
+    //    },
+    // },
     methods: {
+        getBpmnXml(){
+            this.$axios.post("/api/activiti/deployment/getDeployWorkflow/"+this.id)
+                .then(res=>{
+                    if(res.status == 200 && res.data.code == 1){
+                        if(res.data.result){
+                           this.createNewDiagram(res.data.result);
+                        }else{
+                            this.createNewDiagram('');
+                        }
+                    }
+                });
+        },
         editorInit(){
             require('brace/ext/language_tools') //language extension prerequsite...
             require('brace/mode/xml')    //language
@@ -142,6 +150,13 @@ export default {
             var that = this ;
             this.btns = [
                 {
+                    name:'返回',
+                    type:'primary',
+                    icon: '',
+                    click:function(){
+                        that.$router.back();
+                    }
+                },{
                     name:'保存',
                     type:'primary',
                     icon: '',
@@ -181,7 +196,6 @@ export default {
                     type:'primary',
                     icon: '',
                     click:function(){
-                        console.log(that.workflow.form.modelXml);
                         that.xmlVisible = !that.xmlVisible
                     }
                 }
@@ -192,14 +206,21 @@ export default {
             }
             this.workflow.form = {
                 modelName: '', //   模型名称
-                modelKey: 'workflow_'+ this.uuid(), //    模型key(版本)
+                modelKey: this.id, //    模型key(版本)
             }
         },
         createNewDiagram(bpmnXML) {
             if (bpmnXML === '' || bpmnXML === null) {
                 bpmnXML = '<?xml version="1.0" encoding="UTF-8"?>\n' +
-                    '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:tns="http://www.activiti.org/testm1568796216967" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="m1568796216967" name="" targetNamespace="http://www.activiti.org/testm1568796216967">\n' +
-                    '  <process id="workflow_'+this.uuid()+'" name="" processType="None" isClosed="false" isExecutable="true" />\n' +
+                    '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" ' +
+                    'xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" ' +
+                    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+                    'xmlns:tns="http://www.activiti.org/bpmn" ' +
+                    'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
+                    'id="m1568796216967" name="" ' +
+                    'targetNamespace="http://www.activiti.org/bpmn">\n' +
+                    '  <process id="'+this.id+'" name="" isExecutable="true" >\n' +
+                    '  </process>' +
                     '  <bpmndi:BPMNDiagram id="Diagram-_1" name="New Diagram" documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0">\n' +
                     '    <bpmndi:BPMNPlane bpmnElement="myProcess_1" />\n' +
                     '  </bpmndi:BPMNDiagram>\n' +
@@ -283,9 +304,8 @@ export default {
             if (data) {
                 if (type === 'XML') {
                     // 获取到图的xml，保存就是把这个xml提交给后台
-                    const temp = data.replace("/camunda:/g","activiti:");
+                    const temp = this.formXML(data);
                     this.workflow.form.modelXml = temp;
-                    console.log(this.workflow.form.modelXml);
                     return {
                         filename: this.workflow.form.modelName+'.bpmn.xml',
                         href: "data:application/bpmn20-xml;charset=UTF-8," + encodedData,
@@ -295,12 +315,17 @@ export default {
                 if (type === 'SVG') {
                     this.workflow.form.modelImage = data;
                     return {
-                        filename: this.workflow.form.modelName+'.svg',
+                        filename: this.workflow.form.modelName+'.temp.svg',
                         href: "data:application/text/xml;charset=UTF-8," + encodedData,
                         data: data
                     }
                 }
             }
+        },
+        formXML(data){
+            var temp = data.replace(/camunda/ig,"activiti");
+            temp = temp.replace(/FormField/ig,'formProperty');
+            return temp ;
         },
         success() {
             this.addBpmnListener();
@@ -360,7 +385,7 @@ export default {
                     console.log(e)
                     if (!e || e.element.type == 'bpmn:Process') return
                     if (eventType === 'element.changed') {
-                        // that.elementChanged(e)
+                        that.elementChanged(e)
                     } else if (eventType === 'element.click') {
                         console.log('点击了element')
                         var shape = e.element ? elementRegistry.get(e.element.id) : e.shape
@@ -379,26 +404,35 @@ export default {
                 })
             })
         },
+        elementChanged(e){
+
+        },
         saveBpmn() {
-            // var than = this
-            // // 获取XML数据
-            // than.bpmnModeler.saveXML({ format: true }, function(err, xml) {
-            //     if (!err) {
-            //         than.workflow.form.modelXml = xml
-            //         // 获取SVG数据（图片）
-            //         than.bpmnModeler.saveSVG({ format: true }, (err, data) => {
-            //             if (!err) {
-            //                 var svgXml = data
-            //                 var canvas = document.createElement('canvas') // 准备空画布
-            //                 canvas.width = '1000px'
-            //                 canvas.height = screen.availHeight
-            //                 canvg(canvas, svgXml)
-            //                 var imagedata = canvas.toDataURL('image/png')
-            //                 than.workflow.form.modelImage = imagedata
-            //             }
-            //         })
-            //     }
-            // })
+            var xml = this.workflow.form.modelXml;
+            if(xml.indexOf('startEvent') == -1){
+                this.$message({
+                    type :'error',
+                    message:"必须要有开始按钮"
+                })
+                return;
+            }
+            if(xml.indexOf('endEvent') == -1){
+                this.$message({
+                    type :'error',
+                    message:"必须要有结束按钮"
+                })
+                return;
+            }
+            var form = this.workflow.form ;
+            this.$axios.post("/api/activiti/deployment/deployWorkflow",form)
+                .then(res=>{
+                    if(res.status == 200 && res.data.code == 1){
+                        this.$message({
+                            message: "发布成功",
+                            type : 'success'
+                        });
+                    }
+                });
         },
         Import() {// 导入
 

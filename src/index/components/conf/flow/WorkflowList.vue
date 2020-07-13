@@ -27,12 +27,15 @@ export default{
     },
     methods:{
         initWorkflows(){
-
+            var that = this;
             this.workflows = [
                 [
                     {
                         name:"请假申请",
                         imagurl:require("@/assets/img/workflow/workflow-01.jpg"),
+                        function(){
+                            that.$router.push({path:'/startworkflow',query:{key:'workflow_1a84b95'}})
+                        }
                     },{
                         name:"加班申请",
                         imagurl:require("@/assets/img/workflow/workflow-02.jpg"),

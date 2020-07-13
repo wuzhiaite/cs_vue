@@ -94,7 +94,7 @@
     display: inline-block;
     vertical-align: middle;
     color: #666;
-    font-size: 110%;
+    font-size: 14px;
     margin-top: 5px;
     margin-bottom: 10px;
     transition: margin 0.218s linear;
@@ -317,6 +317,7 @@ label.bpp-hidden {
 }
 .bpp-field-description {
     margin-top: 5px;
+    font-size:12px;
     color: #999;
 }
 .bpp-field-description a {
@@ -360,7 +361,9 @@ label.bpp-hidden {
 .bpp-properties-group {
     padding: 6px 15px 6px 15px;
     position: relative;
-    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius:10px;
+    margin-bottom:10px;
     transition: max-height 0.218s ease-in-out, padding-top 0.218s ease-in-out, padding-bottom 0.218s ease-in-out;
 }
 .bpp-properties-group:empty {
@@ -383,11 +386,11 @@ label.bpp-hidden {
     display: inline-block;
     vertical-align: middle;
     color: #666;
-    font-size: 110%;
+    font-size: 15px;
     margin-top: 5px;
     margin-bottom: 10px;
     transition: margin 0.218s linear;
-    font-style: italic;
+    /*font-style: italic;*/
 }
 .bpp-properties-group > .group-label[for] {
     cursor: pointer;
@@ -449,6 +452,7 @@ label.bpp-hidden {
 }
 .bpp-properties-tab-bar {
     border-bottom: 1px solid #ccc;
+    margin-bottom:10px;
     padding: 0 15px;
 }
 .bpp-properties-tab-bar .scroll-tabs-button {
@@ -491,7 +495,7 @@ ul.bpp-properties-tabs-links > li > a {
     border: 1px solid #ccc;
     border-radius: 3px 3px 0 0;
     border-bottom: transparent;
-    background-color: #f8f8f8;
+    background-color: white;
     color: #666;
     text-decoration: none;
 }
@@ -503,7 +507,7 @@ ul.bpp-properties-tabs-links > li + li {
 }
 ul.bpp-properties-tabs-links > li.bpp-active a {
     padding-bottom: 5px;
-    border-top: 2px solid #52B415;
+    border-top: 2px solid #409EFF;
     border-bottom: none;
 }
 .bpp-properties-tab,
@@ -512,4 +516,5 @@ ul.bpp-properties-tabs-links > li.bpp-active a {
 }
 .bpp-properties-tab.bpp-active {
     display: block;
+    margin-bottom:10px;
 }

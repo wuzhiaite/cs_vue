@@ -148,21 +148,21 @@ export default {
                     },{
                         prop : "createTime",
                         label : "创建时间",
-                        width : "10",
+                        width : "15",
                         formatter:function(row){
                             return that.normalFormat(row.updateTime,"yyyy-MM-dd");
                         }
                     },{
                         prop : "updateTime",
                         label : "更新时间",
-                        width : "10",
+                        width : "15",
                         formatter:function(row){
                             return that.normalFormat(row.updateTime,"yyyy-MM-dd");
                         }
                     },{
                         prop : "",
                         label : "操作",
-                        width : "20",
+                        width : "25",
                         sortable:'',
                         fixedDirect:'right',
                         opers:[
