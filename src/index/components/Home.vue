@@ -339,6 +339,16 @@ i{
       height:60px;
       line-height:60px;
   }
-
+.el-step__title {
+    font-size: 14px !important;
+    line-height: 38px;
+}
+.el-step__description {
+    padding-right: 10%;
+    margin-top: -5px;
+    font-size: 12px;
+    line-height: 20px;
+    font-weight: 400;
+}
 
 </style>

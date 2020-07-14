@@ -3,10 +3,12 @@
 <!--     木头人字体-->
      <el-row  v-for="(flow, index) in workflows">
          <el-col v-for="(o, index) in flow" :span="3"  :key="index" :offset="index > 0 ? 2 : 0">
-             <el-card :body-style="{ padding: '0px' }" shadow="hover" @click="">
-                 <img :src="o.imagurl" class="image">
-                 <div style="padding: 14px;">
-                     <strong>{{o.name}}</strong>
+             <el-card :body-style="{ padding: '0px' }" shadow="hover" >
+                 <div @click="o.click ? o.click() : nosupport()">
+                     <img :src="o.imagurl" class="image">
+                     <div style="padding: 14px;">
+                         <strong>{{o.name}}</strong>
+                     </div>
                  </div>
              </el-card>
          </el-col>
@@ -16,6 +18,9 @@
 
 </template>
 <script>
+
+import {workflow} from './js/workflow'
+
 export default{
     data() {
         return {
@@ -23,56 +28,14 @@ export default{
         };
     },
     created(){
-        this.initWorkflows();
+        this.workflows = workflow(this);
     },
     methods:{
-        initWorkflows(){
-            var that = this;
-            this.workflows = [
-                [
-                    {
-                        name:"请假申请",
-                        imagurl:require("@/assets/img/workflow/workflow-01.jpg"),
-                        function(){
-                            that.$router.push({path:'/startworkflow',query:{key:'workflow_1a84b95'}})
-                        }
-                    },{
-                        name:"加班申请",
-                        imagurl:require("@/assets/img/workflow/workflow-02.jpg"),
-                    },{
-                        name:"离职申请",
-                        imagurl:require("@/assets/img/workflow/workflow-03.jpg"),
-                    },{
-                        name:"转正申请",
-                        imagurl:require("@/assets/img/workflow/workflow-04.jpg"),
-                    },{
-                        name:"异动申请",
-                        imagurl:require("@/assets/img/workflow/workflow-05.jpg"),
-                    }
-                ],
-                [
-                    {
-                        name:"用章申请",
-                        imagurl:require("@/assets/img/workflow/workflow-06.jpg"),
-                    },{
-                        name:"办公用品申请",
-                        imagurl:require("@/assets/img/workflow/workflow-07.jpg"),
-                    },{
-                        name:"IT维护申请",
-                        imagurl:require("@/assets/img/workflow/workflow-08.jpg"),
-                    },{
-                        name:"出差申请",
-                        imagurl:require("@/assets/img/workflow/workflow-09.jpg"),
-                    },{
-                        name:"补助申请",
-                        imagurl:require("@/assets/img/workflow/workflow-10.jpg"),
-                    }
-                ],
-
-            ];
-
-
-
+        nosupport(){
+            this.$message({
+                type:'warning',
+                message:'该流程还未新键，敬请期待。'
+            })
 
         }
 

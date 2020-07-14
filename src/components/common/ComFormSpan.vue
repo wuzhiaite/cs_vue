@@ -94,10 +94,22 @@
               size="mini"
               style="width:100%;padding:0px;"
               type="date"
+              :format="item.format ? item.format : 'yyyy 年 MM 月 dd 日'"
+              :value-format="item.valueFormat ? item.valueFormat : 'yyyy-MM-dd HH:mm:ss'"
               :disabled="item.disabled ? item.disabled : false"
               :placeholder="item.placeholder ? item.placeholder : '选择日期' ">
           </el-date-picker>    
       </span>
+       <!--  带具体的事件的日期选择器  -->
+       <span v-if="item.type=='dateTime'">
+           <el-date-picker
+                v-model="form[item.prop]"
+                size="mini"
+                style="width:100%;padding:0px;"
+                type="datetime"
+                :placeholder="item.placeholder ? item.placeholder : '选择日期' ">
+            </el-date-picker>
+       </span>
        <!-- 按钮配置 -->
       <ButtonsAdd v-if="item.type == 'btns'" :item="item" :form="form" />
 
