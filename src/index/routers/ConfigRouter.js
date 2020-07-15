@@ -25,7 +25,7 @@ export default new VueRouter({
                 {
                     path : '/index',
                     name : '首页',
-                    component : () => import('../components/Index'),
+                    component : () => import('../components/com/Index'),
                     hidden:true,
                 },
 

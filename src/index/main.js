@@ -12,7 +12,10 @@ import VueDraggable from 'vue-draggable'
 import VueAxiosPlugin from 'vue-axios-plugin';
 import filters from '../util/com-filter';//通用filter
 import '../util/base/commonUtil';
+import Video from 'video.js'
+import 'video.js/dist/video-js.css'
 
+Vue.prototype.$video = Video //引入Video播放器
 Vue.use(VueDraggable);//可拖动动画
 Vue.use(ElementUI);
 

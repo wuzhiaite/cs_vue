@@ -41,3 +41,4 @@ vue.config.js 配置转发路径和端口，基础路径配置等；
    - 借鉴代码：https://gitee.com/xiaofanger/vue-bpmn-flowable
    - 借鉴博客（很详细的讲解了所有的操作）：https://www.jianshu.com/p/1d6e4ae5d2c1
 - UI框架（ElementUI） https://element.eleme.io/#/zh-CN/guide/design
+- 视频播放组件video.js,vue整合文档  https://docs.videojs.com/tutorial-vue.html

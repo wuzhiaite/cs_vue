@@ -8,7 +8,8 @@
     </el-tab-pane>
     <el-tab-pane>
       <span slot="label"><i class="el-icon-refresh-left"></i> 流程退回</span>
-
+      <ComForm :form.sync="sendBackFlow.form" :formDesign="sendBackFlow.formDesign" />
+      <Buttons :btns="sendBackFlow.btns" />
 
     </el-tab-pane>
   </el-tabs>
@@ -72,7 +73,28 @@ export default {
 
           }
         }
+        this.sendBackFlow = {
+         formDesign:{
+           disabled: false,
+           labelWidth:'20%',
+           inline:false,
+           formItems: [
+             {
+               prop: 'node',
+               label: '返回的节点:',
+               type: 'input',
+               rules: { required: true, message: '请选择任务办理人类型', trigger: 'blur' },
+             },{
+               prop:'reason',
+               label:'处理建议',
+               type:'textarea',
+             }
+           ]
+         },
+         form:{
 
+         }
+       }
 
      },
      initBtns(){
@@ -91,6 +113,21 @@ export default {
           }
 
         ];
+        this.sendBackFlow.btns = [
+         {
+           name: "流程退回",
+           type: 'warning',
+           icon: '',
+           style:"round",
+           click: function () {
+
+
+
+           }
+         }
+
+       ];
+
      }
 
    }
