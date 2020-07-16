@@ -22,7 +22,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row class="el-row" >
+    <el-row class="el-row" style="">
       <el-col :span="14" class="el-col">
           <el-card>
             <IndexVideo />
@@ -30,9 +30,12 @@
       </el-col>
       <el-col :span="10" class="el-col">
           <el-card>
-            <el-carousel indicator-position="outside" interval="2000">
-              <el-carousel-item v-for="item in imgs" :key="item">
-                <img :src="item.imgUrl"  height="100%"/>
+            <el-carousel indicator-position="outside" :interval='2000' >
+              <el-carousel-item v-for="(item,index) in imgs" :key="index">
+                <el-image
+                        style="width: 100%; height: 100%"
+                        :src="item.imgUrl"
+                        fit="contain"></el-image>
               </el-carousel-item>
             </el-carousel>
           </el-card>
@@ -90,9 +93,14 @@
         </el-card>
       </el-col>
       <el-col :span="8" class="el-col">
-        <el-card style="height:100%;">
-
-
+        <el-card style="height:100%;width:100%;">
+          <div slot="header" class="clearfix">
+            <span>卡片名称</span>
+            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+          </div>
+          <div v-for="o in 4" :key="o" class="text item">
+            {{'列表内容 ' + o }}
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -133,6 +141,26 @@ export default {
      padding:10px;
      height:100%;
   }
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both
+}
+
+.box-card {
+  width: 480px;
+}
 </style>
 
 
