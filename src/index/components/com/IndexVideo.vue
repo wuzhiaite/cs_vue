@@ -4,12 +4,8 @@
     </div>
 </template>
 <script>
-import VideoPlayer from "./VideoPlayer";
 
 export default {
-    components: {
-        VideoPlayer
-    },
     data() {
         return {
             videoOptions: {

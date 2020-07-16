@@ -87,7 +87,6 @@ export default {
         ...mapGetters({height:'getScreenHeight',width:'getScreenWidth'}),
     },
     components:{
-        NodeProperties,
         VueAceEditor,
     },
     created(){
@@ -211,6 +210,7 @@ export default {
         },
         createNewDiagram(bpmnXML) {
             if (bpmnXML === '' || bpmnXML === null) {
+
                 bpmnXML = '<?xml version="1.0" encoding="UTF-8"?>\n' +
                     '<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" ' +
                     'xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" ' +
@@ -219,8 +219,7 @@ export default {
                     'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
                     'id="m1568796216967" name="" ' +
                     'targetNamespace="http://www.activiti.org/bpmn">\n' +
-                    '  <process id="'+this.id+'" name="" isExecutable="true" >\n' +
-                    '  </process>' +
+                    '  <process id="'+this.id+'" name="" isExecutable="true" />'+
                     '  <bpmndi:BPMNDiagram id="Diagram-_1" name="New Diagram" documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0">\n' +
                     '    <bpmndi:BPMNPlane bpmnElement="myProcess_1" />\n' +
                     '  </bpmndi:BPMNDiagram>\n' +
@@ -323,9 +322,9 @@ export default {
             }
         },
         formXML(data){
-            var temp = data.replace(/camunda/ig,"activiti");
-            temp = temp.replace(/FormField/ig,'formProperty');
-            return temp ;
+            // var temp = data.replace(/camunda/ig,"activiti");
+            // temp = temp.replace(/FormField/ig,'formProperty');
+            // return temp ;
         },
         success() {
             this.addBpmnListener();

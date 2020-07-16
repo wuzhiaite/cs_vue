@@ -38,10 +38,10 @@
           </el-card>
       </el-col>
     </el-row>
-    <el-row class="el-row" style="height:350px;">
+    <el-row class="el-row" style="height:400px;">
       <el-col :span="8" class="el-col">
-        <el-card>
-          <el-collapse accordion>
+        <el-card style="height:100%;">
+          <el-collapse accordion >
             <el-collapse-item>
               <template slot="title">
                 一致性 Consistency<i class="header-icon el-icon-info"></i>
@@ -66,7 +66,7 @@
         </el-card>
       </el-col>
       <el-col :span="8" class="el-col">
-        <el-card>
+        <el-card style="height:100%;">
           <el-timeline>
             <el-timeline-item timestamp="2018/4/12" placement="top">
               <el-card>
@@ -90,7 +90,7 @@
         </el-card>
       </el-col>
       <el-col :span="8" class="el-col">
-        <el-card>
+        <el-card style="height:100%;">
 
 
         </el-card>

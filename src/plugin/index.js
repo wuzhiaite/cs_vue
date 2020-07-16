@@ -6,7 +6,7 @@ const requireComponent = require.context(
   // 其组件目录的相对路径
   '../components/common/',
   // 是否查询其子目录
-  false,
+  true,
   // 匹配基础组件文件名的正则表达式
   /[A-Z]\w+\.(vue|js)$/
 )
