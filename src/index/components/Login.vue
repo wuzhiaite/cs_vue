@@ -4,7 +4,15 @@
       <div class="login-form">
           <el-form :rules="rules" class="login-container" label-position="left" :model="loginForm"
                 label-width="0px" v-loading="loading">
-              <h3 class="login_title">系统登录</h3>
+              <div>
+                  <el-row>
+                      <img src="@/assets/base/logo.png" height="50px" width="50px"/>
+                  </el-row>
+                  <el-row>
+                      <img src="@/assets/base/system.png" style="height:60px;" />
+                      <h4 style="font-weight:normal;"> 基础后台管理系统 </h4>
+                  </el-row>
+              </div>
               <el-form-item prop="username">
                 <el-input type="text" v-model="loginForm.username"
                           auto-complete="off" placeholder="账号"></el-input>

@@ -10,6 +10,12 @@ npm run serve
 npm run build
 
 ```
+## 详细的使用及说明文档
+
+语雀：https://www.yuque.com/wuzhiaite/ailopg/vfia6q
+
+里面详细描述了封装的组件以及系统的使用。
+
 ## 基础功能实现
 ```
 vue.config.js 配置转发路径和端口，基础路径配置等；

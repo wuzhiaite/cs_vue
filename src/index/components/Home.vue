@@ -62,8 +62,8 @@
                    <i v-show="!collapse" class="el-icon-d-arrow-left"/>
                 </div>
             </el-col>
-            <el-col :span="2" :offset="16">
-                <div style="font-size:15px;text-align:left;float:right;">
+            <el-col :span="22" >
+                <div style="font-size:13px;text-align:left;float:right;margin-right:25px;">
                   <span class="el-title" >
                       <el-image
                               class="el-img"
@@ -82,15 +82,15 @@
                                 >{{v.label}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-
-                </div>
-
-            </el-col>
-            <el-col :span="2">
-                <span class="grid-content bg-purple" @click="logout" style="font-size:14px;">
+                    <span class="grid-content bg-purple" @click="logout" >
                      <i class="el-icon-switch-button"/>
                         退出登录
-                </span>
+                    </span>
+                </div>
+
+<!--            </el-col>-->
+<!--            <el-col :span="2">-->
+
             </el-col>
           </el-row>
         </el-header>
@@ -253,7 +253,7 @@
     padding:3px 10px;
     font-size:12px;
     border-radius:3px;
-    line-height: 27px;
+    line-height: 20px;
 }
 
 .el-baber-title{

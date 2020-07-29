@@ -63,13 +63,13 @@ export default {
               {label:'事假',value:'leave_for_personal_affairs'},
               {label:'调休',value:'take_workings_day_off'},
             ],
-            rules: { required: true, message: '请选择假期类型', trigger: 'blur' },
+            rules: { required: true, message: '请选择假期类型', trigger: 'change' },
           },
           {
             prop: 'leaveReson',
             label: '请假原因',
             type: 'textarea',
-            rules: { required: true, message: '请说明请假原因', trigger: 'blur' },
+            rules: { required: true, message: '请说明请假原因', trigger: 'change' },
           },{
             prop:'leaveDetail',
             label:'请假明细',

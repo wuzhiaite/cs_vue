@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-tabs type="card"  >
+  <el-tabs type="card" size="mini" >
     <el-tab-pane>
       <span slot="label"><i class="el-icon-finished"></i> 流程流转</span>
       <ComForm :form.sync="processFlow.form" :formDesign="processFlow.formDesign" />
@@ -104,7 +104,7 @@ export default {
               name: "流程流转",
               type: 'success',
               icon: '',
-              style:"round",
+              style:"",
               click: function () {
 
 
