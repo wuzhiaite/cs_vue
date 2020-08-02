@@ -10,7 +10,7 @@ export const workflow = function(that){
                 name:"请假申请",
                 imagurl:require("@/assets/img/workflow/workflow-01.jpg"),
                 click:function(){
-                    that.$router.push({path:'/startworkflow',query:{key:'workflow_1a84b95',id:''}})
+                    that.$router.push({path:'/startworkflow',query:{key:'workflow_207f493',id:''}})
                 }
             },{
             name:"加班申请",
