@@ -94,7 +94,6 @@
 <style scoped>
 
   #login{
-    background-image: url("../../assets/base/main.jpg");
     background-repeat: no-repeat;  
     background-size: 100% 100%;
   } 
@@ -109,7 +108,6 @@
     background-clip: padding-box;
     width: 350px;
     padding: 35px 35px 15px 35px;
-    background: #fff;
     border: 1px solid #eee;
   }
   .login_title {

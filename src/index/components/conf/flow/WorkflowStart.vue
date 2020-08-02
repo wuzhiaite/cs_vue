@@ -4,10 +4,7 @@
     <el-card>
       <el-col :span="24">
         <el-steps :active="4" align-center >
-          <el-step title="步骤1" description="描述性文字"></el-step>
-          <el-step title="步骤2" description="描述性文字"></el-step>
-          <el-step title="步骤3" description="描述性文字"></el-step>
-          <el-step title="步骤4" description="描述性文字"></el-step>
+          <el-step :title="s.name" :description="s.description" v-for="s in steps"></el-step>
         </el-steps>
       </el-col>
     </el-card>
@@ -36,14 +33,23 @@ import WorkflowStep from './form/WorkflowStep'
 export default {
   data(){
       return{
+         key:'',
+         id:'',
          form:{},
-         formDesign:{}
+         formDesign:{},
+         steps:[
+           {
+             name:"开始"
+           }
+         ],
       }
   },
   components:{
     WorkflowStep,
   },
   created(){
+      this.key = this.$route.query.key;
+      this.id = this.$route.query.id;
       this.initForm();
   },
   methods:{
@@ -78,15 +84,19 @@ export default {
                   prop:'startDate',
                   label:'开始日期',
                   type:'dateTime',
+                  format:'yyyy-MM-dd HH:mm',
                   rules: { required: true, message: '请选择假期开始时间', trigger: 'blur' },
                 },{
                   prop:'endDate',
                   label:'结束日期',
                   type:'dateTime',
+                  format:'yyyy-MM-dd HH:mm',
+                  rules: { required: true, message: '请选择假期开始时间', trigger: 'blur' },
                 },{
                   prop:'days',
                   label:'天数',
                   type:'input',
+
                 }],
           },{
             prop: 'bz',

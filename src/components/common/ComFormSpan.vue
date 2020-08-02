@@ -5,6 +5,7 @@
           :placeholder="item.placeholder ? item.placeholder : '' "
           :disabled="item.disabled ? item.disabled : false"
           :show-password="item.password ? item.password : false"
+          @change="item.event && item.event.change? item.event.change : null"
           v-model="form[item.prop]">
       </el-input>
       <span v-if="item.type == 'select' ">
@@ -107,6 +108,7 @@
                 size="mini"
                 style="width:100%;padding:0px;"
                 type="datetime"
+                :format="item.format?item.format:'yyyy-MM-dd HH:mm:ss'"
                 :placeholder="item.placeholder ? item.placeholder : '选择日期' ">
             </el-date-picker>
        </span>

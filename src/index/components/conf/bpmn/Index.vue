@@ -303,7 +303,7 @@ export default {
             if (data) {
                 if (type === 'XML') {
                     // 获取到图的xml，保存就是把这个xml提交给后台
-                    const temp = this.formXML(data);
+                    const temp = data;
                     this.workflow.form.modelXml = temp;
                     return {
                         filename: this.workflow.form.modelName+'.bpmn.xml',
@@ -322,9 +322,9 @@ export default {
             }
         },
         formXML(data){
-            // var temp = data.replace(/camunda/ig,"activiti");
-            // temp = temp.replace(/FormField/ig,'formProperty');
-            // return temp ;
+            var temp = data.replace(/camunda/ig,"activiti");
+            temp = temp.replace(/FormField/ig,'formProperty');
+            return temp ;
         },
         success() {
             this.addBpmnListener();
@@ -408,6 +408,7 @@ export default {
         },
         saveBpmn() {
             var xml = this.workflow.form.modelXml;
+            xml = this.formXML(xml);
             if(xml.indexOf('startEvent') == -1){
                 this.$message({
                     type :'error',

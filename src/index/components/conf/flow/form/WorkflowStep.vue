@@ -3,12 +3,12 @@
   <el-tabs type="card" size="mini" >
     <el-tab-pane>
       <span slot="label"><i class="el-icon-finished"></i> 流程流转</span>
-      <ComForm :form.sync="processFlow.form" :formDesign="processFlow.formDesign" />
+      <ComForm  ref="processForm" :form.sync="processFlow.form" :formDesign="processFlow.formDesign" />
       <Buttons :btns="processFlow.btns" />
     </el-tab-pane>
     <el-tab-pane>
       <span slot="label"><i class="el-icon-refresh-left"></i> 流程退回</span>
-      <ComForm :form.sync="sendBackFlow.form" :formDesign="sendBackFlow.formDesign" />
+      <ComForm ref="sendbackForm" :form.sync="sendBackFlow.form" :formDesign="sendBackFlow.formDesign" />
       <Buttons :btns="sendBackFlow.btns" />
 
     </el-tab-pane>
@@ -52,20 +52,21 @@ export default {
                 prop: 'assigne',
                 label: '办理人:',
                 type: 'input',
-                rules: { required: true, message: '请选择任务办理人类型', trigger: 'blur' },
+                rules: { required: true, message: '请选择任务办理人类型', trigger: 'change' },
               },
               {
                 prop: 'approve',
                 label: '处理结果:',
                 type: 'radio',
                 options:[
-                        {label:"同意",value:"Yes"},
+                        {label:"同意",value:"true"},
                         {label:"反对",value:"false"}],
-                rules: { required: true, message: '请说明请假原因', trigger: 'blur' },
+                rules: { required: true, message: '是否同意', trigger: 'change' },
               },{
                 prop:'reason',
                 label:'处理建议',
                 type:'textarea',
+                rules: { required: true, message: '处理意见', trigger: 'change' },
               }
             ]
           },
@@ -106,7 +107,8 @@ export default {
               icon: '',
               style:"",
               click: function () {
-
+                var flag = that.$refs.processForm.validateForm();
+                console.log(flag);
 
 
               }
@@ -118,7 +120,7 @@ export default {
            name: "流程退回",
            type: 'warning',
            icon: '',
-           style:"round",
+           style:"",
            click: function () {
 
 
