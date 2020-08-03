@@ -90,11 +90,12 @@
                              label: '假期类型',
                              type: 'select',
                              clearable:true,
-                             options:[
-                                 {label:'年假',value:'annual_leave'},
-                                 {label:'事假',value:'leave_for_personal_affairs'},
-                                 {label:'调休',value:'take_workings_day_off'},
-                             ],
+                             url:'/api/dict/getdict/leave_process_type',
+                             // options:[
+                             //     {label:'年假',value:'annual_leave'},
+                             //     {label:'事假',value:'leave_for_personal_affairs'},
+                             //     {label:'调休',value:'take_workings_day_off'},
+                             // ],
                              rules: { required: true, message: '请选择假期类型', trigger: 'change' },
                          },
                          {
