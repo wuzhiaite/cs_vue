@@ -19,7 +19,8 @@ export default {
                     profilePhoto:'',
                   },
     screenHeight:window.screen.availHeight - 90,//获取屏幕可用工作区高度
-    screenWidth:window.screen.availWidth - 180,//获取屏幕可用工作区宽度         
+    screenWidth:window.screen.availWidth - 180,//获取屏幕可用工作区宽度
+    lang:'',
 
 
 }

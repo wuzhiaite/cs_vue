@@ -14,6 +14,8 @@ import filters from '../util/com-filter';//通用filter
 import '../util/base/commonUtil';
 import Video from 'video.js'
 import 'video.js/dist/video-js.css'
+import i18n from "../i18n/i18n";
+
 
 Vue.prototype.$video = Video //引入Video播放器
 Vue.use(VueDraggable);//可拖动动画
@@ -31,13 +33,14 @@ Object.keys(filters).forEach(key => {
 new Vue({
   store,
   router,
+  i18n,
   render: h => h(App),
 }).$mount('#app')
 
 
 //页面跳转处理
 Vue.config.productionTip = false
-window.document.title = 'cs';
+window.document.title = 'cs-lpf';
 
 // router.js文件
 // 全局路由守卫，动态改变tille

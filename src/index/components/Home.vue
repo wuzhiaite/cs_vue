@@ -63,28 +63,51 @@
                 </div>
             </el-col>
             <el-col :span="22" >
-                <div style="font-size:13px;text-align:left;float:right;margin-right:25px;">
+                <div class="header-span" >
+                    <el-dropdown @command="changI18n" style="float:left">
+                      <span class="system-header-name">
+                        {{ $i18n.locale }}<i class="el-icon-arrow-down"></i>
+                      </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item
+                                v-for="v in i18nList"
+                                :command="v.label"
+                           >{{v.label}}</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+<!--                    <el-dropdown  style="float:left" @cammand="changI18n">-->
+<!--                        <span class="system-header-name">-->
+<!--                           {{ $i18n.locale }}-->
+<!--                            <i class="el-icon-arrow-down"></i>-->
+<!--                       </span>-->
+<!--                        <el-dropdown-menu slot="dropdown">-->
+<!--                            <el-dropdown-item-->
+<!--                                    v-for="v in i18nList"-->
+<!--                                    :command="v.label"-->
+<!--                            >{{v.label}}</el-dropdown-item>-->
+<!--                        </el-dropdown-menu>-->
+<!--                    </el-dropdown>-->
                   <span class="el-title" >
                       <el-image
                               class="el-img"
                               :src="url" >
                       </el-image>
                    </span>
-                    <el-dropdown>
-                       <span style="font-size:14px;margin-right:10px;color:white;">
+                    <el-dropdown  @command="handleCommand">
+                       <span class="system-header-name">
                            {{username}}
                        </span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item
                                     :icon="v.icon"
                                     v-for="v in dropDownList"
-                                    @click="v.click"
+                                    :command="v.value"
                                 >{{v.label}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                     <span class="grid-content bg-purple" @click="logout" >
                      <i class="el-icon-switch-button"/>
-                        退出登录
+                        {{$t('logout')}}
                     </span>
                 </div>
 
@@ -125,7 +148,27 @@
         srcList: [],
         screenHeight : document.body.clientHeight,
         screenWidth : document.body.clientWidth,
-        dropDownList : []
+        dropDownList : [
+            {
+                icon:'',
+                label:'个人账户设置',
+            },{
+                icon:'',
+                label:'密码修改',
+            },{
+                icon:'',
+                label:'个人履历',
+            }
+        ],
+        i18nList:[
+            {
+                label:'zh-cn',
+            },{
+                label:'zh-hk',
+            },{
+                label:'en-us',
+
+            }]
       }
     },
     created:function(){
@@ -133,7 +176,7 @@
       var url = require('../img/logo.jpg');
       this.url = url;
       this.srcList.push(url);
-      this.initDropDownList();
+      let that = this;
     },
     mounted:function(){
         const that = this
@@ -165,7 +208,13 @@
    },
     methods:{
       ...mapMutations(['setScreenHeight','setScreenWidth',
-                        'setToken','setUser','setSystemName','setUsername']),                        
+                        'setToken','setUser','setSystemName','setUsername']),
+        changI18n(command) {
+          this.$i18n.locale = command ;
+        },
+        handleCommand(command) {
+            this.$message('click on item ' + command);
+        },
       menusInfo(){
           this.$axios
            .post("/api/sys/menus/getUserMenu")
@@ -184,33 +233,6 @@
                     }
                 });
     
-      },
-      initDropDownList(){
-          var that = this;
-           this.dropDownList = [
-               {
-                   icon:'',
-                   label:'个人账户设置',
-                   click:function(){
-                      that.$router.push({path:`/`});
-                   }
-               },{
-                   icon:'',
-                   label:'密码修改',
-                   click:function(){
-                       that.$router.push({path:`/`});
-                   }
-               },{
-                   icon:'',
-                   label:'个人履历',
-                   click:function(){
-                       that.$router.push({path:`/`});
-                   }
-               }
-           ];
-
-
-
       },
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
@@ -242,6 +264,17 @@
   }
 </script>
 <style>
+.system-header-name{
+    font-size:14px;
+    margin-right:10px;
+    color:white;
+}
+.header-span{
+    font-size:13px;
+    text-align:left;
+    float:right;
+    margin-right:25px;
+}
 .el-menu-item{
     padding-left: 30px;
     text-align: left;
@@ -307,6 +340,7 @@ i{
     float:left;
     vertical-align:middle;
     cursor:pointer;
+    line-height:60px;
   }
   .el-header .el-user {
       font-size: 13px;
@@ -350,5 +384,7 @@ i{
     line-height: 20px;
     font-weight: 400;
 }
-
+.el-icon-arrow-down {
+    font-size: 12px;
+}
 </style>

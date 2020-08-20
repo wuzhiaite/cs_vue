@@ -3,7 +3,6 @@ export const dateFormat = {
     
       normalFormat : function(date,fmt){
             if(!date){return ''; }
-            console.log(typeof date);
             if(typeof date === 'string'){
                 date = new Date(date);
             }   

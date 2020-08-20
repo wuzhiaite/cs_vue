@@ -21,6 +21,7 @@ export default {
         state.token = token;
         localStorage.setItem("token",token)
     }  ,
+    setLang:(state,lang) =>{state.lang=lang;}
 
 
 }

@@ -78,7 +78,7 @@
                   this.$router
                         .replace({path: path == '/' || path == undefined ? '/index' : path});
               }else{
-                  this.$message.error(data.message + '');
+                  // this.$message.error(data.message + '');
               }
 
 
