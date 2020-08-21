@@ -5,7 +5,7 @@
         <el-input v-model="search" 
             :placeholder=" pageParam.searchParam && pageParam.searchParam.placeholder 
                                 ? pageParam.searchParam.placeholder 
-                                : '请输入内容' "
+                                : $t('common.pls_input')  "
             :clearable=" pageParam.searchParam && pageParam.searchParam.clearable 
                                 ? pageParam.searchParam.clearable : true"
             size="mini"
@@ -122,7 +122,7 @@
         addQualitySearch:function(){//增加高级查询,和普通查询
           var that = this;
           var selectBtn = {
-              name : '查询',
+              name : this.$t('common.query'),
               type : 'primary',
               icon : 'el-icon-search',
               size: 'mini',
@@ -131,12 +131,12 @@
                  that.doSearch();   
               }
             };
-            if(lodash.findIndex(this.pageParam.btns,{ name : '查询'}) == -1){
+            if(lodash.findIndex(this.pageParam.btns,{ name :  this.$t('common.query')}) == -1){
                  this.pageParam.btns = lodash.concat(selectBtn,this.pageParam.btns );
             }  
             if(this.pageParam.isQualitySearch){  
                  var quailtyBtn = {
-                        name : '高级查询',
+                        name : this.$t('common.advancedQuery'),
                         type : 'primary',
                         icon : 'el-icon-s-promotion',
                         disabled : false,
@@ -144,7 +144,7 @@
                             that.show = ! that.show;
                         }
                     };     
-                if(lodash.findIndex(this.pageParam.btns,{ name : '高级查询'}) == -1){
+                if(lodash.findIndex(this.pageParam.btns,{ name :  this.$t('common.advancedQuery')}) == -1){
                     this.pageParam.btns = lodash.concat(quailtyBtn,this.pageParam.btns );
                 }     
             }

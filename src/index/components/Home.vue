@@ -66,27 +66,15 @@
                 <div class="header-span" >
                     <el-dropdown @command="changI18n" style="float:left">
                       <span class="system-header-name">
-                        {{ $i18n.locale }}<i class="el-icon-arrow-down"></i>
+                        {{$t( lang || 'zh-cn' ) }}<i class="el-icon-arrow-down" style="margin-left:7px;"></i>
                       </span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item
                                 v-for="v in i18nList"
                                 :command="v.label"
-                           >{{v.label}}</el-dropdown-item>
+                           >{{$t(v.label)}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-<!--                    <el-dropdown  style="float:left" @cammand="changI18n">-->
-<!--                        <span class="system-header-name">-->
-<!--                           {{ $i18n.locale }}-->
-<!--                            <i class="el-icon-arrow-down"></i>-->
-<!--                       </span>-->
-<!--                        <el-dropdown-menu slot="dropdown">-->
-<!--                            <el-dropdown-item-->
-<!--                                    v-for="v in i18nList"-->
-<!--                                    :command="v.label"-->
-<!--                            >{{v.label}}</el-dropdown-item>-->
-<!--                        </el-dropdown-menu>-->
-<!--                    </el-dropdown>-->
                   <span class="el-title" >
                       <el-image
                               class="el-img"
@@ -107,26 +95,22 @@
                     </el-dropdown>
                     <span class="grid-content bg-purple" @click="logout" >
                      <i class="el-icon-switch-button"/>
-                        {{$t('logout')}}
+                        {{$t('home.logout')}}
                     </span>
                 </div>
-
-<!--            </el-col>-->
-<!--            <el-col :span="2">-->
-
             </el-col>
           </el-row>
         </el-header>
         <el-header class="el-baber-title" height="50px">
             <el-breadcrumb separator="/" style="padding:15px;">
-              <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
+              <el-breadcrumb-item :to="{ path: '/index' }">{{$t('menus.index')}}</el-breadcrumb-item>
               <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
             </el-breadcrumb>
          </el-header> 
          <div style="overflow-y:auto;overflow-x:auto;">
             <el-main :style="{ height : screenHeight - 110 +'px'}">
                 <transition name="el-zoom-in-center">
-                     <router-view />
+                     <router-view v-if="isRouterAlive"/>
                 </transition>
             </el-main>
          </div>
@@ -146,6 +130,7 @@
         collapse: true,
         url: '',
         srcList: [],
+        isRouterAlive:true,
         screenHeight : document.body.clientHeight,
         screenWidth : document.body.clientWidth,
         dropDownList : [
@@ -171,6 +156,11 @@
             }]
       }
     },
+    provide(){
+        return {
+            reload:this.reload ,
+        }
+    },
     created:function(){
       this.menusInfo();
       var url = require('../img/logo.jpg');
@@ -189,6 +179,7 @@
     },
     computed:{
         ...mapGetters({
+              lang:'lang',
               routes:'cs/getMenus',
               systemName : 'getSystemName',
               username : 'getUsername'}),
@@ -205,12 +196,28 @@
     screenHeight:function(n,o){
       this.setScreenHeight(n);
     },
+    lang(n,o){
+        if(n){
+            this.$i18n.locale = n;
+        }else{
+            this.$i18n.locale = 'zh-cn';
+        }
+    }
    },
     methods:{
       ...mapMutations(['setScreenHeight','setScreenWidth',
+                        'setLang',
                         'setToken','setUser','setSystemName','setUsername']),
         changI18n(command) {
           this.$i18n.locale = command ;
+          this.setLang(command);
+          this.reload();
+        },
+        reload(){
+            this.isRouterAlive = false;
+            this.$nextTick(function(){
+                this.isRouterAlive = true;
+            })
         },
         handleCommand(command) {
             this.$message('click on item ' + command);
@@ -228,7 +235,7 @@
                     }else{
                       this.$message({
                         type:"error",
-                        message:'查询失败，请稍后重试！！！'
+                        message:this.$t('messages.query_failed_pls_check_later')
                       });
                     }
                 });
@@ -250,12 +257,12 @@
                       this.$router.push({path:"/"});
                       this.$message({
                           type:"success",
-                          message:'退出成功！'
+                          message:this.$t('messages.logout_success')
                       });
                   }else{
                       this.$message({
                           type:"error",
-                          message:'退出失败，请刷新重试！'
+                          message:this.$t('messages.logout_fail_pls_refresh')
                       });
                   }
               });

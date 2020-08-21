@@ -176,7 +176,7 @@ export default {
                             that.viewForm(null);
                         }
                     },{
-                        name:'批量删除',
+                        name:this.$t('common.batchDelete'),
                         type:'danger',
                         icon:'el-icon-delete',
                         click:function(){

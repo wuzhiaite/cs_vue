@@ -45,7 +45,6 @@ window.document.title = 'cs-lpf';
 // router.js文件
 // 全局路由守卫，动态改变tille
 router.beforeEach((to, from, next) => {
-  console.log(to);
   if(store.state.token ){
     if(to.path === '/'){
       //登录状态下 访问login.vue页面 会跳到index.vue

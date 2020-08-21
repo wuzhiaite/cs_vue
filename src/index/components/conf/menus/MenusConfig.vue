@@ -83,20 +83,20 @@ export default {
       var that = this ;
       this.btns = [
         {
-          name:'删除',
+          name:that.$t('common.delete'),
           type:'primary',
           click:function(){
             that.remove();
           }
         },
         {
-          name:'新增',
+          name:that.$t('common.add'),
           type:'primary',
           click:function(){
             that.append();
           }
         },{
-          name:'保存',
+          name:that.$t('common.save'),
           type:'primary',
           click:function(){
             that.save();
