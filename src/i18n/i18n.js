@@ -5,6 +5,7 @@ import zh from './zh-cn';
 import hk from './zh-hk';
 import en from './en-us';
 
+
 Vue.use(VueI18n)
 
 const messages = {
@@ -16,7 +17,7 @@ const messages = {
 
 // eslint-disable-next-line no-unused-vars
 const i18n = new VueI18n({
-    locale: 'zh-cn',
+    // locale: 'zh-cn',
     messages,
     fallbackLocale: 'zh-cn',
     formatFallbackMessages: true,

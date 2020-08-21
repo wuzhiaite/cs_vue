@@ -196,13 +196,6 @@
     screenHeight:function(n,o){
       this.setScreenHeight(n);
     },
-    lang(n,o){
-        if(n){
-            this.$i18n.locale = n;
-        }else{
-            this.$i18n.locale = 'zh-cn';
-        }
-    }
    },
     methods:{
       ...mapMutations(['setScreenHeight','setScreenWidth',

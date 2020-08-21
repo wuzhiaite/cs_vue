@@ -1,8 +1,9 @@
 
 //全局过滤器配置
 import {dateFormat} from './base/dateUtil'
+import Vue from "vue";
 
-export default {
+export const filters = {
     normalDateFormat : function(date,fmt){
         return dateFormat.normalFormat(date,fmt);
     },
@@ -12,7 +13,10 @@ export default {
 }
 
 
-
+//全局filter注册
+Object.keys(filters).forEach(key => {
+    Vue.filter(key, filters[key])
+})
 
 
 

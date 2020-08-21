@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import store from "../../store";
 
 Vue.use(VueRouter);
 
@@ -7,7 +8,7 @@ const Login = () => import('../components/Login');
 const Home = () => import('../components/Home');
 const Index = () => import('../components/com/Index');
 
-export default new VueRouter({
+export const router =  new VueRouter({
     mode:'history',
     base:'',
     routes :[
@@ -36,9 +37,11 @@ export default new VueRouter({
             ]
         },
     ]
-}); 
+});
 
 
+
+export default router ;
 
 
 
