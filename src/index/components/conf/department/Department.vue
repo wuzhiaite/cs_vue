@@ -21,7 +21,7 @@
             </el-col>
             <!-- 菜单表单 -->
             <el-col :span="15" :offset="1">
-                <el-card class="box-card" style="overflow-y:auto;">
+                <el-card class="box-card" >
                     <ComForm :formDesign="formDesign"
                              :form.sync="form"
                              :btns="[]">

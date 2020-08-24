@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueAxiosPlugin from "vue-axios-plugin";
 import store from "../store";
 import router from "../index/routers/ConfigRouter";
+import { MessageBox, Message } from 'element-ui'
 
 
 
@@ -10,7 +11,6 @@ Vue.use(VueAxiosPlugin, {
     // 请求拦截处理
     reqHandleFunc: config =>{
         let token = store.state.token;
-        console.log("==reqHandleFunc===");
         if (token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
             config.headers.Authorization = "Bearer "+token;
         }
@@ -19,9 +19,11 @@ Vue.use(VueAxiosPlugin, {
     reqErrorFunc: error => Promise.reject(error),
     // 响应拦截处理
     resHandleFunc: response => {
+        console.log(response);
         return response ;
     },
     resErrorFunc: err => {
+        console.log(err);
         let message = "";
         if (err.response.status == 504 || err.response.status == 404) {
             message = '服务器被吃了⊙﹏⊙∥';
@@ -43,7 +45,7 @@ Vue.use(VueAxiosPlugin, {
                 // router.push({path : "/"});
             }
         }
-        ElementUI.Message({
+        Message({
             message: message,
             type: 'warning'
         });
