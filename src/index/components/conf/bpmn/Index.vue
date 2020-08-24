@@ -137,6 +137,8 @@ export default {
                         }else{
                             this.createNewDiagram('');
                         }
+                    }else{
+                        this.createNewDiagram('');
                     }
                 });
         },
@@ -224,6 +226,8 @@ export default {
                     '    <bpmndi:BPMNPlane bpmnElement="myProcess_1" />\n' +
                     '  </bpmndi:BPMNDiagram>\n' +
                     '</definitions>'
+            }else{
+                bpmnXML = this.reformXML(bpmnXML);
             }
             // 将字符串转换成图显示出来
             var that = this;
@@ -322,8 +326,13 @@ export default {
             }
         },
         formXML(data){
-            var temp = data.replace(/camunda/ig,"activiti");
+            let temp = data.replace(/camunda/ig,"activiti");
             temp = temp.replace(/FormField/ig,'formProperty');
+            return temp ;
+        },
+        reformXML(data){
+            let temp = data.replace(/activiti/ig,"camunda");
+            temp = temp.replace(/formProperty/ig,'FormField');
             return temp ;
         },
         success() {
