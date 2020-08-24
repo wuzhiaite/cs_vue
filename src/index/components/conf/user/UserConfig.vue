@@ -53,6 +53,8 @@
 </template>
 <script>
 
+import {permissionList,getPermission} from '@/api/index/user'
+
 export default {
    data(){
        return {
@@ -103,7 +105,7 @@ export default {
        getTreeData(){
            var temp = {"userId":this.form.id};
            this.$axios
-               .post("/api/sys/menus/getPermissionList",temp)
+               .post(permissionList(),temp)
                .then(res => {
                    if(res.status == 200 && res.data.code == 1){
                        var result = res.data.result ;
@@ -117,7 +119,7 @@ export default {
                });
         },
        initData(){
-           this.$axios.post("/api/user/getPermission/"+this.id)
+           this.$axios.post(getPermission(this.id))
                .then(res=>{
                    if(res.status == 200 && res.data.code == 1){
                       var result = res.data.result ;
