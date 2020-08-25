@@ -64,6 +64,9 @@
             </el-col>
             <el-col :span="22" >
                 <div class="header-span" >
+                    <el-badge :value="12"  style="float:left">
+                        <el-button size="mini" type="primary">评论</el-button>
+                    </el-badge>
                     <el-dropdown @command="changI18n" style="float:left">
                       <span class="system-header-name">
                         {{$t( lang || 'zh-cn' ) }}<i class="el-icon-arrow-down" style="margin-left:7px;"></i>

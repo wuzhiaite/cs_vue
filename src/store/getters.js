@@ -7,6 +7,7 @@ export default {
     getScreenHeight : state => state.screenHeight ,
     getScreenWidth : state => state.screenWidth,
     lang:state => state.lang,
+    token:state => state.token,
 }
 
 
