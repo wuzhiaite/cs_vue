@@ -168,7 +168,7 @@ import ComPageList from './ComPageList';
                 this.initPageDesignForm();
                 this.pageDesignForm.formDesign.disabled = false ;
              }
-          }  
+          }
         },
         tempForm:{
           deep:true,
@@ -356,7 +356,7 @@ import ComPageList from './ComPageList';
             this.columnForm.form = tempForm ;
             
         },
-        pageDesignDataFormat : function(){
+        pageDesignDataFormat(){ //临时数据渲染
             var temp = [];
             for(var i in this.tempForm){
                  var obj = {};
@@ -364,10 +364,11 @@ import ComPageList from './ComPageList';
                  obj.value = i ;
                  temp.push(obj);
             }
-           this.tempArr = temp;      
+           this.tempArr = temp;
         },
-        initPageDesignForm : function(){
+        initPageDesignForm : function(){//初始化设计主页面
           var that = this;
+          console.log("initPageDesignForm");
           var  formItems = [{
                   prop:'CONFIG_NAME',
                   label:'台账名称:',
@@ -454,8 +455,8 @@ import ComPageList from './ComPageList';
                 SEARCH_COLUMNS:[],
                 REQUES_URL:"/api/pagelist/commonpage/"+this.id,
                 EVENTS:'{\n"init":function(){\n\t\\*callbackParam:{ multipleSelection:[]}*\\ \n\t var that = this;\n},\n"rowClick":function(row, column, event){\n\n\n}\n}',
-
             }
+            this.$forceUpdate();
         },
         getSearchInfo : function(){//获取数据
             this.bol.isBtnsPage = false;
@@ -479,9 +480,9 @@ import ComPageList from './ComPageList';
             for(var i in tempArr){
                 var temp = tempArr[i].trim();
                 if( temp.length == 0 ) continue;
-                if( ((index = temp.lastIndexOf('AS')) != -1 && temp.lastIndexOf(' ') != -1) ||
-                    ((index = temp.lastIndexOf('as')) != -1 && temp.lastIndexOf(' ') != -1) ){
-                    temp = temp.substring(index + 2);
+                if( ((index = temp.lastIndexOf(' AS ')) != -1 && temp.lastIndexOf(' ') != -1) ||
+                    ((index = temp.lastIndexOf(' as ')) != -1 && temp.lastIndexOf(' ') != -1) ){
+                    temp = temp.substring(index + 4);
                     filedArr.push(temp.trim());
                 }else if((index = temp.lastIndexOf('.')) != -1 ){
                     filedArr.push(temp.substring(index+1).trim());

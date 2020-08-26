@@ -37,11 +37,17 @@ Vue.use(VueAxiosPlugin, {
   reqErrorFunc: error => Promise.reject(error),
   // 响应拦截处理
   resHandleFunc: response => {
+
     return response ;
   },
   resErrorFunc: err => {
     console.log(err);
     let message = "";
+    //服务器出错的话，先清除token
+    if(err.response.status === 500 || err.response.status === 504){
+       store.state.token = '';
+       localStorage.setItem("token","");
+    }
     if (err.response.status == 504 || err.response.status == 404) {
       message = '服务器被吃了⊙﹏⊙∥';
     } else if (err.response.status == 403) {
@@ -51,7 +57,7 @@ Vue.use(VueAxiosPlugin, {
       });
       store.state.token = "" ;
       localStorage.setItem("token","");//本地保存的token设置为空
-      router.push({path : "/"});
+
     } else if (err.response.status == 401) {
       message = err.response.data.msg ;
     } else {
@@ -66,6 +72,9 @@ Vue.use(VueAxiosPlugin, {
       message: message,
       type: 'warning'
     });
+    if(!store.state.token){
+      router.push({path : "/"});
+    }
     return err ;
   }
 });

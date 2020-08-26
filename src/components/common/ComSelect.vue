@@ -23,17 +23,28 @@ export default {
             type:Object,
         }
     },
-    created() {
-        if(!this.item.options){
-            this.getOptions();
-        }else{
-            this.options = this.item.options ;
-        }
-    },
     data(){
         return {
             options:[]
         }
+    },
+    watch:{
+      item:{
+          deep:true,
+          immediate:true,
+          handler(n,o){
+              if(n && n != o){
+                  if(n.url){
+                      this.getOptions();
+                  }else{
+                      if(this.item.options && this.item.options.length>0){
+                          this.options = this.item.options ;
+                          this.$forceUpdate();
+                      }
+                  }
+              }
+          }
+      }
     },
     methods:{
         getOptions(){
