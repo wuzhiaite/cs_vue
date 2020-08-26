@@ -104,6 +104,7 @@
     transform: translate(-50%, -50%);
   }
   .login-container {
+      background-color:white;
     border-radius: 15px;
     background-clip: padding-box;
     width: 350px;

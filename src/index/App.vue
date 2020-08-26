@@ -32,16 +32,16 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background-color:rgb(238, 238, 238);;
   background-repeat: no-repeat;  
   background-size: 100% 100%;  
   overflow:hidden;  
 }
 
 body,html{
-	margin: 0; 
-	padding: 0;
-	border: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
   height:100%;
+  background-color:rgb(238, 238, 238);
 }
 </style>
