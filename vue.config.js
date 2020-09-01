@@ -1,6 +1,6 @@
 const path = require('path')
 const resolve = dir => path.join(__dirname, dir)
-
+const webpack = require('webpack')
 
 module.exports = {
     publicPath : '/',//部署应用包时的基本 URL

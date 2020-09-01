@@ -8,7 +8,7 @@ import Video from 'video.js'
 import VueDraggable from 'vue-draggable'
 import ElementUI from 'element-ui';
 import {hasPermission, hasNoPermission, hasAnyPermission, hasRole, hasAnyRole} from '../util/permission-directive';
-
+import jquery from 'jquery';
 
 
 let ComBindPlugin = {};
@@ -19,6 +19,7 @@ ComBindPlugin.install = function(Vue,options){
     window.document.title = 'cs-lpf';
     Vue.prototype.$G2 = G2;
     window.G2 = G2;
+    window.$ = jquery;
     window.DataSet = DataSet;
     window.lodash = lodash;//注册使用lodash
     Vue.prototype.$lodash = lodash;//注册使用lodash
@@ -34,6 +35,7 @@ ComBindPlugin.install = function(Vue,options){
     Vue.use(hasAnyPermission);
     Vue.use(hasRole);
     Vue.use(hasAnyRole);
+
     
 }
 
