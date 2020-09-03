@@ -26,6 +26,7 @@ export const dateFormat = {
      
     },
     textDateFormat : function(text,fmt){//对文字中日期进行抽出格式化
+          console.log(text);
         var regExp = /\d{4}-\d{1,2}-\d{1,2}/ig;
         var result = text.match(regExp);
         for(var i in result){

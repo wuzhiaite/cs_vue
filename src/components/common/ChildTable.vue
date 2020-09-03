@@ -1,5 +1,6 @@
 <template>
 <div class="block-box">
+    {{item.disabled}}
     <table>
         <thead>
             <th v-for="(v,k) in  item.form" > {{v.label}} </th>
@@ -11,8 +12,8 @@
                     <ComFormSpan :item="column" :form="form[item.prop][index]" />
                 </td>
                 <td class="btn-classs">
-                    <el-tag size="mini" @click="addRow(index)">新增</el-tag>
-                    <el-tag type="danger" size="mini" @click="deleteRow(index)">删除</el-tag>
+                    <el-tag size="mini" @click="disabled ? null: addRow(index)">新增</el-tag>
+                    <el-tag type="danger" size="mini" @click="disabled ? null : deleteRow(index)">删除</el-tag>
                 </td>
             </tr>
         </tbody>
@@ -31,6 +32,11 @@ export default {
         form:{
             required:true,
             type:Object,
+        },
+        disabled:{
+            required:true,
+            type:Boolean,
+            default:false,
         }
     },
     data:function(){

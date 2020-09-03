@@ -2,6 +2,7 @@
   <div>
     <div :id="id"></div>
     <input style="display: none" ref="files" @change="uploadFile" type="file" accept="image/*">
+
   </div>
 </template>
 <script>
@@ -152,22 +153,20 @@
         let target = e.target;
         let file = target.files[0];
         const formData = new FormData();
-        formData.append("file", file);
-        formData.append("token", this.qnToken);
-        // this.$axios({
-        //   method: "post",
-        //   url: "https://upload.qiniup.com",
-        //   data: formData
-        // })
-        // .then(res => {
-        //   //上传成功地址拼接
-        //   let imgUrl = "https://qiniu.****.com/" + res.data.key;
-        //   this.addImgToMd(imgUrl)
-        //
-        // })
-        // .catch(error => {
-        //   console.error(error.response);
-        // });
+        this.$axios({
+          method: "post",
+          url: "https://upload.qiniup.com",
+          data: formData
+        })
+        .then(res => {
+          //上传成功地址拼接
+          let imgUrl = "https://qiniu.****.com/" + res.data.key;
+          this.addImgToMd(imgUrl)
+
+        })
+        .catch(error => {
+          console.error(error.response);
+        });
         target.value = "";//这个地方清除一下不然会有问题
       },
       //添加图片到markdown
@@ -187,7 +186,7 @@
       },
       getqiniuToken() {
         getToken().then(res => {
-          this.qnToken = res.data.upToken;
+          this.qnToken = res.data.result;
         })
         .catch(error => {
           console.error(error.response);

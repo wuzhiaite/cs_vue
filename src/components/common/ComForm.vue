@@ -21,7 +21,7 @@
             <!-- 横向子表-->
             <SelectForm v-if="item.type=='select-form'" :item="item" :form="form"  />
             <!-- 列展示子表 -->
-            <ChildTable v-if="item.type=='child-form'" :item="item" :form="form"/>
+            <ChildTable v-if="item.type=='child-form'" :disabled="formStyle.disabled"  :item="item" :form="form"/>
             <span v-if="item.type=='slot-form'">
                 <slot :name="item.prop" :item="item" :form="form" ></slot>
             </span>
