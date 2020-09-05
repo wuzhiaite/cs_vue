@@ -9,31 +9,36 @@
 import {getLeaveRequestFormData} from '@/api/index/workflow';
 
 export default{
-        data(){
-            return {
-                startForm:{
-                    form:{},
-                    formDesign:{},
-                },
-            }
+    data(){
+        return {
+            startForm:{
+                form:{},
+                formDesign:{},
+            },
+        }
+    },
+    props:{
+        taskId:{
+            required:false,
         },
-        props:{
-            taskId:{
-                required:false,
-            }
-        },
-        created(){
+        disabled:{
+            required:true,
+            default:false
+        }
+    },
+    created(){
             if(this.taskId){
                 this.getFormData();
             }
+           console.log(this.disabled);
             this.initStartForm();
         },
-        methods:{
+    methods:{
             initStartForm(){
-                var that = this;
+                let that = this;
                 this.startForm = {
                     formDesign : {
-                        disabled: that.taskId ? true : false,
+                        disabled: that.disabled,
                         labelWidth:'15%',
                         inline:false,
                         formItems: [
@@ -106,7 +111,7 @@ export default{
 
 
         }
-    }
+}
 
 </script>
 <style>

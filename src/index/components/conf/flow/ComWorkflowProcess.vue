@@ -4,8 +4,9 @@
             <el-card>
                 <el-col :span="24">
                     <el-steps :active="steps.length -1 "  align-center finish-status="success">
-                        <el-step  v-for="s in steps"
-                                 :title="s.activityName"/>
+                        <template  v-for="s in steps">
+                            <el-step v-if="s.activityName" :title="s.activityName"/>
+                        </template>
                     </el-steps>
                 </el-col>
             </el-card>
@@ -13,7 +14,7 @@
         <el-row class="workflow-contain">
             <el-col :span="16" >
                 <el-card>
-                    <LeaveRequestForm  :taskId="taskId"/>
+                    <LeaveRequestForm :disabled="disabled" :taskId="taskId"/>
                 </el-card>
             </el-col>
             <el-col :span="7" :offset="1">
@@ -46,6 +47,7 @@ export default {
             taskId:'',
             instId:'',
             form:{},
+            disabled:false,
             formDesign:{},
             processFlow:{
                 form:{},
@@ -57,6 +59,7 @@ export default {
                 formDesign:{},
                 btns:[]
             },
+            currentStep:{},
             steps:[],
         }
     },
@@ -81,7 +84,7 @@ export default {
                     formItems: [
                         {
                             prop: 'assigne',
-                            label: '办理人:',
+                            label: '下步骤办理人:',
                             type: 'input',
                             rules: { required: true, message: '请选择任务办理人类型', trigger: 'change' },
                         },
@@ -139,8 +142,6 @@ export default {
                     style:"",
                     click: function () {
                         that.doProcesse();
-
-
                     }
                 }
 
@@ -161,28 +162,24 @@ export default {
             ];
         },
         doProcesse(){
-            let validate = this.$refs.form.validateForm() ;
-            if(!validate) return ;
-            console.log(validate);
             let process =  this.$refs.processForm.validateForm();
             let back = this.$refs.sendbackForm.validateForm();
             if(!(process || back))return ;
             let temp = {
-                process:{
-                    KEY_:this.key,
-                    taskId:this.id,
-                },
-                form:this.form,
-                assigne:this.processFlow.assigne
+                instId:this.instId,
+                taskId:this.taskId,
+                form:this.processFlow.form,
+                assigne:this.processFlow.form.assigne
             };
             this.$axios
-                .post("/api/activiti/task/startprocess",tempArr)
+                .post("/api/activiti/task/completeTask",temp)
                 .then(res => {
                     if(res.status == 200 && res.data.code == 1){
                         this.$message({
                             type:"success",
                             message:"流程发起成功！"
                         });
+                        this.$router.push("/workflow/de4a")
                     }else{
                         this.$message({
                             type:"error",
@@ -190,18 +187,63 @@ export default {
                         });
                     }
                 });
-
-
-
-
         },
         getSteps(){
             this.$axios.post('/api/activiti/historic/historysteps/'+this.instId)
                 .then(res=>{
                     if(res.status == 200 && res.data.code == 1){
-                        this.steps = res.data.result;
+                        let temp = [];
+                        let result = res.data.result;
+                        for(let r in result){
+                            if(result[r].activityName){
+                                temp.push(result[r]);
+                            }
+                        }
+                        this.steps = temp;
+                        this.currentStep = temp[temp.length-1];
+                        this.disabled = !(this.currentStep.activityId == 'Activity_1tdmgmx');
+                        if(this.currentStep.activityId == 'Activity_1tdmgmx'){
+                           this.processForm();
+                        }
                     }
                 });
+        },
+        processForm(){
+            this.processFlow = {
+                formDesign:{
+                    disabled: false,
+                    labelWidth:'20%',
+                    inline:false,
+                    formItems: [
+                        {
+                            prop: 'assigne',
+                            label: '下步骤办理人:',
+                            type: 'input',
+                            rules: { required: true, message: '请选择任务办理人类型', trigger: 'change' },
+                        },
+                        {
+                            prop: 'resend',
+                            label: '是否重发:',
+                            type: 'radio',
+                            options:[
+                                {label:"重发",value:"true"},
+                                {label:"不重发",value:"false"}],
+                            rules: { required: true, message: '是否重发', trigger: 'change' },
+                        },{
+                            prop:'reason',
+                            label:'处理建议',
+                            type:'textarea',
+                            rules: { required: true, message: '处理意见', trigger: 'change' },
+                        }
+                    ]
+                },
+                form:{
+
+                }
+            }
+            this.initBtns();
+            this.$forceUpdate();
+            this.$set(this.processFlow,this.processFlow);
         }
 
 

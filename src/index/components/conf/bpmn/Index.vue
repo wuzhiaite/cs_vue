@@ -2,16 +2,6 @@
 <template>
     <el-card :style="{'min-height':height + 'px' }">
         <el-row :gutter="24" style="width:100%;">
-<!--            <el-col :span="15">-->
-<!--                <el-form size="mini" :inline="true" :model="workflow.form" class="demo-form-inline">-->
-<!--                    <el-form-item label="流程名称">-->
-<!--                        <el-input v-model="workflow.form.modelName" placeholder="请输入流程名称"/>-->
-<!--                    </el-form-item>-->
-<!--                    <el-form-item label="版本号">-->
-<!--                        <el-input disabled v-model="workflow.form.modelKey" placeholder="请输入版本号"/>-->
-<!--                    </el-form-item>-->
-<!--                </el-form>-->
-<!--            </el-col>-->
             <el-col :offset="1">
                 <Buttons style="float:left;" :btns="btns"/>
             </el-col>
@@ -120,13 +110,6 @@ export default {
             this.adjustPalette();
             this.getBpmnXml();
         },
-    // watch:{
-    //    'workflow.form.modelName'(n,o){
-    //        if(n && n.length>0){
-    //            this.createNewDiagram('');
-    //        }
-    //    },
-    // },
     methods: {
         getBpmnXml(){
             this.$axios.post("/api/activiti/deployment/getDeployWorkflow/"+this.id)
