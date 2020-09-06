@@ -26,8 +26,9 @@ export const formatRoutes = (routes)=> {
         path: path,
         component :function(resolve){
            if(realPath){
-             require(['./components/'+realPath+'.vue'],resolve) ;
-           }       
+             // require(['./components/'+realPath+'.vue'],resolve) ;
+             return import('./components/'+realPath+'.vue') ;
+           }
         },
         name: name,
         iconCls: iconCls,

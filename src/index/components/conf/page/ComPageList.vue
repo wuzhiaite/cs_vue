@@ -6,10 +6,9 @@
 <script>
 export default {
     props:{
-          'pageParam':{
-                default:{},
-                required:false
-          }
+          // 'pageParam':{
+          //       default:{},
+          // }
 
     },
     data:function(){
@@ -17,14 +16,19 @@ export default {
             param:{},
             id: '',
             isShow:false,
+            pageParam:{},
         }
     },
     watch:{
+        "$route":function(to,from){
+            this.getQueryId();
+            next();
+        },
         pageParam:{
             deep:true,
             immediate:true,
             handler(n,o){
-                if(n != o && (typeof n != 'undefined')
+                if(n && n != o && (typeof n != 'undefined')
                         && JSON.stringify(n) != "{}" ){
                       this.formatParam();
                 }else{
@@ -34,11 +38,14 @@ export default {
         }
     },
     created(){
-          if(!this.pageParam || JSON.stringify(this.pageParam ) == "{}"){
-                this.getQueryId();
-          }
+        this.initData();
     },
     methods:{
+        initData(){
+            if(!this.pageParam || JSON.stringify(this.pageParam ) == "{}"){
+                this.getQueryId();
+            }
+        },
           getQueryId : function(){//获取页面id
                 console.log("compagelist");
                 var param = this.$route.params ? this.$route.param : this.$route.query;

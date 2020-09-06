@@ -113,7 +113,9 @@
          <div style="overflow-y:auto;overflow-x:auto;">
             <el-main :style="{ height : screenHeight - 110 +'px'}">
                 <transition name="el-zoom-in-center">
-                     <router-view v-if="isRouterAlive"/>
+                    <keep-alive>
+                        <router-view v-if="isRouterAlive"/>
+                    </keep-alive>
                 </transition>
             </el-main>
          </div>

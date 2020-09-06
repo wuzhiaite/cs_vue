@@ -59,6 +59,7 @@ const customTranslateModule = {
 export default {
     data() {
         return {
+            key:"",
             id:"",
             workflow:{
                 form:{},
@@ -80,7 +81,8 @@ export default {
         VueAceEditor,
     },
     created(){
-        if(!this.id){
+        if(!this.key){
+            this.key = this.$route.params.key ;
             this.id = this.$route.params.id ;
         }
         this.initFormAndBtns();
@@ -112,7 +114,7 @@ export default {
         },
     methods: {
         getBpmnXml(){
-            this.$axios.post("/api/activiti/deployment/getDeployWorkflow/"+this.id)
+            this.$axios.post("/api/activiti/deployment/getDeployWorkflow/"+this.key+'/'+this.id)
                 .then(res=>{
                     if(res.status == 200 && res.data.code == 1){
                         if(res.data.result){
@@ -190,7 +192,8 @@ export default {
             }
             this.workflow.form = {
                 modelName: '', //   模型名称
-                modelKey: this.id, //    模型key(版本)
+                modelKey: this.key, //    模型key(版本)
+                deployementId:this.id
             }
         },
         createNewDiagram(bpmnXML) {
@@ -204,7 +207,7 @@ export default {
                     'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
                     'id="m1568796216967" name="" ' +
                     'targetNamespace="http://www.activiti.org/bpmn">\n' +
-                    '  <process id="'+this.id+'" name="" isExecutable="true" />'+
+                    '  <process id="'+this.key+'" name="" isExecutable="true" />'+
                     '  <bpmndi:BPMNDiagram id="Diagram-_1" name="New Diagram" documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0">\n' +
                     '    <bpmndi:BPMNPlane bpmnElement="myProcess_1" />\n' +
                     '  </bpmndi:BPMNDiagram>\n' +

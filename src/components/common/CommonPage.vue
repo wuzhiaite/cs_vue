@@ -94,7 +94,7 @@
             deep:true,
             immediate:true,
             handler(n,o){
-                if(n != o){
+                if(n && n != o){
                     this.addQualitySearch();
                     this.$nextTick();
                 }  
