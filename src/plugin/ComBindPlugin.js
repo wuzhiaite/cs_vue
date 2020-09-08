@@ -9,7 +9,7 @@ import VueDraggable from 'vue-draggable'
 import ElementUI from 'element-ui';
 import {hasPermission, hasNoPermission, hasAnyPermission, hasRole, hasAnyRole} from '../util/permission-directive';
 import jquery from 'jquery';
-
+import mavonEditor from 'mavon-editor'
 
 let ComBindPlugin = {};
 
@@ -35,6 +35,7 @@ ComBindPlugin.install = function(Vue,options){
     Vue.use(hasAnyPermission);
     Vue.use(hasRole);
     Vue.use(hasAnyRole);
+    Vue.use(mavonEditor)
 
     
 }

@@ -28,6 +28,7 @@
         return {
             key:'',
             id:'',
+            deployementId:'',
             start:{
                 form:{},
                 formDesign:{},
@@ -41,7 +42,7 @@
      },
      created(){
          this.key = this.$route.query.key;
-         this.id = this.$route.query.id;
+         this.deployementId = this.$route.query.id;
          this.initForm();
          this.initStartForm();
      },
@@ -153,6 +154,7 @@
              let temp = {
                  process:{
                      KEY_:this.key,
+                     ID_:this.deploymentId,
                      taskId:this.id,
                  },
                  form:tempForm,

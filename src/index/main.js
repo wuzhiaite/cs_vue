@@ -13,6 +13,7 @@ import '../util/el-components';
 import 'video.js/dist/video-js.css';
 import ElementUI from 'element-ui';
 import VueAxiosPlugin from 'vue-axios-plugin';
+import 'mavon-editor/dist/css/index.css'
 
 
 i18n.locale = store.state.lang || 'zh-cn';

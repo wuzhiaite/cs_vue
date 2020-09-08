@@ -312,8 +312,8 @@ export default {
             }
         },
         formXML(data){
-            let temp = data.replace(/camunda/ig,"activiti");
-            temp = temp.replace(/FormField/ig,'formProperty');
+            let temp = data.replace(/camunda/g,"activiti");
+            temp = temp.replace(/FormField/ig,"formProperty");
             return temp ;
         },
         reformXML(data){
@@ -402,7 +402,7 @@ export default {
 
         },
         saveBpmn() {
-            var xml = this.workflow.form.modelXml;
+            let xml = this.workflow.form.modelXml;
             xml = this.formXML(xml);
             if(xml.indexOf('startEvent') == -1){
                 this.$message({
@@ -418,7 +418,8 @@ export default {
                 })
                 return;
             }
-            var form = this.workflow.form ;
+            this.workflow.form.modelXml = xml;
+            let form = this.workflow.form ;
             this.$axios.post("/api/activiti/deployment/deployWorkflow",form)
                 .then(res=>{
                     if(res.status == 200 && res.data.code == 1){
