@@ -1,6 +1,7 @@
 const path = require('path')
 const resolve = dir => path.join(__dirname, dir)
 const webpack = require('webpack')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     publicPath : '/',//部署应用包时的基本 URL
@@ -16,29 +17,20 @@ module.exports = {
             .set('@', resolve('src'));
     },
     configureWebpack: config => { // 修改配置数据
-        if (process.env.NODE_ENV === 'product') {
-            plugins.push(
-                new UglifyJsPlugin({
-                    uglifyOptions: {
-                        compress: {
-                            warnings: false,
-                            drop_console: true,
-                            drop_debugger: false,
-                            pure_funcs: ['console.log'] //移除console
-                        }
-                    },
-                    sourceMap: false,
-                    parallel: true
-                })
-            );
-            config.plugins = [...config.plugins, ...plugins];
-        }
-        
-        if (process.env.NODE_ENV === 'product') {
-          // 为生产环境修改配置...
-        } else {
-          // 为开发环境修改配置...
-        }
+        let plugins =[];
+        let copyWebpackPlugin = new CopyWebpackPlugin([{
+                from: 'node_modules/mavon-editor/dist/highlightjs',
+                to: path.resolve(__dirname, '../dist/highlightjs'), // 插件将会把文件导出于/dist/highlightjs之下
+            }, {
+                from: 'node_modules/mavon-editor/dist/markdown',
+                to: path.resolve(__dirname, '../dist/markdown'), // 插件将会把文件导出于/dist/markdown之下
+            }, {
+                from: 'node_modules/mavon-editor/dist/katex', // 插件将会把文件导出
+                to: path.resolve(__dirname, '../dist/katex')
+            }]);
+        plugins.push(copyWebpackPlugin);
+        config.plugins = [...config.plugins, ...plugins];
+
     },
     devServer : { //代理
         port : 9876,

@@ -1,8 +1,9 @@
 <template>
     <mavon-editor
             ref=md
-            :style="{height:height+'px'}"
+            :style="{height:height*0.8+'px'}"
             :toolbars="markdownOption"
+            @save="saveEditor"
             @imgAdd="imgAdd"
             @imgDel="imgDel"
             v-model="handbook"/>
@@ -13,6 +14,7 @@ import {mapGetters} from 'vuex';
 export default {
     data() {
         return {
+            id:"",
             markdownOption: {
                 bold: true, // 粗体
                 italic: true, // 斜体
@@ -48,7 +50,7 @@ export default {
                 subfield: true, // 单双栏模式
                 preview: true, // 预览
             },
-            handbook: ""
+            handbook: "",
         };
     },
     computed:{
@@ -56,29 +58,56 @@ export default {
             height:"getScreenHeight",
         }),
     },
+    created(){
+        this.id = this.$route.params.id ;
+    },
     methods:{
         imgAdd(pos, $file){
-            return ;
-            // 第一步.将图片上传到服务器.
-            var formdata = new FormData();
+            let formdata = new FormData();
+            let name = $file.name
             formdata.append('image', $file);
             this.$axios({
                 url: '/api/upload/imgupload',
                 method: 'post',
                 data: formdata,
                 headers: { 'Content-Type': 'multipart/form-data' },
-            }).then((url) => {
-                // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-                /**
-                 * $vm 指为mavonEditor实例，可以通过如下两种方式获取
-                 * 1. 通过引入对象获取: `import {mavonEditor} from ...` 等方式引入后，`$vm`为`mavonEditor`
-                 * 2. 通过$refs获取: html声明ref : `<mavon-editor ref=md ></mavon-editor>，`$vm`为 `this.$refs.md`
-                 */
-                $vm.$img2Url(pos, url);
+            }).then(res => {
+               if(res.data.code == 1){
+                   this.$refs.md.$img2Url(pos, res.data.result);
+               }
             })
-
         },
-        imgDel(){
+        imgDel(files){
+            let url = files[0];
+            let idx = url.lastIndexOf("/");
+            let fileName = url.substring(idx+1,url.length);
+            this.$axios.post("/api/upload/deleteUploadFile/"+fileName)
+            .then(res=>{
+                if(res.data.code == 1){
+                    this.$message({
+                        type:'success',
+                        message:"删除成功",
+                    });
+                }
+            })
+        },
+        saveEditor(value,render){
+            let form = {
+                md:value,
+                html:render,
+                id:id,
+            }
+            this.$axios.post("/api/article/md/saveArticle")
+                .then(res=>{
+                    if(res.data.code == 1){
+                        this.$message({
+                            type:'success',
+                            message:"保存成功",
+                        });
+                    }
+                })
+
+
 
         }
     }
