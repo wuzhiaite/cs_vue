@@ -229,6 +229,7 @@ import ComPageList from './ComPageList';
             this.sqlForm.formDesign = {
               disabled:false,  
               formItems : formItems,
+              labelWidth:'20%',
             }
             this.sqlForm.btns = [{
                     id : 'confirm',

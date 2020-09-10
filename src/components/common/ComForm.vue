@@ -8,7 +8,7 @@
             :rules=" formStyle.rules ? formStyle.rules : {} "
             :inline="formStyle.inline ? formStyle.inline : false"
             :disabled="formStyle.disabled ? formStyle.disabled : false "
-            :label-width="formStyle.labelWidth ? formStyle.labelWidth : '20%' ">
+            :label-width="formStyle.labelWidth ? formStyle.labelWidth=='auto' ? '' : formStyle.labelWidth : '20%' ">
     <el-form-item v-for="(item,index)  in  formStyle.formItems"  
             style="font-size:10px;"
              :prop="item.prop"
@@ -114,7 +114,7 @@ import ComFormSpan from './ComFormSpan';
   font-size:10px;
   border-radius: 3px;
   transition: .2s;
-  padding:25px;
+  padding:10px;
 } 
 .el-form-item_label{
   font-size:7px;
