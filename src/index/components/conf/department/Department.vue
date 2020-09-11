@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;">
+    <div>
         <el-row :gutter="24" style="height:100%;">
             <el-col :span="8">
                 <el-card class="box-card" >

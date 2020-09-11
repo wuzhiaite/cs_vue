@@ -20,7 +20,7 @@
 <script>
 
 import {mapGetters} from 'vuex';
-import {formDesign,toolbars} from './article'
+import {formDesign,toolbars,btns,blogDetail} from './article'
 
 export default {
     data() {
@@ -48,6 +48,7 @@ export default {
         })
         this.id = this.$route.params.id ;
         this.getBlogDetail();
+        this.btns = btns(that);
 
     },
     methods:{
@@ -99,10 +100,9 @@ export default {
                 })
         },
         getBlogDetail(){
-            this.$axios.post("/api/article/getBlogById/"+this.id)
-                .then(res=>{
+            blogDetail(this).then(res=>{
                     let data = res.data ;
-                    if(data.code == 1){
+                    if(data.code == 1 && data.result){
                         let result = data.result;
                         this.form = result
                         this.handbook = result.designText ? result.designText : '';

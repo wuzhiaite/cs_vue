@@ -1,3 +1,92 @@
+/**
+ * 查询博客细节
+ * @param that
+ * @returns {*}
+ */
+export function blogDetail(that){
+   return that.$axios.post("/api/article/getBlogById/"+that.id);
+}
+
+/**
+ *
+ * @param that
+ * @returns {*}
+ */
+export function blogList(that){
+    return that.$axios.post("/api/article/getList");
+}
+
+
+/**
+ * 返回按钮
+ * @param that
+ * @returns {{name: string, icon: string, disabled: boolean, type: string, click: click}[]}
+ */
+export function backBtn(that){
+    return [
+        {
+            name : '返回',
+            type : 'primary',
+            icon : 'el-icon-back',
+            disabled : false,
+            click : function(){
+                that.$router.go(-1);
+            }
+        }
+    ]
+} ;
+
+
+
+/**
+ * 配置按钮
+ * @param that
+ * @returns {({hasPermission: [string], name: string, icon: string, disabled: boolean, type: string, click: click}|{hasPermission: [string], name: string, icon: string, disabled: boolean, type: string, click: click}|{name: string, icon: string, disabled: boolean, type: string, click: click})[]}
+ */
+export function btns(that){
+    return [
+        {
+            name : '保存',
+            type : 'primary',
+            hasPermission:['can_add'],
+            icon : 'el-icon-circle-plus-outline',
+            disabled : false,
+            click : function(){
+                alert('有下面的保存先');
+            }
+        },
+        {
+            name : '删除',
+            type : 'primary',
+            hasPermission:['can_delete'],
+            icon : 'el-icon-delete',
+            disabled : false,
+            click : function(){
+                that.$axios.post("/api/article/removeById/"+that.id)
+                    .then(res=>{
+                       if(res.data.code == 1){
+                            that.$router.go(-1);
+                       }
+                    })
+            }
+        },
+        {
+            name : '返回',
+            type : 'primary',
+            icon : 'el-icon-back',
+            disabled : false,
+            click : function(){
+                that.$router.go(-1);
+            }
+        }
+    ];
+}
+
+
+/**
+ * 配置表单样式
+ * @type {{ref: string, inline: boolean, formItems: [{prop: string, label: string, type: string}, {clearable: boolean, prop: string, label: string, type: string, url: string}], labelPosition: string, labelWidth: string}}
+ */
 export const formDesign = {
     ref:'md',
     inline:true,
@@ -20,7 +109,10 @@ export const formDesign = {
 }
 
 
-
+/**
+ * md工具栏
+ * @type {{preview: boolean, code: boolean, underline: boolean, superscript: boolean, link: boolean, save: boolean, redo: boolean, italic: boolean, undo: boolean, navigation: boolean, quote: boolean, alignleft: boolean, subfield: boolean, ul: boolean, strikethrough: boolean, ol: boolean, table: boolean, subscript: boolean, imagelink: boolean, bold: boolean, alignright: boolean, trash: boolean, help: boolean, fullscreen: boolean, aligncenter: boolean, htmlcode: boolean, readmodel: boolean, header: boolean, mark: boolean}}
+ */
 export const toolbars = {
     bold: true, // 粗体
     italic: true, // 斜体

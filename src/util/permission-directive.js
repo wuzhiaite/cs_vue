@@ -5,12 +5,18 @@ export const hasPermission = {
         Vue.directive('hasPermission', {
             bind (el, binding, vnode) {
                 const permissions = vnode.context.$route.meta.permissions ;
-                console.log(permissions);
                 const value = binding.value;
-                let flag = true
-                for (const v of value) {
-                    if (!permissions.includes(v)) {
-                        flag = false
+                let flag = true;
+                if(value && value.length >0 && value[0] != 'all'){
+                    if(typeof permissions == 'undefined' || permissions.length == 0){
+                        flag = false;
+                    }else{
+                        for (const v of value) {
+                            if (!permissions.includes(v)) {
+                                flag = false;
+                                break;
+                            }
+                        }
                     }
                 }
                 if (!flag) {

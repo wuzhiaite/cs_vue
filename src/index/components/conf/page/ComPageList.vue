@@ -6,11 +6,12 @@
 <script>
 export default {
     props:{
-          // 'pageParam':{
-          //       default:{},
-          // }
+          'pageParam':{
+                default:{},
+          }
 
     },
+    inject: ['reload'],
     data:function(){
         return {
             param:{},
@@ -21,7 +22,7 @@ export default {
     },
     watch:{
         "$route":function(to,from){
-            this.getQueryId();
+            this.reload();
             next();
         },
         pageParam:{
