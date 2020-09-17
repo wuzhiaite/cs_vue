@@ -3,7 +3,7 @@
     <el-row class="el-row">
       <el-col :span="6" class="el-col">
         <el-card>
-            统计图1
+            <RadarMap/>
         </el-card>
       </el-col>
       <el-col :span="6" class="el-col">
@@ -108,7 +108,8 @@
 </template>
 <script>
 import {getImgs} from './js/index';
-import IndexVideo from './IndexVideo'
+import IndexVideo from './IndexVideo';
+import RadarMap from './charts/radarMap'
 
 export default {
   data(){
@@ -117,7 +118,8 @@ export default {
     }
   },
   components:{
-    IndexVideo
+    IndexVideo,
+    RadarMap,
   },
   created(){
     this.imgs = getImgs();
