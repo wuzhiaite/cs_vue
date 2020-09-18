@@ -16,6 +16,8 @@ npm run build
 
 里面详细描述了封装的组件以及系统的使用。
 
+线上地址：http://www.wuzhiaite.top/
+
 ## 基础功能实现
 ```
 vue.config.js 配置转发路径和端口，基础路径配置等；
