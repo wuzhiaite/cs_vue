@@ -2,11 +2,7 @@
 <div>
    <el-row style="margin-bottom: 10px;">
     <el-col :span="7" >
-        <el-row>
-            <el-col :span="5">
-                <buttons :btns="btns"/>
-            </el-col>
-        </el-row>
+
         <el-row>
           <el-card>
               <template v-for="v in list">
@@ -19,6 +15,11 @@
               </template>
           </el-card>
         </el-row>
+<!--        <el-row>-->
+<!--            <el-col :span="5">-->
+<!--                <buttons :btns="btns"/>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
     </el-col>
     <el-col :span="16" :offset="1">
       <el-card>
@@ -61,6 +62,23 @@ export default{
 }
 
 </script>
-<style scoped>
-
+<style>
+p{
+    font-size:14px;
+}
+.hljs-left{
+    line-height:25px;
+    text-align:left
+}
+code{
+     color: #f8f8f2;
+     display: block!important;
+     overflow-x: auto!important;
+     padding: 1em!important;
+     background: #282c34!important;
+     border: 1px solid #fff!important;
+     border-radius: 5px!important;
+     font-family: Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace!important;
+     font-size: 15px!important
+ }
 </style>

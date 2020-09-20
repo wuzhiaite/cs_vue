@@ -8,7 +8,7 @@
     <el-row>
         <mavon-editor
                 ref=md
-                :style="{height:height*0.9+'px'}"
+                :style="{'min-height':height+'px'}"
                 :toolbars="markdownOption"
                 @save="saveEditor"
                 @imgAdd="imgAdd"
@@ -84,10 +84,10 @@ export default {
         saveEditor(value,render){
             let temp = {
                 designText:value,
-                html:render,
                 id: this.id,
                 ...this.form,
             }
+            temp.html = render;
             temp.designText = value;
             this.$axios.post("/api/article/addOrUpdatePage",temp)
                 .then(res=>{
