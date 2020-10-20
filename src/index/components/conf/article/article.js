@@ -30,7 +30,12 @@ export function backBtn(that){
             icon : 'el-icon-back',
             disabled : false,
             click : function(){
-                that.$router.go(-1);
+                // that.$router.go(-1);
+                that.$axios.post("/api/pagelist/downloadFile/2d39",{"token":that.token})
+                    .then(res=>{
+                        console.log(res);
+                    });
+
             }
         }
     ]

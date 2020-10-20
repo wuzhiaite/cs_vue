@@ -16,7 +16,7 @@ npm run build
 
 里面详细描述了封装的组件以及系统的使用。
 
-线上地址：http://www.wuzhiaite.top/
+线上地址：http://www.wuzhiaite.top/ (ps:服务器只有1M带宽，首次访问慢的会让人发指)
 
 ## 基础功能实现
 ```

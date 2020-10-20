@@ -17,7 +17,6 @@ export default {
             param:{},
             id: '',
             isShow:false,
-            pageParam:{},
         }
     },
     watch:{

@@ -130,7 +130,7 @@
     name:'home',
     data() {
       return {
-        collapse: true,
+        collapse: false,
         url: '',
         srcList: [],
         isRouterAlive:true,

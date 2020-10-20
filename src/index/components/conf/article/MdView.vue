@@ -32,7 +32,7 @@
 </template>
 <script>
 import {blogDetail,backBtn,blogList} from './article'
-
+import {mapGetters} from 'vuex';
 
 export default{
     data(){
@@ -47,6 +47,9 @@ export default{
      this.id = this.$route.params.id ;
      this.getBlogList();
      this.btns = backBtn(this);
+    },
+    computed:{
+      ...mapGetters(["token"]),
     },
     methods:{
      getBlogList(){
