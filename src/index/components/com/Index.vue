@@ -3,7 +3,8 @@
     <el-row class="el-row">
       <el-col :span="6" class="el-col">
         <el-card>
-            <RadarMap/>
+<!--            <RadarMap/>-->
+          统计图1
         </el-card>
       </el-col>
       <el-col :span="6" class="el-col">

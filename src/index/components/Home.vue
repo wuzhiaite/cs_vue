@@ -64,9 +64,12 @@
             </el-col>
             <el-col :span="22" >
                 <div class="header-span" >
-<!--                    <el-badge :value="12"  style="float:left">-->
-<!--                        <el-button size="mini" type="primary">评论</el-button>-->
-<!--                    </el-badge>-->
+                    <span class="el-title" >
+                      <img   @click="jumpToGitee()"
+                             class="el-img"
+                             src="@/assets/img/home/gitee.png" >
+                      </img>
+                    </span>
                     <el-dropdown @command="changI18n" style="float:left">
                       <span class="system-header-name">
                         {{$t( lang || 'zh-cn' ) }}<i class="el-icon-arrow-down" style="margin-left:7px;"></i>
@@ -78,12 +81,12 @@
                            >{{$t(v.label)}}</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                  <span class="el-title" >
-                      <el-image
-                              class="el-img"
-                              :src="url" >
-                      </el-image>
-                   </span>
+                    <span class="el-title" >
+                      <img
+                            class="el-img"
+                            src="@/assets/base/logo.png" >
+                      </img>
+                    </span>
                     <el-dropdown  @command="handleCommand">
                        <span class="system-header-name">
                            {{username}}
@@ -126,6 +129,8 @@
   import {mapGetters,mapMutations} from  'vuex';
   import  {formatRoutes}  from  '../menus-util';
 
+
+
   export default {
     name:'home',
     data() {
@@ -166,9 +171,6 @@
     },
     created:function(){
       this.menusInfo();
-      var url = require('../img/logo.jpg');
-      this.url = url;
-      this.srcList.push(url);
       let that = this;
     },
     mounted:function(){
@@ -243,6 +245,9 @@
       handleClose(key, keyPath) {
         // console.log(key, keyPath);
          setTimeout(function(){},1500);
+      },
+      jumpToGitee(){
+          window.open("https://gitee.com/wuzhiaite");
       },
       logout(){
           this.$axios
@@ -329,6 +334,8 @@ i{
       background-color:#409EFF;
   }
   .el-img{
+
+     background: #c0c4cc;
      border-radius:50%;
      width:30px;
      height:30px;
