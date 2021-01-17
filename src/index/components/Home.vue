@@ -118,6 +118,9 @@
                 <transition name="el-zoom-in-center">
                     <router-view v-if="isRouterAlive"/>
                 </transition>
+                <el-row class="domain-connect">
+                    <a  href="https://beian.miit.gov.cn/" target = "_blank">粤ICP备20012325号</a>
+                </el-row>
             </el-main>
          </div>
       </el-container> 
@@ -243,7 +246,6 @@
         console.log(key, keyPath);
       },
       handleClose(key, keyPath) {
-        // console.log(key, keyPath);
          setTimeout(function(){},1500);
       },
       jumpToGitee(){
@@ -260,11 +262,6 @@
                           type:"success",
                           message:this.$t('messages.logout_success')
                       });
-                  }else{
-                      this.$message({
-                          type:"error",
-                          message:this.$t('messages.logout_fail_pls_refresh')
-                      });
                   }
               });
       }
@@ -272,6 +269,18 @@
   }
 </script>
 <style>
+.domain-connect{
+    width:100%;
+    height:30px;
+    position:absolute;
+    right:0;
+    bottom:0;
+}
+
+.domain-connect a{
+    float:right;
+    margin-right:20px;
+}
 .system-header-name{
     font-size:14px;
     margin-right:10px;

@@ -1,34 +1,35 @@
 <template>
   <div id="login" >
-
       <div class="login-form">
-          <el-form :rules="rules" class="login-container" label-position="left" :model="loginForm"
-                label-width="0px" v-loading="loading">
-              <div>
-                  <el-row>
-                      <img src="@/assets/base/logo.png" height="50px" width="50px"/>
-                  </el-row>
-                  <el-row>
-                      <img src="@/assets/base/system.png" style="height:60px;" />
-                      <h4 style="font-weight:normal;"> 基础后台管理系统 </h4>
-                  </el-row>
-              </div>
-              <el-form-item prop="username">
-                <el-input type="text" v-model="loginForm.username"
-                          auto-complete="off" placeholder="账号"></el-input>
-              </el-form-item>
-              <el-form-item prop="password">
-                <el-input type="password" v-model="loginForm.password"
-                          auto-complete="off" placeholder="密码"></el-input>
-              </el-form-item>
-              <!-- <el-checkbox class="login_remember" v-model="checked"
-                          label-position="left">记住密码</el-checkbox> -->
-              <el-form-item style="width: 100%">
-                <el-button type="primary" style="width: 100%" @click="submit">登录</el-button>
-              </el-form-item>
-          </el-form>
+              <el-form :rules="rules" class="login-container" label-position="left" :model="loginForm"
+                       label-width="0px" v-loading="loading">
+                  <div>
+                      <el-row>
+                          <img src="@/assets/base/logo.png" height="50px" width="50px"/>
+                      </el-row>
+                      <el-row>
+                          <img src="@/assets/base/system.png" style="height:60px;" />
+                          <h4 style="font-weight:normal;"> 基础后台管理系统 </h4>
+                      </el-row>
+                  </div>
+                  <el-form-item prop="username">
+                      <el-input type="text" v-model="loginForm.username"
+                                auto-complete="off" placeholder="账号"></el-input>
+                  </el-form-item>
+                  <el-form-item prop="password">
+                      <el-input type="password" v-model="loginForm.password"
+                                auto-complete="off" placeholder="密码"></el-input>
+                  </el-form-item>
+                  <!-- <el-checkbox class="login_remember" v-model="checked"
+                              label-position="left">记住密码</el-checkbox> -->
+                  <el-form-item style="width: 100%">
+                      <el-button type="primary" style="width: 100%" @click="submit">登录</el-button>
+                  </el-form-item>
+              </el-form>
+          </div>
+      <div class="domain-connect">
+          <a href="https://beian.miit.gov.cn/" target = "_blank">粤ICP备20012325号</a>
       </div>
- 
 </div>
 </template>
 <script>
@@ -77,11 +78,7 @@
                   var path = this.$route.query.redirect;
                   this.$router
                         .replace({path: path == '/' || path == undefined ? '/index' : path});
-              }else{
-                  // this.$message.error(data.message + '');
               }
-
-
           });
 
 
@@ -103,8 +100,19 @@
     top:50%;
     transform: translate(-50%, -50%);
   }
+  .domain-connect{
+      width:100%;
+      height:30px;
+      position:absolute;
+      right:0;
+      bottom:0;
+  }
+  .domain-connect a{
+      float:right;
+      margin-right:20px;
+  }
   .login-container {
-      background-color:white;
+    background-color:white;
     border-radius: 15px;
     background-clip: padding-box;
     width: 350px;
