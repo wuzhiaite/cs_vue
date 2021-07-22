@@ -54,6 +54,6 @@
     "file-saver": "^2.0.2",
     "video.js": "^7.8.4",
     "vue-template-compiler": "^2.6.11",
-    "xlsx": "^0.15.6"
+    "xlsx": "^0.17.0"
   }
 }
